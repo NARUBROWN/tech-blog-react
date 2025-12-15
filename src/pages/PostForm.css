@@ -89,3 +89,124 @@
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-lg);
 }
+
+/* Category Selection */
+.category-select-container {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.category-input-readonly {
+    flex: 1;
+    background-color: var(--color-background);
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-background);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: var(--color-surface);
+    width: 100%;
+    max-width: 400px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-body {
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.category-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.category-option:hover {
+    background-color: var(--color-background);
+    border-color: var(--color-primary);
+}
+
+.category-option.selected {
+    background-color: rgba(37, 99, 235, 0.05);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--color-text-secondary);
+    padding: var(--spacing-xl) 0;
+}
+
+/* Custom Toolbar Button */
+.ql-snow .ql-mermaid {
+    width: auto !important;
+    padding: 0 5px;
+}
+
+.ql-snow .ql-mermaid::before {
+    content: 'Mermaid';
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+.ql-snow .ql-mermaid:hover::before {
+    color: var(--color-primary);
+}

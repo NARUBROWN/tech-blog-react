@@ -11,6 +11,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+}
+
+.navbar-categories {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-category {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.nav-category:hover,
+.nav-category.active {
+    color: var(--color-primary);
 }
 
 .navbar-logo {

@@ -11,6 +11,7 @@ const Signup = () => {
         bio: '',
         profileImageUrl: ''
     });
+    const [role, setRole] = useState('AUTHOR');
     const [error, setError] = useState('');
     const { signup, loading } = useAuth();
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ const Signup = () => {
             return;
         }
 
-        const result = await signup(formData);
+        const result = await signup(formData, role);
         if (result.success) {
             alert('Signup successful! Please login.');
             navigate('/login');
@@ -49,6 +50,25 @@ const Signup = () => {
                 <p className="auth-subtitle">Join our community of developers</p>
 
                 {error && <div className="auth-error">{error}</div>}
+
+                <div className="role-toggle-container">
+                    <div className="role-toggle">
+                        <button
+                            type="button"
+                            className={`toggle-btn ${role === 'AUTHOR' ? 'active' : ''}`}
+                            onClick={() => setRole('AUTHOR')}
+                        >
+                            Writer
+                        </button>
+                        <button
+                            type="button"
+                            className={`toggle-btn ${role === 'ADMIN' ? 'active' : ''}`}
+                            onClick={() => setRole('ADMIN')}
+                        >
+                            Admin
+                        </button>
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">

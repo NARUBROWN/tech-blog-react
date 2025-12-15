@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
 import { User, Tag, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -10,11 +10,14 @@ const Home = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchParams] = useSearchParams();
+    const categoryName = searchParams.get('categoryName');
 
     useEffect(() => {
         const fetchPosts = async () => {
+            setLoading(true);
             try {
-                const data = await getAllPosts();
+                const data = await getAllPosts(0, 10, categoryName);
                 // data.content contains the array of posts based on the provided JSON
                 setPosts(data.content || []);
             } catch (err) {
@@ -26,7 +29,7 @@ const Home = () => {
         };
 
         fetchPosts();
-    }, []);
+    }, [categoryName]);
 
     // Use a text-only version of content for preview if needed, or just show title/tags
     // For safety, we can strip HTML from content or just not show it in the preview card

@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { login as loginApi, signup as signupApi } from '../api/auth';
+import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi } from '../api/auth';
 
 const AuthContext = createContext(null);
 
@@ -19,13 +19,10 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         setLoading(true);
         try {
-            await loginApi(username, password);
-            // Since API spec doesn't show return user data on login, we'll manually set a user object for now
-            // or assume the cookie is set.
-            // For Demo purposes, let's store the username.
-            const userObj = { username };
-            setUser(userObj);
-            localStorage.setItem('user', JSON.stringify(userObj));
+            const data = await loginApi(username, password);
+            // Store the full user object including role which comes from the response
+            setUser(data);
+            localStorage.setItem('user', JSON.stringify(data));
             return { success: true };
         } catch (error) {
             return { success: false, error };
@@ -34,10 +31,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const signup = async (userData) => {
+    const signup = async (userData, role = 'AUTHOR') => {
         setLoading(true);
         try {
-            await signupApi(userData);
+            if (role === 'ADMIN') {
+                await adminSignupApi(userData);
+            } else {
+                await signupApi(userData);
+            }
             return { success: true };
         } catch (error) {
             return { success: false, error };

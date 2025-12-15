@@ -1,10 +1,25 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { PenSquare, LogOut, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { getCategoryList } from '../api/category';
 import './Navbar.css';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategoryList();
+                setCategories(data);
+            } catch (error) {
+                console.error("Failed to fetch categories", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     return (
         <nav className="navbar">
@@ -13,6 +28,18 @@ const Navbar = () => {
                     TechBlog
                 </Link>
 
+                <div className="navbar-categories">
+                    {categories.map((category) => (
+                        <NavLink
+                            key={category.id}
+                            to={`/?categoryName=${category.name}`}
+                            className={({ isActive }) => isActive ? "nav-category active" : "nav-category"}
+                        >
+                            {category.name}
+                        </NavLink>
+                    ))}
+                </div>
+
                 <div className="navbar-links">
                     {user ? (
                         <>
@@ -20,9 +47,11 @@ const Navbar = () => {
                                 <PenSquare size={18} />
                                 Write
                             </Link>
-                            <Link to="/category/create" className="btn btn-ghost">
-                                New Category
-                            </Link>
+                            {user.role === 'ROLE_ADMIN' && (
+                                <Link to="/category/create" className="btn btn-ghost">
+                                    New Category
+                                </Link>
+                            )}
                             <div className="user-menu">
                                 <span className="user-name">
                                     <User size={18} />

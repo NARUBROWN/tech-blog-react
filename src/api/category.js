@@ -6,3 +6,8 @@ export const createCategory = async (name) => {
     });
     return response.data;
 };
+
+export const getCategoryList = async () => {
+    const response = await client.get('/category/list');
+    return response.data;
+};

@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPost } from '../api/post';
+import { getCategoryList } from '../api/category';
 import { useNavigate } from 'react-router-dom';
+import { X, Check } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import './PostForm.css';
@@ -21,6 +23,31 @@ const CreatePost = () => {
         tags: '' // Comma separated string for UI
     });
 
+    const [categories, setCategories] = useState([]);
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [selectedCategoryName, setSelectedCategoryName] = useState('');
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategoryList();
+                setCategories(data);
+            } catch (err) {
+                console.error('Failed to fetch categories', err);
+            }
+        };
+
+        if (showCategoryModal && categories.length === 0) {
+            fetchCategories();
+        }
+    }, [showCategoryModal, categories.length]);
+
+    const handleCategorySelect = (category) => {
+        setFormData(prev => ({ ...prev, categoryId: category.id }));
+        setSelectedCategoryName(category.name);
+        setShowCategoryModal(false);
+    };
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -31,6 +58,33 @@ const CreatePost = () => {
     const handleContentChange = (value) => {
         setFormData(prev => ({ ...prev, content: value }));
     };
+
+    const modules = {
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                ['link', 'image'],
+                ['clean'],
+                ['mermaid'] // Custom button
+            ],
+            handlers: {
+                'mermaid': function () {
+                    const cursorPosition = this.quill.getSelection().index;
+                    this.quill.insertText(cursorPosition, 'graph TD;\n  A-->B;', 'code-block', true);
+                    this.quill.setSelection(cursorPosition + 20);
+                }
+            }
+        }
+    };
+
+    const formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+    ];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,16 +140,24 @@ const CreatePost = () => {
                         </div>
 
                         <div className="form-group flex-1">
-                            <label htmlFor="categoryId">Category ID *</label>
-                            <input
-                                type="number"
-                                name="categoryId"
-                                id="categoryId"
-                                value={formData.categoryId}
-                                onChange={handleChange}
-                                required
-                                placeholder="ID"
-                            />
+                            <label htmlFor="categoryId">Category *</label>
+                            <div className="category-select-container">
+                                <input
+                                    type="text"
+                                    value={selectedCategoryName || (formData.categoryId ? `ID: ${formData.categoryId}` : '')}
+                                    readOnly
+                                    placeholder="Select a category"
+                                    onClick={() => setShowCategoryModal(true)}
+                                    className="category-input-readonly"
+                                />
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => setShowCategoryModal(true)}
+                                >
+                                    Select
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -106,6 +168,8 @@ const CreatePost = () => {
                             value={formData.content}
                             onChange={handleContentChange}
                             className="content-editor-quill"
+                            modules={modules}
+                            formats={formats}
                         />
                     </div>
 
@@ -176,6 +240,37 @@ const CreatePost = () => {
                     </div>
                 </form>
             </div>
+
+            {showCategoryModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h3>Select Category</h3>
+                            <button onClick={() => setShowCategoryModal(false)} className="btn-icon">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {categories.length > 0 ? (
+                                <div className="category-list">
+                                    {categories.map(cat => (
+                                        <button
+                                            key={cat.id}
+                                            className={`category-option ${formData.categoryId === cat.id ? 'selected' : ''}`}
+                                            onClick={() => handleCategorySelect(cat)}
+                                        >
+                                            <span>{cat.name}</span>
+                                            {formData.categoryId === cat.id && <Check size={16} />}
+                                        </button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="empty-state">No categories found.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
