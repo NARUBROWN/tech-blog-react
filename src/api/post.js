@@ -35,3 +35,8 @@ export const unlikePost = async (postId) => {
     const response = await client.delete(`/like/${postId}`);
     return response.data;
 };
+
+export const getPostLikes = async (postId) => {
+    const response = await client.get(`/like/${postId}`);
+    return response.data;
+};

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPostBySlug, likePost, unlikePost } from '../api/post';
+import { getPostBySlug, likePost, unlikePost, getPostLikes } from '../api/post';
 import { useAuth } from '../context/AuthContext';
+import UserListModal from '../components/UserListModal';
+import RecommendedPosts from '../components/RecommendedPosts';
 import { Calendar, User, Tag, Heart, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import DOMPurify from 'dompurify';
@@ -22,6 +24,8 @@ const PostDetail = () => {
     const [error, setError] = useState('');
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [likers, setLikers] = useState([]);
+    const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -38,8 +42,46 @@ const PostDetail = () => {
             }
         };
 
+        const fetchLikers = async () => {
+            if (!slug || !post?.id) return;
+            try {
+                const likersData = await getPostLikes(post.id);
+                setLikers(likersData);
+                setLikeCount(likersData.length);
+                if (user) {
+                    setIsLiked(likersData.some(u => u.username === user.username));
+                }
+            } catch (error) {
+                console.error("Failed to fetch likes", error);
+            }
+        };
+
         if (slug) fetchPost();
+
+        // If post exists (after first load), fetch likes separately or chain it
+        // To simplify, we'll rely on effect dependency on post?.id
     }, [slug]);
+
+    useEffect(() => {
+        if (post?.id) {
+            const updateLikeState = async () => {
+                try {
+                    const likersData = await getPostLikes(post.id);
+                    setLikers(likersData);
+                    setLikeCount(likersData.length);
+                    if (user) {
+                        // Check by username or id. API response has username.
+                        setIsLiked(likersData.some(u => u.username === user.username));
+                    } else {
+                        setIsLiked(false);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch likes", error);
+                }
+            }
+            updateLikeState();
+        }
+    }, [post?.id, user]);
 
     useEffect(() => {
         if (!post?.content) return;
@@ -174,6 +216,11 @@ const PostDetail = () => {
             } else {
                 await likePost(post.id);
             }
+
+            // Re-fetch likers to be accurate
+            const freshLikers = await getPostLikes(post.id);
+            setLikers(freshLikers);
+            setLikeCount(freshLikers.length);
         } catch (error) {
             console.error('Failed to toggle like:', error);
             // Revert on error
@@ -248,6 +295,12 @@ const PostDetail = () => {
                             aria-label={isLiked ? "Unlike post" : "Like post"}
                         >
                             <Heart size={20} fill={isLiked ? "currentColor" : "none"} />
+                        </button>
+                        <button
+                            className="like-count-btn"
+                            onClick={() => setIsLikeModalOpen(true)}
+                            aria-label="View who liked this post"
+                        >
                             <span>{likeCount}</span>
                         </button>
                     </div>
@@ -273,6 +326,15 @@ const PostDetail = () => {
                     </div>
                 </div>
             </footer>
+
+            <RecommendedPosts currentPostId={post.id} />
+
+            <UserListModal
+                isOpen={isLikeModalOpen}
+                onClose={() => setIsLikeModalOpen(false)}
+                title="Likes"
+                users={likers}
+            />
         </article>
     );
 };
