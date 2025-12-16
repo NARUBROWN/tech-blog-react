@@ -11,6 +11,6 @@ export const uploadImage = async (file) => {
     });
     return {
         ...response.data,
-        url: `http://localhost:8080${response.data.url}`
+        url: `${response.data.url}`
     };
 };
