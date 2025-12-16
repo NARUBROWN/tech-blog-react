@@ -133,3 +133,10 @@
         color: #818cf8;
     }
 }
+
+.rec-image-wrapper.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+}

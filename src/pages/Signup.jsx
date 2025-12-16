@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ImageUpload from '../components/ImageUpload';
 import './Auth.css';
 
 const Signup = () => {
@@ -119,13 +120,10 @@ const Signup = () => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="profileImageUrl">Profile Image URL</label>
-                        <input
-                            type="text"
-                            name="profileImageUrl"
-                            id="profileImageUrl"
-                            value={formData.profileImageUrl}
-                            onChange={handleChange}
+                        <ImageUpload
+                            label="Profile Image"
+                            onUpload={(url) => setFormData(prev => ({ ...prev, profileImageUrl: url }))}
+                            initialUrl={formData.profileImageUrl}
                         />
                     </div>
 

@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { createPost } from '../api/post';
 import { getCategoryList } from '../api/category';
+import { uploadImage } from '../api/image';
+import ImageUpload from '../components/ImageUpload';
 import { useNavigate } from 'react-router-dom';
 import { X, Check } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
@@ -11,6 +13,8 @@ const CreatePost = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const quillRef = useRef(null);
+    const imageRef = useRef(null);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -59,25 +63,49 @@ const CreatePost = () => {
         setFormData(prev => ({ ...prev, content: value }));
     };
 
-    const modules = {
-        toolbar: {
-            container: [
-                [{ 'header': [1, 2, false] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                ['link', 'image'],
-                ['clean'],
-                ['mermaid'] // Custom button
-            ],
-            handlers: {
-                'mermaid': function () {
-                    const cursorPosition = this.quill.getSelection().index;
-                    this.quill.insertText(cursorPosition, 'graph TD;\n  A-->B;', 'code-block', true);
-                    this.quill.setSelection(cursorPosition + 20);
+    const imageHandler = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (file) {
+                try {
+                    const result = await uploadImage(file);
+                    const range = quillRef.current.getEditor().getSelection(true);
+                    quillRef.current.getEditor().insertEmbed(range.index, 'image', result.url);
+                } catch (error) {
+                    console.error('Image upload failed:', error);
+                    alert('Image upload failed');
                 }
             }
-        }
+        };
     };
+
+    const modules = useMemo(() => {
+        return {
+            toolbar: {
+                container: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                    ['link', 'image'],
+                    ['clean'],
+                    ['mermaid']
+                ],
+                handlers: {
+                    'image': imageHandler,
+                    'mermaid': function () {
+                        const cursorPosition = this.quill.getSelection().index;
+                        this.quill.insertText(cursorPosition, 'graph TD;\n  A-->B;', 'code-block', true);
+                        this.quill.setSelection(cursorPosition + 20);
+                    }
+                }
+            }
+        };
+    }, []);
 
     const formats = [
         'header',
@@ -164,6 +192,7 @@ const CreatePost = () => {
                     <div className="form-group">
                         <label htmlFor="content">Content *</label>
                         <ReactQuill
+                            ref={quillRef}
                             theme="snow"
                             value={formData.content}
                             onChange={handleContentChange}
@@ -175,13 +204,10 @@ const CreatePost = () => {
 
                     <div className="form-row">
                         <div className="form-group flex-1">
-                            <label htmlFor="thumbnailUrl">Thumbnail URL</label>
-                            <input
-                                type="text"
-                                name="thumbnailUrl"
-                                id="thumbnailUrl"
-                                value={formData.thumbnailUrl}
-                                onChange={handleChange}
+                            <ImageUpload
+                                label="Thumbnail Image"
+                                onUpload={(url) => setFormData(prev => ({ ...prev, thumbnailUrl: url }))}
+                                initialUrl={formData.thumbnailUrl}
                             />
                         </div>
                         <div className="form-group flex-1">

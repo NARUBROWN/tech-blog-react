@@ -1,7 +1,13 @@
 .post-detail-container {
     max-width: 800px;
     margin: 3rem auto;
-    padding: 0 1.5rem;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-xl);
     animation: fadeIn 0.5s ease-out;
 }
 
@@ -97,18 +103,23 @@
 }
 
 /* Featured Image */
-.post-featured-image {
-    margin: 0 -2rem 3rem -2rem;
-    /* Break out of container on mobile */
-    border-radius: 12px;
+/* Featured Image Banner (Twitter Style) */
+.post-featured-image-banner {
+    margin: -2rem -2rem 2rem -2rem;
+    height: 300px;
+    /* Fixed height for banner look */
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    width: calc(100% + 4rem);
+    /* Compensate for container padding */
 }
 
-.post-featured-image img {
+.post-featured-image-banner img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     display: block;
 }
 
@@ -118,6 +129,27 @@
     line-height: 1.8;
     color: var(--text-primary, #334155);
     margin-bottom: 4rem;
+}
+
+.post-body-text img {
+    display: block;
+    /* Center horizontally relative to parent */
+    margin-left: 50%;
+    transform: translateX(-50%);
+
+    /* Allow breaking out of padding */
+    width: auto;
+    /* Preserve aspect ratio for small images */
+    max-width: calc(100% + 4rem);
+    /* Allow filling the entire card width (parent + padding) */
+
+    /* Vertical spacing */
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    /* Styling */
+    border-radius: var(--radius-md, 8px);
+    box-shadow: none;
 }
 
 /* ... existing typography styles usually go here or in global ... */
@@ -271,9 +303,12 @@
         font-size: 2rem;
     }
 
-    .post-featured-image {
-        margin: 0 -1.5rem 2rem -1.5rem;
+    .post-featured-image-banner {
+        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        width: calc(100% + 3rem);
         border-radius: 0;
+        height: 200px;
+        /* Smaller height on mobile */
     }
 
     .post-author-bio-card {

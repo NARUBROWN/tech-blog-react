@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
 import { format } from 'date-fns';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Image } from 'lucide-react';
 import './RecommendedPosts.css';
 
 const RecommendedPosts = ({ currentPostId }) => {
@@ -29,6 +29,13 @@ const RecommendedPosts = ({ currentPostId }) => {
         fetchPosts();
     }, [currentPostId]);
 
+    const slugify = (text) => {
+        return text
+            .toString()
+            .trim()
+            .replace(/\s+/g, '-');
+    };
+
     if (loading || posts.length === 0) return null;
 
     return (
@@ -36,10 +43,14 @@ const RecommendedPosts = ({ currentPostId }) => {
             <h3 className="recommended-title">Recommended Reading</h3>
             <div className="recommended-grid">
                 {posts.map(post => (
-                    <Link to={`/post/${post.slug}`} key={post.id} className="recommended-card">
-                        {post.thumbnailUrl && (
+                    <Link to={`/post/${slugify(post.title)}`} key={post.id} className="recommended-card">
+                        {post.thumbnailUrl ? (
                             <div className="rec-image-wrapper">
                                 <img src={post.thumbnailUrl} alt={post.title} />
+                            </div>
+                        ) : (
+                            <div className="rec-image-wrapper placeholder">
+                                <Image size={32} color="#9ca3af" />
                             </div>
                         )}
                         <div className="rec-content">
