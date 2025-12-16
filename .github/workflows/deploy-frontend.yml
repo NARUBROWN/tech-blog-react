@@ -32,4 +32,3 @@ jobs:
           source: "dist"
           target: "/var/www/tech-blog/"
           overwrite: true
-          rm: true
