@@ -10,6 +10,7 @@ const Navbar = () => {
     const { user, logout } = useAuth();
     const [categories, setCategories] = useState([]);
     const [isVisible, setIsVisible] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const activeCategory = searchParams.get('categoryName');
@@ -19,17 +20,34 @@ const Navbar = () => {
     const hideTimer = useRef(null);
     const isMouseAtTop = useRef(false);
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const handleResize = (event) => setIsMobile(event.matches);
+
+        setIsMobile(mediaQuery.matches);
+        mediaQuery.addEventListener('change', handleResize);
+
+        return () => mediaQuery.removeEventListener('change', handleResize);
+    }, []);
+
     // Auto-hide logic
     useEffect(() => {
         const isMainPage = location.pathname === '/';
-        if (isMainPage) {
+        if (isMobile || isMainPage) {
             setIsVisible(true);
-            if (hideTimer.current) clearTimeout(hideTimer.current);
+            if (hideTimer.current) {
+                clearTimeout(hideTimer.current);
+                hideTimer.current = null;
+            }
             return;
         }
 
         const resetTimer = () => {
             if (hideTimer.current) clearTimeout(hideTimer.current);
+
+            // Disable auto-hide on mobile
+            if (isMobile) return;
+
             if (!isMouseAtTop.current) {
                 hideTimer.current = setTimeout(() => {
                     setIsVisible(false);
@@ -89,8 +107,9 @@ const Navbar = () => {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('mousemove', handleMouseMove);
             if (hideTimer.current) clearTimeout(hideTimer.current);
+            hideTimer.current = null;
         };
-    }, [location.pathname]);
+    }, [location.pathname, isMobile]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -105,12 +124,12 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className={`navbar ${!isVisible ? 'hidden' : ''}`}>
+        <nav className={`navbar ${!isVisible && !isMobile ? 'hidden' : ''}`}>
             <div className="navbar-content">
                 <Link to="/" className="navbar-logo">
                     {/* Using an emoji or icon as placeholder if logo image not fitting well, but keeping image as requested */}
                     <img src="/logo.png" alt="Logo" className="navbar-logo-image" />
-                    {<span>TechBlog</span>}
+                    {<span>NARUBROWN</span>}
                 </Link>
 
                 <div className="navbar-categories">

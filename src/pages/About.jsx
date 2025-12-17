@@ -203,53 +203,54 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
         },
         {
             date: '2024.10 ~ 2025.06',
-            title: '스카우트',
+            title: '보너스잡',
             role: 'Back-End Engineer',
             org: '(주)스카우트',
-            summary: 'AI 기반 맞춤 채용과 스카우터 커리어 컨설팅, 취업·추천 보상 등으로 구직자와 기업을 연결하는 국내 대표 온라인 HR 채용 플랫폼입니다.',
-            techs: ['Java', 'Spring Boot', 'JPA', 'QueryDSL', 'mySQL'],
+            summary: '취업 시 축하금과 추천 보상금을 제공하며 직종별 채용공고 검색, 지원, 추천 보상 기능을 결합한 보상형 채용 플랫폼입니다.',
+            techs: ['Java', 'Spring Boot', 'JPA', 'mySQL', 'MakeBill API'],
             problems: [
-                'B2B 대행형 플랫폼 구조로 계약 기업만 공고 등록 가능, 수익 모델 제한',
-                '결제·환불·정산 흐름이 수작업 중심으로 운영 리스크 존재',
-                '글로벌 서비스에서 복잡한 쿼리로 API 응답 지연 발생'
+                '계약 기업만 공고를 등록하는 대행형 B2B 채용 서비스 구조로 인해 확장성 한계',
+                '유료 노출, 결제, 환불, 회계 처리가 수작업 중심으로 운영 부담 발생'
             ],
             solutions: [
-                '셀프 서비스 채용 플랫폼으로 확장, 포커스 게재 유료 상품 설계',
-                '포인트 충전·차감·환불 도메인 모델링 및 상태 세분화',
-                'MakeBill API 연동으로 세금계산서 발행/재전송/취소 자동화',
-                '슈퍼 유저 권한 기반 입금 확정 및 다중 상태 검색·통계 API 제공',
-                'Spring Boot + JPA로 계층 분리(도메인–리포지토리–서비스) 및 RESTful CRUD 설계',
-                'QueryDSL로 다중 쿼리를 단일 쿼리로 통합'
+                '모든 기업이 직접 공고를 등록할 수 있는 셀프 서비스 채용 구조로 전환',
+                '포커스 게재(메인 노출) 유료 상품 도입',
+                '포인트 충전·차감·환불 도메인 설계 및 상태 모델링',
+                '포인트 상태를 통합·세분화하여 결제 및 환불 흐름 안정화',
+                'MakeBill API 연동을 통해 세금계산서 발행·재전송·취소 자동화',
+                '슈퍼 유저 권한 기반 입금 확정 로직 구현',
+                '다중 상태 검색 및 통계 API 제공으로 회계·정산 업무 간소화'
             ],
             results: [
-                '대행형 → 셀프 서비스형 전환으로 신규 수익 모델 확장',
-                '안정적인 결제·환불·정산 흐름 구축으로 운영 리스크 감소',
-                '글로벌 서비스 API 응답 속도 개선 및 DB 접근 횟수 약 50% 감소'
+                '유료 상품 기반 수익 모델 확보',
+                '결제·정산·회계 전반이 자동화된 B2B 채용 플랫폼 구축',
+                '운영 인력 의존도 감소 및 서비스 확장성 향상'
             ],
-            serviceUrl: 'https://www.scout.co.kr/'
+            serviceUrl: 'https://www.bonusjob.co.kr'
         },
         {
             date: '2024.10 ~ 2025.06',
-            title: '인프라 모니터링 & 관측성 확보',
+            title: '스카우트 글로벌',
             role: 'Back-End Engineer',
             org: '(주)스카우트',
-            summary: '온프레미스와 클라우드를 아우르는 통합 모니터링/알림 스택 구축',
-            techs: ['Docker', 'Prometheus', 'Grafana', 'cAdvisor', 'Windows Exporter', 'AWS EC2'],
+            techs: ['Java', 'Spring Boot', 'JPA', 'QueryDSL', 'mySQL'],
+            summary: 'AI 기반 맞춤 채용과 스카우터 커리어 컨설팅, 취업·추천 보상 등으로 구직자와 기업을 연결하는 국내 대표 온라인 HR 채용 플랫폼입니다.',
             problems: [
-                '체계적인 시스템 모니터링 환경 부재로 장애 인지 지연 및 자원 현황 파악 어려움',
-                '온프레미스와 클라우드가 혼재되어 가시성 부족'
+                '외국인 취업 공고를 제공하는 신규 서비스에서 복잡한 조회 조건으로 인한 API 응답 지연 및 잦은 DB 접근 문제 발생',
+                '신규 서비스임에도 초기부터 확장성과 유지보수성을 고려한 구조 필요'
             ],
             solutions: [
-                '컨테이너 기반 인프라 전반을 아우르는 통합 모니터링 아키텍처 설계',
-                'cAdvisor, Prometheus, Grafana, Windows Exporter 도입 및 Docker Compose로 스택 구성/배포 자동화',
-                '온프레미스 + AWS EC2 환경 통합 수집, Prometheus Alertmanager 연동으로 즉각 알림',
-                'Grafana 대시보드 템플릿화로 유지보수성과 확장성 확보'
+                'Spring Boot + JPA 기반으로 도메인–레포지토리–서비스 계층 명확히 분리',
+                'RESTful 규약을 준수한 CRUD API 설계',
+                'QueryDSL을 활용해 다중 쿼리를 단일 쿼리로 통합',
+                '중복 로직 제거 및 불필요한 DB 접근 최소화'
             ],
             results: [
-                '서버·컨테이너·DB 리소스를 실시간 파악 가능한 관측 환경 확보',
-                '장애 대응 속도 향상 및 운영 안정성 개선',
-                '데이터 기반 인프라 비용 최적화 의사결정 가능'
-            ]
+                'API 응답 속도 개선',
+                'DB 접근 횟수 약 50% 감소',
+                '신규 글로벌 서비스의 안정적인 초기 운영 기반 확보'
+            ],
+            serviceUrl: 'https://www.scout.co.kr'
         },
         {
             date: '2024.10 ~ 2025.06',
@@ -257,21 +258,51 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             role: 'Back-End Engineer',
             org: '(주)스카우트',
             summary: '스카우트가 운영하는 토탈 홈케어 플랫폼으로, 검증된 매니저가 가사·사업장 청소, 공간 소독과 생활편의 서비스를 앱 기반으로 맞춤 제공하는 청소·위생 서비스입니다.',
-            techs: ['Java', 'Spring Boot', 'JPA'],
+            techs: ['Java', 'Spring Boot', 'JPA', 'mySQL'],
             problems: [
-                'DB 프로시저·함수 호출에 강하게 의존한 레거시 구조',
-                'Controller에서 객체를 직접 생성하는 비표준 아키텍처로 추적과 유지보수 어려움'
+                'DB 프로시저 및 함수 직접 호출로 인한 높은 DB 종속성',
+                'Controller 레벨에서 직접 객체 생성 등 비표준 구조로 오류 추적 및 유지보수 어려움'
             ],
             solutions: [
-                'DB 프로시저 기반 로직을 JPA + 서비스 계층 기반 RESTful API로 전환',
-                '@GetMapping/@PostMapping 등 명확한 HTTP 메서드 매핑 적용',
-                'Spring DI 도입으로 객체 생성 및 의존성 관리 표준화, 중복 어노테이션/직접 생성 제거'
+                'DB 프로시저 기반 로직을 JPA + Service 계층 중심 구조로 전환',
+                'RESTful API로 재설계',
+                '@GetMapping, @PostMapping 등 명확한 HTTP 메서드 매핑 적용',
+                'Spring DI 도입으로 객체 생성 책임 분리',
+                'Controller 코드 정리 및 중복 어노테이션 제거'
             ],
             results: [
-                '컨트롤러 코드 약 20% 이상 정리 및 DB 종속성/호출량 감소',
-                '코드 가독성·유지보수성 향상, 신규 기능 개발 리드타임 단축'
+                'Controller 코드 약 20% 이상 정리',
+                'DB 의존성 및 DB 호출량 감소',
+                '코드 가독성·유지보수성·협업 효율 향상',
+                '신규 기능 추가 시 개발 리드타임 단축'
             ],
             serviceUrl: 'https://helper.veteranscout.co.kr/'
+        },
+        {
+            date: '2024.10 ~ 2025.06',
+            title: '통합 모니터링 & 관측 시스템',
+            role: 'Back-End Engineer',
+            org: '(주)스카우트',
+            summary: '온프레미스와 클라우드를 아우르는 통합 모니터링/알림 스택 구축',
+            techs: ['Docker', 'Prometheus', 'Grafana', 'cAdvisor', 'Windows Exporter', 'AWS EC2'],
+            problems: [
+                '체계적인 시스템 모니터링 환경 부재로 장애 인지 지연',
+                '온프레미스와 클라우드 환경이 분리되어 인프라 가시성 부족',
+                '클라우드 비용 사용 현황 파악 어려움'
+            ],
+            solutions: [
+                '컨테이너 기반 환경을 전제로 통합 모니터링 아키텍처 직접 설계 및 구축',
+                'cAdvisor, Prometheus, Grafana, Windows Exporter 기반 스택 구성',
+                '온프레미스 + AWS EC2 환경 통합 모니터링',
+                'Docker Compose를 활용한 모니터링 스택 배포 자동화',
+                'Prometheus Alert Manager 연동으로 장애 발생 시 즉각 알림',
+                'Grafana 대시보드 템플릿화로 유지보수성과 확장성 확보'
+            ],
+            results: [
+                '서버·컨테이너·DB 상태를 실시간으로 파악 가능한 관측 환경 구축',
+                '장애 대응 속도 및 운영 안정성 향상',
+                '클라우드 비용 최적화를 위한 가시성 기반 마련'
+            ]
         },
         {
             date: '2024.01 ~ 2024.02',
@@ -558,13 +589,15 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                                 year: '2025.07 ~ 현재',
                                 title: '요즘IT 필진 활동',
                                 org: '필명: 나루브라운',
-                                desc: '“어이 신입, 탈출각이다.”, “닮고 싶은 개발자의 초상” 등 성장과 커리어를 주제로 에세이 연재'
+                                desc: '“어이 신입, 탈출각이다.”, “닮고 싶은 개발자의 초상” 등 성장과 커리어를 주제로 에세이 연재',
+                                url: 'https://yozm.wishket.com/magazine/@narubrown/'
                             },
                             {
                                 year: '2023.03.01 ~ 2025.03.01',
                                 title: '글로벌 앱센터 센터장',
                                 org: '인천대학교 전산원 산하 글로벌 앱센터',
-                                desc: '서버 파트장 및 센터장으로 팀 운영과 백엔드 기술 공유'
+                                desc: '서버 파트장 및 센터장으로 팀 운영과 백엔드 기술 공유',
+                                url: 'https://home.inuappcenter.kr/team/common?year=16.5'
                             },
                             {
                                 year: '2024.12.18',
@@ -588,7 +621,11 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                             <div className="award-card" key={index}>
                                 <div className="award-header">
                                     <span className="award-year">{activity.year}</span>
-                                    <span className="award-icon"><ExternalLink size={16} /></span>
+                                    {activity.url && (
+                                        <a href={activity.url} target="_blank" rel="noopener noreferrer">
+                                            <span className="award-icon"><ExternalLink size={16} /></span>
+                                        </a>
+                                    )}
                                 </div>
                                 <h3 className="award-title">{activity.title}</h3>
                                 <span className="award-org">{activity.org}</span>
@@ -644,12 +681,12 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                             {
                                 period: '2023.03 ~ 2025.02',
                                 school: '인천대학교, 인천 연수구',
-                                major: '컴퓨터공학, 공학사'
+                                major: '컴퓨터공학부, 공학사'
                             },
                             {
                                 period: '2018.03 ~ 2023.02',
                                 school: '인천재능대학교, 인천 연수구',
-                                major: '컴퓨터정보, 공업전문학사'
+                                major: '인공지능컴퓨터정보, 공업전문학사'
                             }
                         ].map((edu, index) => (
                             <div className="award-card" key={index}>
