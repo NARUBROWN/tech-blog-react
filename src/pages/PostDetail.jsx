@@ -1,10 +1,10 @@
 import { useState, useEffect, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPostBySlug, likePost, unlikePost, getPostLikes } from '../api/post';
+import { getPostBySlug, likePost, unlikePost, getPostLikes, deletePost } from '../api/post';
 import { useAuth } from '../context/AuthContext';
 import UserListModal from '../components/UserListModal';
 import RecommendedPosts from '../components/RecommendedPosts';
-import { Calendar, User, Tag, Heart, Eye } from 'lucide-react';
+import { Calendar, User, Tag, Heart, Eye, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import DOMPurify from 'dompurify';
 // Configure DOMPurify to allow SVG elements for Mermaid diagrams
@@ -232,6 +232,20 @@ const PostDetail = () => {
         }
     };
 
+    const handleDelete = async () => {
+        if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            await deletePost(post.id);
+            navigate('/');
+        } catch (error) {
+            console.error('Failed to delete post:', error);
+            alert('Failed to delete post.');
+        }
+    };
+
     if (loading) return <div className="loading-state">Loading...</div>;
     if (error) return <div className="error-state">{error}</div>;
     if (!post) return <div className="error-state">Post not found</div>;
@@ -274,7 +288,16 @@ const PostDetail = () => {
                                 </div>
                             </div>
                             <div className="header-actions">
-                                {/* Placeholder for share/bookmark actions */}
+                                {(user && post.author && (user.username === post.author.username || user.role === 'ROLE_ADMIN')) && (
+                                    <button
+                                        className="action-btn delete-btn"
+                                        onClick={handleDelete}
+                                        title="Delete Post"
+                                        style={{ color: '#ef4444' }} // Simple inline style for danger color, or move to CSS
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
