@@ -304,7 +304,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             role: 'Backend Developer',
             desc: 'Kafka 기반 MSA 티켓팅 시스템 설계. JPA 비관/낙관 락과 트랜잭션 격리 수준 실험으로 동시 예약 정합성 확보, Spring Cloud Gateway + Eureka + Feign으로 서비스 간 통신 표준화.',
             techs: ['Java', 'Spring Boot', 'Kafka', 'Hibernate', 'MSA', 'Spring Cloud Gateway', 'Feign Client', 'Eureka'],
-            links: { demo: '#', github: 'https://github.com/NARUBROWN' }
+            links: { github: 'https://github.com/appcenter-advanced-study/msa-ticketing-system-wonjeong' }
         },
         {
             date: '2024.10 ~ 2025.02',
@@ -312,7 +312,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             role: 'Backend Developer',
             desc: '코딩 교육 플랫폼 백엔드 개발. N+1 문제를 BatchSize 및 IN 절 최적화로 해결해 API 호출 성능 최대 40배 개선, GitHub Actions와 Docker로 배포 자동화.',
             techs: ['Java', 'Spring Boot', 'JPA', 'GitHub Actions', 'Docker'],
-            links: { demo: '#', github: 'https://github.com/NARUBROWN' }
+            links: { github: 'https://github.com/9oormthon-univ/2024_DANPOONG_TEAM_45_BE' }
         }
     ];
 
@@ -503,13 +503,12 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                                                 )}
                                                 {skill.level && (
                                                     <span
-                                                        className={`skill-level ${
-                                                            skill.level === '상'
-                                                                ? 'level-high'
-                                                                : skill.level === '중'
-                                                                    ? 'level-mid'
-                                                                    : 'level-low'
-                                                        }`}
+                                                        className={`skill-level ${skill.level === '상'
+                                                            ? 'level-high'
+                                                            : skill.level === '중'
+                                                                ? 'level-mid'
+                                                                : 'level-low'
+                                                            }`}
                                                     >
                                                         {skill.level}
                                                     </span>
