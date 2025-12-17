@@ -4,6 +4,7 @@ import { getAllPosts } from '../api/post';
 import { User, Tag, Clock, Image } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
+import Typewriter from '../components/Typewriter';
 import './Home.css';
 
 const Home = () => {
@@ -115,10 +116,23 @@ const Home = () => {
                 <div className="hero-section">
                     <div className="hero-grid-overlay" aria-hidden="true"></div>
                     <div className="hero-content">
-                        <h1>Backend Engineer&apos;s Launchpad</h1>
-                        <p>Share systems thinking, architecture wins, and pragmatic backend lessons with the community.</p>
+                        <h1>
+                            <Typewriter
+                                phrases={[
+                                    "동시성을 구조로 다루는",
+                                    "성능을 수치로 증명하는",
+                                    "관심사를 코드로 분리하는",
+                                    "레거시를 현실적으로 개선하는",
+                                    "운영까지 책임지는",
+                                    "아키텍처를 문서로 남기는",
+                                    "팀의 시행착오를 줄이는",
+                                    "복잡함을 단순한 구조로 바꾸는"
+                                ]}
+                            /> <br></br>개발자
+                        </h1>
+                        <p>실무에서 마주한 문제를 구조로 풀고, 그 선택을 수치와 기록으로 남깁니다.</p>
                         <div className="hero-actions">
-                            <Link to="/post/create" className="btn btn-primary btn-lg">Start Writing</Link>
+                            <Link to="/about" className="btn btn-primary btn-lg">About Me</Link>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,692 @@
+import React, { useEffect, useState } from 'react';
+import { Mail, Github, Linkedin, ExternalLink, Trophy, Zap, Activity, BarChart2, Share2, Layers, Database, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
+import './About.css';
+
+const About = () => {
+    const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+
+    useEffect(() => {
+        // Simple intersection observer for fade-in animations on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(el => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, []);
+
+    const skillCategories = [
+        {
+            title: "프로그래밍 언어",
+            skills: [
+                { name: 'Java', icon: '☕', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'JavaScript', icon: '🟡', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'TypeScript', icon: '💙', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'Go', icon: '🐹', tags: ['실무 경험 있음'], level: '하' }
+            ]
+        },
+        {
+            title: "프레임워크",
+            skills: [
+                { name: 'Spring Boot', icon: '🌱', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '상' },
+                { name: 'NestJS', icon: '🦁', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '상' },
+                { name: 'FastAPI', icon: '⚡', tags: ['프로젝트 경험 있음'], level: '상' },
+                { name: 'echo', icon: '🌐', tags: ['실무 경험 있음'], level: '중' }
+            ]
+        },
+        {
+            title: "데이터베이스",
+            skills: [
+                { name: 'MySQL', icon: '🐬', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'PostgreSQL', icon: '🐘', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '하' },
+                { name: 'Redis', icon: '🟥', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' }
+            ]
+        },
+        {
+            title: "DevOps & 기타",
+            skills: [
+                { name: 'Docker / Compose', icon: '🐳', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'Jenkins / GitHub Actions', icon: '⚙️', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'Kafka / RabbitMQ', icon: '📡', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'JPA / TypeORM', icon: '🧰', tags: ['프로젝트 경험 있음', '실무 경험 있음'], level: '중' },
+                { name: 'Knex.js', icon: '🛠️', tags: ['실무 경험 있음'], level: '상' }
+            ]
+        }
+    ];
+
+    const experience = [
+        {
+            date: '2025.07 ~ 현재',
+            type: '정규직',
+            title: 'Back-End Engineer',
+            company: '(주)셈웨어, 서울 금천구',
+            description: [
+                'Redis Pub/Sub 기반 다중 서버 실시간 대기방 아키텍처 설계',
+                'Redis 분산락으로 경쟁 조건 제어',
+                'JMeter 기반 SLO 정의와 HPA 튜닝',
+                'OpenTelemetry + Jaeger로 E2E 트레이싱 구축'
+            ],
+            techs: ['Redis', 'JMeter', 'OpenTelemetry', 'Jaeger']
+        },
+        {
+            date: '2024.10 ~ 2025.06',
+            type: '정규직',
+            title: 'Back-End Engineer',
+            company: '(주)스카우트, 서울 강남구',
+            description: [
+                '보너스잡 포커스 게재 상품화 및 포인트 결제/회계 도메인 설계',
+                'JPA 기반 RESTful 구조로 레거시 프로시저 코드 리팩토링',
+                '서비스 계층 도입과 DI 표준화로 유지보수성 개선'
+            ],
+            techs: ['JPA', 'Spring Boot', 'Refactoring']
+        },
+        {
+            date: '2024.01 ~ 2024.02',
+            type: '인턴',
+            title: 'Back-End Engineer',
+            company: '(주)모베란, 인천 연수구',
+            description: [
+                '국회 정책 세미나 실시간 전달 시스템 백오피스 API 개발'
+            ],
+            techs: ['API Development', 'Backoffice']
+        }
+    ];
+
+    const interests = [
+        {
+            icon: <Zap size={24} />,
+            title: "실시간 시스템과 상태 일관성",
+            desc: `동시에 많은 사용자가 몰리는 환경에서 상태가 어긋나는 순간을 가장 흥미로운 문제로 봅니다.
+다중 서버 대기방을 설계하며 Redis Pub/Sub, 분산락, 원자적 업데이트를 비교·실험했고, 경쟁 조건 속에서도 “단 한 번만 반영되는 상태”를 만드는 구조에 관심을 두고 있습니다.`
+        },
+        {
+            icon: <Activity size={24} />,
+            title: "관측 가능한 시스템",
+            desc: `장애는 숨겨질수록 커진다고 생각합니다.
+OpenTelemetry, Jaeger, Prometheus를 활용해 마이크로서비스의 호출 흐름을 추적하고, “어디서 느려졌고 왜 실패했는지”를 눈으로 확인할 수 있는 시스템을 만드는 데 관심이 많습니다.`
+        },
+        {
+            icon: <BarChart2 size={24} />,
+            title: "성능 분석과 기준 있는 운영",
+            desc: `막연한 최적화보다 근거 있는 판단을 선호합니다.
+JMeter 부하 테스트를 통해 병목을 조기에 드러내고, 수치로 정의된 SLO를 기반으로 HPA를 튜닝하며 안정성과 비용 효율을 동시에 맞추는 운영 방식에 관심을 두고 있습니다.`
+        },
+        {
+            icon: <Share2 size={24} />,
+            title: "MSA와 이벤트 아키텍처",
+            desc: `모놀리식에서 MSA로 전환되는 지점의 복잡성을 좋아합니다.
+Kafka·RabbitMQ 기반 이벤트 흐름을 설계하며, 서비스 간 결합도를 낮추고 독립 배포와 장애 격리를 자연스럽게 얻는 구조에 관심을 갖고 있습니다.`
+        },
+        {
+            icon: <Layers size={24} />,
+            title: "트랜잭션 경계와 관심사 분리",
+            desc: `“이 로직의 책임은 어디까지인가”를 계속 고민합니다.
+코어 비즈니스 로직과 횡단 관심사를 분리하고, 트랜잭션의 소유권을 명확히 정의해 테스트 가능하고 예측 가능한 구조를 만드는 데 관심이 있습니다.`
+        },
+        {
+            icon: <Database size={24} />,
+            title: "데이터 정합성과 동시성 전략",
+            desc: `정합성은 하나의 정답이 아니라 선택의 문제라고 생각합니다.
+JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접근까지 상황별로 비교·실험하며, 트래픽과 도메인에 맞는 동시성 전략을 탐구하고 있습니다.`
+        },
+        {
+            icon: <BookOpen size={24} />,
+            title: "기술을 지식으로 남기는 일",
+            desc: `문제 해결이 개인의 경험으로 끝나는 걸 경계합니다.
+실험과 시행착오를 문서로 정리해 팀의 공통 자산으로 만들고, 다시 재사용 가능한 지식으로 축적하는 과정 자체에 큰 관심을 두고 있습니다.`
+        }
+    ];
+
+    const professionalProjects = [
+        {
+            date: '2025.07 ~',
+            title: 'SteamUp Academy',
+            role: 'Backend Engineer',
+            summary: '수학·과학·코딩·예술을 아우르는 디지털 STEAM 수업 플랫폼으로 실시간 양방향 수업, 코스웨어 제공과 맞춤형 강의 제작·학급 관리를 지원합니다.',
+            techs: ['Go', 'Echo', 'WebSocket', 'Redis', 'Redis Pub/Sub', 'PostgreSQL'],
+            problems: [
+                'WebSocket 기반 실시간 클래스룸에서 다중 서버를 고려하지 않아 입·퇴장/좌석 선택 시 상태 충돌과 중복 처리 위험',
+                '단일 Handler에 비즈니스 로직·DB 접근·응답 스키마가 섞인 1-Tier 구조로 테스트와 확장이 어려움'
+            ],
+            solutions: [
+                '다중 서버 환경을 전제로 실시간 대기방 아키텍처 재설계',
+                'Redis Pub/Sub 이벤트 스트림으로 모든 서버 인스턴스 간 상태 동기화',
+                '스냅샷 + Delta 전략으로 전체 상태 반복 전송을 제거',
+                '좌석 선택 등 경쟁 구간에 Redis 분산락을 적용해 단일 반영 보장',
+                'Handler–Service–DB 3-Tier 아키텍처로 전면 재정비',
+                '객체 생성과 의존성 연결을 중앙화하고 Service 계층을 순수 비즈니스 로직 전용으로 분리',
+                '레거시를 유지하며 단계적으로 신규 구조로 마이그레이션'
+            ],
+            results: [
+                '수십 명 동시 접속에서도 상태 충돌 없는 고신뢰 실시간 클래스룸 구현',
+                '다중 인스턴스 환경에서도 데이터 무결성 유지',
+                '테스트 가능한 구조 확보로 신규 기능 개발 속도 및 코드 안정성 향상',
+                '수평 확장을 전제로 한 실시간 백엔드 아키텍처 기반 마련'
+            ],
+            serviceUrl: 'https://www.steamup.academy/ko/'
+        },
+        {
+            date: '2025.07 ~',
+            title: 'AlgeoMath',
+            role: 'Backend Engineer',
+            summary: '한국과학창의재단이 개발한 수학 탐구형 온라인 도구로 대수·기하 기반의 시각화, 2D/3D 수학 실습과 블록코딩 학습, 수업 자료 제작 및 과제 관리를 지원합니다.',
+            techs: ['NestJS', 'RabbitMQ', 'Knex.js', 'mySQL', 'JMeter', 'Kubernetes', 'OpenTelemetry', 'Jaeger'],
+            problems: [
+                '모놀리식 구조로 서비스 간 결합도가 높고 장애 전파 범위가 큼',
+                'MSA 전환 이후에도 성능 한계 지점과 HPA 기준이 불명확',
+                '로그인 로직에 핵심 처리와 부가 기능이 뒤섞여 유지보수성 저하',
+                '실시간 DB 쿼리 성능 모니터링 부재로 Slow Query를 사후 인지'
+            ],
+            solutions: [
+                '모놀리식을 마이크로서비스 아키텍처로 전환하고 RabbitMQ 기반 EDA 도입',
+                '서비스 간 직접 호출을 제거해 독립 배포/확장 구조 확립',
+                'JMeter 성능 테스트 시나리오로 서비스별 SLO 정의 및 HPA 스케일 기준 튜닝',
+                '로그인 프로세스를 NestJS Interceptor 기반으로 재설계해 인증 로직과 부가 기능(로그 기록, 보상 지급) 분리',
+                'Knex.js Event Emitter를 활용해 Slow Query 감지 시스템 구축, 100ms 초과 쿼리의 SQL·실행 시간·호출 API 자동 로깅',
+                'OpenTelemetry + Jaeger로 서비스 호출 트레이싱'
+            ],
+            results: [
+                '서비스 간 결합도 감소 및 장애 격리 가능 구조 확보',
+                '트래픽 변화에 유연하게 대응하는 자동 확장 환경 구축',
+                '로그인 로직 책임 분리로 유지보수성과 확장성 향상',
+                'DB 성능 병목을 사전에 식별하는 관측 가능성 확보',
+                'MSA 전반을 성능·운영·관측까지 통합 관리 가능한 플랫폼으로 고도화'
+            ],
+            serviceUrl: 'https://www.algeomath.kr/algeo/main'
+        },
+        {
+            date: '2024.10 ~ 2025.06',
+            title: '스카우트',
+            role: 'Back-End Engineer',
+            org: '(주)스카우트',
+            summary: 'AI 기반 맞춤 채용과 스카우터 커리어 컨설팅, 취업·추천 보상 등으로 구직자와 기업을 연결하는 국내 대표 온라인 HR 채용 플랫폼입니다.',
+            techs: ['Java', 'Spring Boot', 'JPA', 'QueryDSL', 'mySQL'],
+            problems: [
+                'B2B 대행형 플랫폼 구조로 계약 기업만 공고 등록 가능, 수익 모델 제한',
+                '결제·환불·정산 흐름이 수작업 중심으로 운영 리스크 존재',
+                '글로벌 서비스에서 복잡한 쿼리로 API 응답 지연 발생'
+            ],
+            solutions: [
+                '셀프 서비스 채용 플랫폼으로 확장, 포커스 게재 유료 상품 설계',
+                '포인트 충전·차감·환불 도메인 모델링 및 상태 세분화',
+                'MakeBill API 연동으로 세금계산서 발행/재전송/취소 자동화',
+                '슈퍼 유저 권한 기반 입금 확정 및 다중 상태 검색·통계 API 제공',
+                'Spring Boot + JPA로 계층 분리(도메인–리포지토리–서비스) 및 RESTful CRUD 설계',
+                'QueryDSL로 다중 쿼리를 단일 쿼리로 통합'
+            ],
+            results: [
+                '대행형 → 셀프 서비스형 전환으로 신규 수익 모델 확장',
+                '안정적인 결제·환불·정산 흐름 구축으로 운영 리스크 감소',
+                '글로벌 서비스 API 응답 속도 개선 및 DB 접근 횟수 약 50% 감소'
+            ],
+            serviceUrl: 'https://www.scout.co.kr/'
+        },
+        {
+            date: '2024.10 ~ 2025.06',
+            title: '인프라 모니터링 & 관측성 확보',
+            role: 'Back-End Engineer',
+            org: '(주)스카우트',
+            summary: '온프레미스와 클라우드를 아우르는 통합 모니터링/알림 스택 구축',
+            techs: ['Docker', 'Prometheus', 'Grafana', 'cAdvisor', 'Windows Exporter', 'AWS EC2'],
+            problems: [
+                '체계적인 시스템 모니터링 환경 부재로 장애 인지 지연 및 자원 현황 파악 어려움',
+                '온프레미스와 클라우드가 혼재되어 가시성 부족'
+            ],
+            solutions: [
+                '컨테이너 기반 인프라 전반을 아우르는 통합 모니터링 아키텍처 설계',
+                'cAdvisor, Prometheus, Grafana, Windows Exporter 도입 및 Docker Compose로 스택 구성/배포 자동화',
+                '온프레미스 + AWS EC2 환경 통합 수집, Prometheus Alertmanager 연동으로 즉각 알림',
+                'Grafana 대시보드 템플릿화로 유지보수성과 확장성 확보'
+            ],
+            results: [
+                '서버·컨테이너·DB 리소스를 실시간 파악 가능한 관측 환경 확보',
+                '장애 대응 속도 향상 및 운영 안정성 개선',
+                '데이터 기반 인프라 비용 최적화 의사결정 가능'
+            ]
+        },
+        {
+            date: '2024.10 ~ 2025.06',
+            title: '클린베테랑',
+            role: 'Back-End Engineer',
+            org: '(주)스카우트',
+            summary: '스카우트가 운영하는 토탈 홈케어 플랫폼으로, 검증된 매니저가 가사·사업장 청소, 공간 소독과 생활편의 서비스를 앱 기반으로 맞춤 제공하는 청소·위생 서비스입니다.',
+            techs: ['Java', 'Spring Boot', 'JPA'],
+            problems: [
+                'DB 프로시저·함수 호출에 강하게 의존한 레거시 구조',
+                'Controller에서 객체를 직접 생성하는 비표준 아키텍처로 추적과 유지보수 어려움'
+            ],
+            solutions: [
+                'DB 프로시저 기반 로직을 JPA + 서비스 계층 기반 RESTful API로 전환',
+                '@GetMapping/@PostMapping 등 명확한 HTTP 메서드 매핑 적용',
+                'Spring DI 도입으로 객체 생성 및 의존성 관리 표준화, 중복 어노테이션/직접 생성 제거'
+            ],
+            results: [
+                '컨트롤러 코드 약 20% 이상 정리 및 DB 종속성/호출량 감소',
+                '코드 가독성·유지보수성 향상, 신규 기능 개발 리드타임 단축'
+            ],
+            serviceUrl: 'https://helper.veteranscout.co.kr/'
+        },
+        {
+            date: '2024.01 ~ 2024.02',
+            title: '국회 정책 세미나 실시간 전달 시스템 백오피스 개발',
+            role: 'Back-End Engineer',
+            org: '(주)모베란',
+            summary: '국회 정책 세미나 실시간 전달을 지원하는 백오피스 API 백엔드',
+            techs: ['Java', 'Spring Boot', 'mySQL'],
+            problems: [
+                '국회 정책 세미나 실시간 전달 시스템 운영을 위한 백오피스 API 부재',
+                '운영 데이터 관리/상태 조회/관리 기능을 안정적으로 지원할 서버 구조 필요'
+            ],
+            solutions: [
+                '실시간 전달 시스템 운영을 지원하는 백오피스 API 설계·구현',
+                '흩어져 있던 엔드포인트를 통합하고 RESTful 규약에 맞게 구조 정비',
+                '운영 환경을 고려해 서버 구조 단순화 및 불필요 흐름 제거로 응답 성능 개선'
+            ],
+            results: [
+                '실제 세미나 운영에 사용 가능한 백오피스 API 구축',
+                '안정성·일관성·관리 편의성을 고려한 서버 설계 경험 확보',
+                '실시간 시스템/운영 중심 백엔드 개발의 실무 경험 축적'
+            ]
+        }
+    ];
+
+    const personalProjects = [
+        {
+            date: '2025.04 ~ 2025.06',
+            title: '티켓팅 시스템',
+            role: 'Backend Developer',
+            desc: 'Kafka 기반 MSA 티켓팅 시스템 설계. JPA 비관/낙관 락과 트랜잭션 격리 수준 실험으로 동시 예약 정합성 확보, Spring Cloud Gateway + Eureka + Feign으로 서비스 간 통신 표준화.',
+            techs: ['Java', 'Spring Boot', 'Kafka', 'Hibernate', 'MSA', 'Spring Cloud Gateway', 'Feign Client', 'Eureka'],
+            links: { demo: '#', github: 'https://github.com/NARUBROWN' }
+        },
+        {
+            date: '2024.10 ~ 2025.02',
+            title: 'Codingland',
+            role: 'Backend Developer',
+            desc: '코딩 교육 플랫폼 백엔드 개발. N+1 문제를 BatchSize 및 IN 절 최적화로 해결해 API 호출 성능 최대 40배 개선, GitHub Actions와 Docker로 배포 자동화.',
+            techs: ['Java', 'Spring Boot', 'JPA', 'GitHub Actions', 'Docker'],
+            links: { demo: '#', github: 'https://github.com/NARUBROWN' }
+        }
+    ];
+
+    return (
+        <div className="about-page">
+            <div className="about-hero">
+                <div className="about-content">
+                    <h1>
+                        안녕하세요, <span style={{ color: 'var(--color-primary)' }}>김원정</span>입니다.
+                    </h1>
+                    <p style={{ marginTop: '2rem' }}>
+                        새로운 기술에 도전하며 불편함을 개선해 온 백엔드 개발자입니다. 빠른 응답 속도와 안정성을 고민하며 <br></br>성장했고, 앞으로도 작은 디테일까지 놓치지 않고 개선하는 동료가 되고자 합니다.
+                    </p>
+                </div>
+            </div>
+
+            <div className="content-container">
+                <section className="experience-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">경력</h2>
+                    </div>
+                    <div className="timeline">
+                        {experience.map((item, index) => (
+                            <div className="timeline-item" key={index}>
+                                <div className="timeline-dot"></div>
+                                <div className="timeline-content">
+                                    <div className="timeline-header">
+                                        <span className="timeline-date">{item.date}</span>
+                                        <span className="timeline-type">{item.type}</span>
+                                        <h3 className="timeline-title">{item.title}</h3>
+                                        <h4 className="timeline-company">{item.company}</h4>
+                                    </div>
+
+                                    <div className="timeline-techs">
+                                        {item.techs.map((tech, i) => (
+                                            <span key={i} className="tech-badge-sm">{tech}</span>
+                                        ))}
+                                    </div>
+
+                                    <div className="timeline-desc">
+                                        <ul>
+                                            {item.description.map((desc, i) => (
+                                                <li key={i}>{desc}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="projects-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">실무 프로젝트</h2>
+                    </div>
+                    <div className="projects-grid">
+                        {professionalProjects.map((project, index) => (
+                            <div className="project-card" key={index}>
+                                <div className="project-content">
+                                    {project.date && <span className="project-date">{project.date}</span>}
+                                    <h3 className="project-title">{project.title}</h3>
+                                    {project.role && <div className="project-role">{project.role}</div>}
+                                    {project.summary && <p className="project-summary">{project.summary}</p>}
+                                    {project.org && <div className="project-org">{project.org}</div>}
+                                    {project.desc && <p className="project-desc">{project.desc}</p>}
+                                    <div className="project-techs">
+                                        {project.techs.map(tech => (
+                                            <span key={tech} className="tech-badge">{tech}</span>
+                                        ))}
+                                    </div>
+                                    {project.problems && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">Problem</div>
+                                            <ul className="project-list">
+                                                {project.problems.map((item, i) => (
+                                                    <li key={i}>{item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.solutions && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">Solution</div>
+                                            <ul className="project-list">
+                                                {project.solutions.map((item, i) => (
+                                                    <li key={i}>{item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.results && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">Result</div>
+                                            <ul className="project-list">
+                                                {project.results.map((item, i) => (
+                                                    <li key={i}>{item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.serviceUrl && (
+                                        <div className="project-visit">
+                                            <a className="project-visit-btn" href={project.serviceUrl} target="_blank" rel="noopener noreferrer">
+                                                <ExternalLink size={16} /> 서비스 바로가기
+                                            </a>
+                                        </div>
+                                    )}
+                                    {project.links && (
+                                        <div className="project-links">
+                                            {project.links.github && (
+                                                <a href={project.links.github} className="project-link">
+                                                    <Github size={18} /> Code
+                                                </a>
+                                            )}
+                                            {project.links.demo && (
+                                                <a href={project.links.demo} className="project-link">
+                                                    <ExternalLink size={18} /> Live Demo
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="interests-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                        <h2 className="section-title">관심 분야</h2>
+                    </div>
+                    <div className="interests-grid">
+                        {interests.map((item, index) => (
+                            <div className="interest-card" key={index}>
+                                <div className="interest-icon-wrapper">
+                                    {item.icon}
+                                </div>
+                                <h3 className="interest-title">{item.title}</h3>
+                                <p className="interest-desc">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="skills-section animate-on-scroll">
+                    <div
+                        style={{ textAlign: 'center', marginBottom: '2rem' }}
+                        className="skills-header-container"
+                    >
+                        <h2 className="section-title">기술 스택</h2>
+                    </div>
+
+                    <div className="skills-toggle-container" style={{ textAlign: 'center', marginBottom: isSkillsOpen ? '3rem' : '0' }}>
+                        <button
+                            className="btn-skills-toggle"
+                            onClick={() => setIsSkillsOpen(!isSkillsOpen)}
+                        >
+                            {isSkillsOpen ? "접기" : "다룰 수 있는 도구들이 궁금하신가요?"}
+                            {isSkillsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        </button>
+                    </div>
+
+                    {isSkillsOpen && (
+                        <div className="skill-categories animate-fade-in">
+                            {skillCategories.map((category, catIndex) => (
+                                <div key={catIndex} className="skill-category-group" style={{ marginBottom: '1.5rem' }}>
+                                    <h3 style={{
+                                        fontSize: '1.25rem',
+                                        marginBottom: '1rem',
+                                        color: 'var(--color-text-main)',
+                                        borderLeft: '3px solid var(--color-primary)',
+                                        paddingLeft: '0.75rem'
+                                    }}>
+                                        {category.title}
+                                    </h3>
+                                    <div className="skills-grid">
+                                        {category.skills.map((skill, index) => (
+                                            <div className="skill-card" key={index} style={{ animationDelay: `${index * 100}ms` }}>
+                                                <span className="skill-icon">{skill.icon}</span>
+                                                <span className="skill-name">{skill.name}</span>
+                                                {skill.tags && (
+                                                    <div className="skill-tags">
+                                                        {skill.tags.map(tag => (
+                                                            <span key={tag} className="skill-tag">{tag}</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                                {skill.level && (
+                                                    <span
+                                                        className={`skill-level ${
+                                                            skill.level === '상'
+                                                                ? 'level-high'
+                                                                : skill.level === '중'
+                                                                    ? 'level-mid'
+                                                                    : 'level-low'
+                                                        }`}
+                                                    >
+                                                        {skill.level}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                <section className="awards-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">수상</h2>
+                    </div>
+                    <div className="awards-grid">
+                        {[
+                            {
+                                year: '2022.11.25 ~ 2022.11.26',
+                                title: '2022 AI-X 해커톤 대상',
+                                org: '인천대학교',
+                                desc: 'NoiseMonitoringSystem 프로젝트로 대상(300만원) 수상'
+                            }
+                        ].map((award, index) => (
+                            <div className="award-card" key={index}>
+                                <div className="award-header">
+                                    <span className="award-year">{award.year}</span>
+                                    <span className="award-icon"><Trophy size={16} /></span>
+                                </div>
+                                <h3 className="award-title">{award.title}</h3>
+                                <span className="award-org">{award.org}</span>
+                                <p className="award-desc">{award.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="activities-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">활동</h2>
+                    </div>
+                    <div className="awards-grid">
+                        {[
+                            {
+                                year: '2025.07 ~ 현재',
+                                title: '요즘IT 필진 활동',
+                                org: '필명: 나루브라운',
+                                desc: '“어이 신입, 탈출각이다.”, “닮고 싶은 개발자의 초상” 등 성장과 커리어를 주제로 에세이 연재'
+                            },
+                            {
+                                year: '2023.03.01 ~ 2025.03.01',
+                                title: '글로벌 앱센터 센터장',
+                                org: '인천대학교 전산원 산하 글로벌 앱센터',
+                                desc: '서버 파트장 및 센터장으로 팀 운영과 백엔드 기술 공유'
+                            },
+                            {
+                                year: '2024.12.18',
+                                title: '구름톤 유니브 단풍톤 본선 진출',
+                                org: 'Codingland 프로젝트',
+                                desc: '코딩 교육 취약 계층을 위한 플랫폼으로 본선 진출'
+                            },
+                            {
+                                year: '2023.06.01 ~ 2025.02.01',
+                                title: '구름톤 유니브 학교 대표',
+                                org: '인천대학교',
+                                desc: '학교 대표로 활동하며 스터디와 해커톤 운영'
+                            },
+                            {
+                                year: '2024.08.31',
+                                title: 'SESSION 2024 연사',
+                                org: '인천대학교',
+                                desc: '“OCP 위배를 극복한 전략 패턴 적용 사례” 발표'
+                            }
+                        ].map((activity, index) => (
+                            <div className="award-card" key={index}>
+                                <div className="award-header">
+                                    <span className="award-year">{activity.year}</span>
+                                    <span className="award-icon"><ExternalLink size={16} /></span>
+                                </div>
+                                <h3 className="award-title">{activity.title}</h3>
+                                <span className="award-org">{activity.org}</span>
+                                <p className="award-desc">{activity.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="projects-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">개인 프로젝트</h2>
+                    </div>
+                    <div className="projects-grid">
+                        {personalProjects.map((project, index) => (
+                            <div className="project-card" key={index}>
+                                <div className="project-content">
+                                    {project.date && <span className="project-date">{project.date}</span>}
+                                    <h3 className="project-title">{project.title}</h3>
+                                    {project.role && <div className="project-role">{project.role}</div>}
+                                    <p className="project-desc">{project.desc}</p>
+                                    <div className="project-techs">
+                                        {project.techs.map(tech => (
+                                            <span key={tech} className="tech-badge">{tech}</span>
+                                        ))}
+                                    </div>
+                                    {project.links && (
+                                        <div className="project-links">
+                                            {project.links.github && (
+                                                <a href={project.links.github} className="project-link">
+                                                    <Github size={18} /> Code
+                                                </a>
+                                            )}
+                                            {project.links.demo && (
+                                                <a href={project.links.demo} className="project-link">
+                                                    <ExternalLink size={18} /> Live Demo
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="education-section animate-on-scroll">
+                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                        <h2 className="section-title">학력</h2>
+                    </div>
+                    <div className="awards-grid">
+                        {[
+                            {
+                                period: '2023.03 ~ 2025.02',
+                                school: '인천대학교, 인천 연수구',
+                                major: '컴퓨터공학, 공학사'
+                            },
+                            {
+                                period: '2018.03 ~ 2023.02',
+                                school: '인천재능대학교, 인천 연수구',
+                                major: '컴퓨터정보, 공업전문학사'
+                            }
+                        ].map((edu, index) => (
+                            <div className="award-card" key={index}>
+                                <div className="award-header">
+                                    <span className="award-year">{edu.period}</span>
+                                    <span className="award-icon"><BookOpen size={16} /></span>
+                                </div>
+                                <h3 className="award-title">{edu.school}</h3>
+                                <div className="award-org">{edu.major}</div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="contact-section animate-on-scroll">
+                    <div style={{ textAlign: 'center' }}>
+                        <h2 className="section-title">연락하기</h2>
+                        <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--color-text-secondary)' }}>
+                            새로운 프로젝트, 문제 해결 아이디어, 협업 제안 모두 환영합니다. 언제든 편하게 연락 주세요.
+                        </p>
+                        <div className="contact-actions">
+                            <a href="mailto:ruffmadman@kakao.com" className="contact-btn email">
+                                <Mail size={18} /> Email Me
+                            </a>
+                            <a href="https://github.com/NARUBROWN" target="_blank" rel="noopener noreferrer" className="contact-btn social">
+                                <Github size={18} /> GitHub
+                            </a>
+                            <a href="https://linkedin.com/in/naru-brown" target="_blank" rel="noopener noreferrer" className="contact-btn social">
+                                <Linkedin size={18} /> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    );
+};
+
+export default About;

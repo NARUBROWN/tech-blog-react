@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import About from './pages/About';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import CreatePost from './pages/CreatePost';
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
 

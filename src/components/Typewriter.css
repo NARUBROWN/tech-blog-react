@@ -1,0 +1,15 @@
+.typewriter {
+    display: inline-block;
+}
+
+.cursor {
+    display: inline-block;
+    margin-left: 2px;
+    font-weight: 100;
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+
+.cursor.blink {
+    opacity: 0;
+}

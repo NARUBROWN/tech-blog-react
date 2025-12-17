@@ -33,7 +33,7 @@ const Navbar = () => {
             if (!isMouseAtTop.current) {
                 hideTimer.current = setTimeout(() => {
                     setIsVisible(false);
-                }, 5000);
+                }, 1000);
             }
         };
 
@@ -110,7 +110,7 @@ const Navbar = () => {
                 <Link to="/" className="navbar-logo">
                     {/* Using an emoji or icon as placeholder if logo image not fitting well, but keeping image as requested */}
                     <img src="/logo.png" alt="Logo" className="navbar-logo-image" />
-                    {/* <span>TechBlog</span> - Removed text to match "Logo" style in prompt if needed, but keeping simplistic */}
+                    {<span>TechBlog</span>}
                 </Link>
 
                 <div className="navbar-categories">
