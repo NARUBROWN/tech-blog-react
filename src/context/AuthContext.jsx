@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi } from '../api/auth';
+import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi, logout as logoutApi } from '../api/auth';
 
 const AuthContext = createContext(null);
 
@@ -47,9 +47,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user');
+    const logout = async () => {
+        try {
+            await logoutApi();
+        } catch (error) {
+            console.error('Logout failed:', error);
+        } finally {
+            setUser(null);
+            localStorage.removeItem('user');
+        }
     };
 
     return (
