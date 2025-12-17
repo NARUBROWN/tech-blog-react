@@ -14,6 +14,7 @@ DOMPurify.setConfig({
 });
 import mermaid from 'mermaid';
 import './PostDetail.css';
+import PostDetailSkeleton from '../components/PostDetailSkeleton';
 
 // Memoized component for Post Content to prevent re-rendering Mermaid on modal open
 const PostContent = memo(({ content }) => {
@@ -246,7 +247,7 @@ const PostDetail = () => {
         }
     };
 
-    if (loading) return <div className="loading-state">Loading...</div>;
+    if (loading) return <PostDetailSkeleton />;
     if (error) return <div className="error-state">{error}</div>;
     if (!post) return <div className="error-state">Post not found</div>;
 

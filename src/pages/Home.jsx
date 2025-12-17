@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
 import Typewriter from '../components/Typewriter';
 import './Home.css';
+import PostListSkeleton from '../components/PostListSkeleton';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -140,7 +141,7 @@ const Home = () => {
 
             <div className="content-container">
                 {loading ? (
-                    <div className="loading-container">Loading...</div>
+                    <PostListSkeleton count={6} />
                 ) : error ? (
                     <div className="error-container">{error}</div>
                 ) : (

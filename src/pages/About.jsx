@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Mail, Github, Linkedin, ExternalLink, Trophy, Zap, Activity, BarChart2, Share2, Layers, Database, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import './About.css';
 
 const About = () => {
     const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+    const [showSummary, setShowSummary] = useState(false);
+    const summaryRef = useRef(null);
 
     useEffect(() => {
         // Simple intersection observer for fade-in animations on scroll
@@ -141,6 +143,85 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             title: "기술을 지식으로 남기는 일",
             desc: `문제 해결이 개인의 경험으로 끝나는 걸 경계합니다.
 실험과 시행착오를 문서로 정리해 팀의 공통 자산으로 만들고, 다시 재사용 가능한 지식으로 축적하는 과정 자체에 큰 관심을 두고 있습니다.`
+        }
+    ];
+
+    const summaryMeta = [
+        {
+            label: '포지션',
+            value: 'Back-End Engineer',
+            note: '실시간 · 플랫폼 · B2B/B2C'
+        },
+        {
+            label: '핵심 키워드',
+            value: '실시간 아키텍처 · 관측성 · 성능 튜닝',
+            note: 'Redis Pub/Sub · HPA · OpenTelemetry'
+        },
+        {
+            label: '메시징/EDA',
+            value: 'Kafka · RabbitMQ',
+            note: '서비스 간 결합도 완화/장애 격리'
+        },
+        {
+            label: '선호 스택',
+            value: 'Spring Boot · NestJS',
+            note: 'MySQL · PostgreSQL · Redis'
+        }
+    ];
+
+    const summaryTiles = [
+        {
+            title: '경력 스냅샷',
+            tag: '실무 3개사 · 4개 제품',
+            icon: <Activity size={18} />,
+            bullets: [
+                '실시간 교육/채용/운영 플랫폼 백엔드',
+                '분산락·Pub/Sub로 동시성 제어 및 상태 일관성 확보',
+                'JPA 리팩토링·DI 표준화로 서비스 안정성 개선'
+            ],
+            link: '#experience',
+            accent: 'indigo'
+        },
+        {
+            title: '주요 프로젝트',
+            marqueeItems: [
+                'SteamUp Academy',
+                'AlgeoMath',
+                '보너스잡',
+                '스카우트 글로벌',
+                '클린베테랑',
+                '통합 모니터링 & 관측 시스템',
+                '국회 정책 세미나 백오피스',
+                '티켓팅 시스템',
+                'Codingland'
+            ],
+            icon: <Layers size={18} />,
+            bullets: [
+                '다중 서버 WebSocket 대기방 + Redis Pub/Sub 동기화',
+                'RabbitMQ 기반 EDA, Slow Query 관측 자동화',
+                '포인트 도메인/유료 노출 상품화로 수익 모델 확립'
+            ],
+            link: '#professional-projects',
+            accent: 'violet'
+        },
+        {
+            title: '학력',
+            tag: '컴퓨터공학 기반',
+            icon: <BookOpen size={18} />,
+            bullets: [
+                '인천대학교 컴퓨터공학부 (2023.03~2025.02) · 공학사',
+                '인천재능대학교 인공지능컴퓨터정보 (2018.03~2023.02) · 공업전문학사'
+            ],
+            link: '#education',
+            accent: 'teal'
+        },
+        {
+            title: '요즘 궁금한 것들',
+            tag: '관심사',
+            icon: <Zap size={18} />,
+            bullets: interests.slice(0, 3).map(item => item.title),
+            link: '#interests',
+            accent: 'amber'
         }
     ];
 
@@ -347,6 +428,20 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
         }
     ];
 
+    const handleSummaryToggle = () => {
+        setShowSummary(prev => {
+            const next = !prev;
+            if (!prev) {
+                setTimeout(() => {
+                    if (summaryRef.current) {
+                        summaryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 50);
+            }
+            return next;
+        });
+    };
+
     return (
         <div className="about-page">
             <div className="about-hero">
@@ -357,11 +452,80 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     <p style={{ marginTop: '2rem' }}>
                         새로운 기술에 도전하며 불편함을 개선해 온 백엔드 개발자입니다. 빠른 응답 속도와 안정성을 고민하며 성장했고, 앞으로도 작은 디테일까지 놓치지 않고 개선하는 동료가 되고자 합니다.
                     </p>
+                    <div className="hero-actions">
+                        <button className="btn-hero-summary" onClick={handleSummaryToggle}>
+                            <Layers size={18} />
+                            한 눈에 보기
+                        </button>
+                        <a className="btn-hero-secondary" href="#contact">
+                            <Mail size={18} />
+                            연락하기
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div className="content-container">
-                <section className="experience-section animate-on-scroll">
+                {showSummary && (
+                    <section className="summary-section animate-fade-in" ref={summaryRef}>
+                        <button className="summary-close" onClick={handleSummaryToggle} aria-label="요약 닫기">
+                            ✕
+                        </button>
+                        <div className="summary-header">
+                            <span className="summary-chip">한 눈에 보기</span>
+                            <div className="summary-divider" aria-hidden="true"></div>
+                            <div>
+                                <h2>경력, 학력, 프로젝트를 한 번에 훑어보세요.</h2>
+                                <p>실시간 시스템과 관측 가능성, MSA/EDA 전환 경험을 중심으로 어떤 문제를 풀어왔는지 압축 정리했습니다.</p>
+                            </div>
+                        </div>
+
+                        <div className="summary-meta">
+                            {summaryMeta.map((item, idx) => (
+                                <div key={idx} className="summary-meta-card">
+                                    <span className="summary-meta-label">{item.label}</span>
+                                    <div className="summary-meta-value">{item.value}</div>
+                                    <span className="summary-meta-note">{item.note}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="summary-grid">
+                            {summaryTiles.map((tile, idx) => (
+                                <div key={idx} className={`summary-card accent-${tile.accent}`}>
+                                    <div className="summary-card-head">
+                                        <div className="summary-icon">{tile.icon}</div>
+                                        {tile.marqueeItems ? (
+                                            <div className="summary-tag-marquee">
+                                                <div className="summary-tag-track">
+                                                    {tile.marqueeItems.map((item, i) => (
+                                                        <span key={`a-${i}`} className="summary-tag-item">{item}</span>
+                                                    ))}
+                                                    {tile.marqueeItems.map((item, i) => (
+                                                        <span key={`b-${i}`} className="summary-tag-item">{item}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <span className="summary-tag">{tile.tag}</span>
+                                        )}
+                                    </div>
+                                    <h3>{tile.title}</h3>
+                                    <ul>
+                                        {tile.bullets.map((bullet, i) => (
+                                            <li key={i}>{bullet}</li>
+                                        ))}
+                                    </ul>
+                                    <a className="summary-link" href={tile.link}>
+                                        자세히 보기 <ExternalLink size={14} />
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                <section className="experience-section animate-on-scroll" id="experience">
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <h2 className="section-title">경력</h2>
                     </div>
@@ -396,7 +560,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     </div>
                 </section>
 
-                <section className="projects-section animate-on-scroll">
+                <section className="projects-section animate-on-scroll" id="professional-projects">
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <h2 className="section-title">실무 프로젝트</h2>
                     </div>
@@ -472,7 +636,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     </div>
                 </section>
 
-                <section className="interests-section animate-on-scroll">
+                <section className="interests-section animate-on-scroll" id="interests">
                     <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                         <h2 className="section-title">관심 분야</h2>
                     </div>
@@ -635,7 +799,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     </div>
                 </section>
 
-                <section className="projects-section animate-on-scroll">
+                <section className="projects-section animate-on-scroll" id="personal-projects">
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <h2 className="section-title">개인 프로젝트</h2>
                     </div>
@@ -672,7 +836,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     </div>
                 </section>
 
-                <section className="education-section animate-on-scroll">
+                <section className="education-section animate-on-scroll" id="education">
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <h2 className="section-title">학력</h2>
                     </div>
@@ -701,7 +865,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                     </div>
                 </section>
 
-                <section className="contact-section animate-on-scroll">
+                <section className="contact-section animate-on-scroll" id="contact">
                     <div style={{ textAlign: 'center' }}>
                         <h2 className="section-title">연락하기</h2>
                         <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--color-text-secondary)' }}>
