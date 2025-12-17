@@ -1,9 +1,9 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { PenSquare, LogOut, User } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { PenSquare, LogOut, User, ChevronDown, FolderPlus } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { getCategoryList } from '../api/category';
-import { useRef } from 'react';
+
 import './Navbar.css';
 
 const Navbar = () => {
@@ -11,6 +11,7 @@ const Navbar = () => {
     const [categories, setCategories] = useState([]);
     const [isVisible, setIsVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const activeCategory = searchParams.get('categoryName');
@@ -153,21 +154,56 @@ const Navbar = () => {
 
                 <div className="navbar-links">
                     {user ? (
-                        <div className="user-menu">
-                            {isAdmin && (
-                                <Link to="/category/create" className="btn btn-primary" title="Create category">
-                                    Add Category
-                                </Link>
-                            )}
-                            {user.profileImageUrl ? (
-                                <img src={user.profileImageUrl} alt={user.username} className="user-avatar-nav" />
-                            ) : (
-                                <User size={16} />
-                            )}
-                            <span className="user-name">{user.username || user.email}</span>
-                            <button onClick={logout} className="btn-icon" title="Logout">
-                                <LogOut size={16} />
+                        <div className="user-dropdown-container">
+                            <button
+                                className="user-menu-trigger"
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            >
+                                {user.profileImageUrl ? (
+                                    <img src={user.profileImageUrl} alt={user.username} className="user-avatar-nav" />
+                                ) : (
+                                    <User size={16} />
+                                )}
+                                <span className="user-name">{user.username || user.email}</span>
+                                <ChevronDown size={14} className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`} />
                             </button>
+
+                            {isDropdownOpen && (
+                                <div className="dropdown-menu">
+                                    <Link
+                                        to="/post/create"
+                                        className="dropdown-item"
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    >
+                                        <PenSquare size={16} />
+                                        <span>Write Post</span>
+                                    </Link>
+
+                                    {isAdmin && (
+                                        <Link
+                                            to="/category/create"
+                                            className="dropdown-item"
+                                            onClick={() => setIsDropdownOpen(false)}
+                                        >
+                                            <FolderPlus size={16} />
+                                            <span>Add Category</span>
+                                        </Link>
+                                    )}
+
+                                    <div className="dropdown-divider"></div>
+
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className="dropdown-item logout-item"
+                                    >
+                                        <LogOut size={16} />
+                                        <span>Logout</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <>
