@@ -139,7 +139,7 @@ const Navbar = () => {
                         end
                         className={() => (!activeCategory ? "nav-category active" : "nav-category")}
                     >
-                        All
+                        전체
                     </NavLink>
                     {categories.map((category) => (
                         <NavLink
@@ -176,7 +176,7 @@ const Navbar = () => {
                                         onClick={() => setIsDropdownOpen(false)}
                                     >
                                         <PenSquare size={16} />
-                                        <span>Write Post</span>
+                                        <span>글 작성</span>
                                     </Link>
 
                                     {isAdmin && (
@@ -186,7 +186,7 @@ const Navbar = () => {
                                             onClick={() => setIsDropdownOpen(false)}
                                         >
                                             <FolderPlus size={16} />
-                                            <span>Add Category</span>
+                                            <span>카테고리 추가</span>
                                         </Link>
                                     )}
 
@@ -200,14 +200,14 @@ const Navbar = () => {
                                         className="dropdown-item logout-item"
                                     >
                                         <LogOut size={16} />
-                                        <span>Logout</span>
+                                        <span>로그아웃</span>
                                     </button>
                                 </div>
                             )}
                         </div>
                     ) : (
                         <>
-                            <Link to="/login" className="nav-category">Login</Link>
+                            <Link to="/login" className="nav-category">로그인</Link>
                         </>
                     )}
                 </div>

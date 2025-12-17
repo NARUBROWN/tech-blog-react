@@ -7,6 +7,147 @@ const About = () => {
     const [showSummary, setShowSummary] = useState(false);
     const summaryRef = useRef(null);
 
+    // SEO metadata for Google/Naver crawling on the /about page
+    useEffect(() => {
+        const siteName = 'NARUBROWN의 기술 블로그';
+        const defaultTitle = document.title || siteName;
+        const pageTitle = `김원정 | 백엔드 엔지니어 포트폴리오 - ${siteName}`;
+        const description = 'Redis Pub/Sub 기반 실시간 아키텍처, MSA/EDA 전환, OpenTelemetry 관측, 성능 튜닝 경험을 담은 김원정 백엔드 엔지니어 포트폴리오.';
+        const canonicalUrl = 'https://na2ru2.me/about';
+        const ogImage = 'https://na2ru2.me/logo.png';
+
+        const previousMetaContent = new Map();
+        const createdMeta = [];
+
+        const upsertMeta = (attr, key, value) => {
+            if (!value) return;
+            let element = document.querySelector(`meta[${attr}="${key}"]`);
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute(attr, key);
+                document.head.appendChild(element);
+                createdMeta.push(element);
+            } else {
+                previousMetaContent.set(element, element.getAttribute('content'));
+            }
+            element.setAttribute('content', value);
+        };
+
+        const metaDefinitions = [
+            { attr: 'name', key: 'description', value: description },
+            { attr: 'name', key: 'keywords', value: '백엔드 개발자, Backend Engineer, 김원정, NARUBROWN, 실시간 아키텍처, Redis Pub/Sub, MSA, EDA, OpenTelemetry, JMeter, Spring Boot, NestJS, 포트폴리오' },
+            { attr: 'name', key: 'author', value: '김원정 (NARUBROWN)' },
+            { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
+            { attr: 'property', key: 'og:title', value: pageTitle },
+            { attr: 'property', key: 'og:description', value: description },
+            { attr: 'property', key: 'og:type', value: 'profile' },
+            { attr: 'property', key: 'og:site_name', value: siteName },
+            { attr: 'property', key: 'og:url', value: canonicalUrl },
+            { attr: 'property', key: 'og:image', value: ogImage },
+            { attr: 'property', key: 'og:locale', value: 'ko_KR' },
+            { attr: 'name', key: 'twitter:card', value: 'summary_large_image' },
+            { attr: 'name', key: 'twitter:title', value: pageTitle },
+            { attr: 'name', key: 'twitter:description', value: description },
+            { attr: 'name', key: 'twitter:image', value: ogImage }
+        ];
+
+        metaDefinitions.forEach(meta => upsertMeta(meta.attr, meta.key, meta.value));
+
+        const existingCanonical = document.querySelector('link[rel="canonical"]');
+        const canonicalCreated = !existingCanonical;
+        const previousCanonicalHref = existingCanonical?.getAttribute('href') || '';
+        const canonicalLink = existingCanonical || document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        canonicalLink.setAttribute('href', canonicalUrl);
+        if (canonicalCreated) {
+            document.head.appendChild(canonicalLink);
+        }
+
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            "name": pageTitle,
+            "description": description,
+            "url": canonicalUrl,
+            "isPartOf": {
+                "@type": "WebSite",
+                "name": siteName,
+                "url": "https://na2ru2.me"
+            },
+            "about": {
+                "@type": "Person",
+                "name": "김원정",
+                "alternateName": "NARUBROWN",
+                "jobTitle": "Back-End Engineer",
+                "email": "mailto:ruffmadman@kakao.com",
+                "url": canonicalUrl,
+                "image": ogImage,
+                "knowsAbout": [
+                    "Redis Pub/Sub 실시간 아키텍처",
+                    "분산락과 동시성 제어",
+                    "MSA 전환과 이벤트 주도 아키텍처",
+                    "OpenTelemetry/Jaeger 관측",
+                    "JMeter 성능 테스트",
+                    "Spring Boot, NestJS, Go 백엔드 개발"
+                ],
+                "alumniOf": [
+                    {
+                        "@type": "CollegeOrUniversity",
+                        "name": "인천대학교"
+                    },
+                    {
+                        "@type": "CollegeOrUniversity",
+                        "name": "인천재능대학교"
+                    }
+                ],
+                "sameAs": [
+                    "https://github.com/NARUBROWN",
+                    "https://linkedin.com/in/naru-brown"
+                ]
+            },
+            "breadcrumb": "홈 > About"
+        };
+
+        const existingLd = document.getElementById('about-structured-data');
+        const ldCreated = !existingLd;
+        const previousLdContent = existingLd?.textContent || '';
+        const ldScript = existingLd || document.createElement('script');
+        ldScript.type = 'application/ld+json';
+        ldScript.id = 'about-structured-data';
+        ldScript.textContent = JSON.stringify(structuredData);
+        if (ldCreated) {
+            document.head.appendChild(ldScript);
+        }
+
+        document.title = pageTitle;
+
+        return () => {
+            document.title = defaultTitle;
+            createdMeta.forEach(meta => meta.remove());
+            previousMetaContent.forEach((content, meta) => {
+                if (content) {
+                    meta.setAttribute('content', content);
+                } else {
+                    meta.removeAttribute('content');
+                }
+            });
+
+            if (canonicalCreated) {
+                canonicalLink.remove();
+            } else if (previousCanonicalHref) {
+                canonicalLink.setAttribute('href', previousCanonicalHref);
+            } else {
+                canonicalLink.removeAttribute('href');
+            }
+
+            if (ldCreated) {
+                ldScript.remove();
+            } else {
+                ldScript.textContent = previousLdContent;
+            }
+        };
+    }, []);
+
     useEffect(() => {
         // Simple intersection observer for fade-in animations on scroll
         const observer = new IntersectionObserver((entries) => {
@@ -873,7 +1014,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                         </p>
                         <div className="contact-actions">
                             <a href="mailto:ruffmadman@kakao.com" className="contact-btn email">
-                                <Mail size={18} /> Email Me
+                                <Mail size={18} /> Email
                             </a>
                             <a href="https://github.com/NARUBROWN" target="_blank" rel="noopener noreferrer" className="contact-btn social">
                                 <Github size={18} /> GitHub

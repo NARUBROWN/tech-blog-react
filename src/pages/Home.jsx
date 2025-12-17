@@ -133,7 +133,7 @@ const Home = () => {
                         </h1>
                         <p>실무에서 마주한 문제를 구조로 풀고, 그 선택을 수치와 기록으로 남깁니다.</p>
                         <div className="hero-actions">
-                            <Link to="/about" className="btn btn-primary btn-lg">About Me</Link>
+                            <Link to="/about" className="btn btn-primary btn-lg">자기소개서 확인하기</Link>
                         </div>
                     </div>
                 </div>

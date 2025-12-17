@@ -5,9 +5,12 @@ import { uploadImage } from '../api/image';
 import ImageUpload from '../components/ImageUpload';
 import { useNavigate } from 'react-router-dom';
 import { X, Check } from 'lucide-react';
-import ReactQuill from 'react-quill-new';
+import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import ImageResize from 'quill-image-resize-module-react';
 import './PostForm.css';
+
+Quill.register('modules/imageResize', ImageResize);
 
 const CreatePost = () => {
     const navigate = useNavigate();
@@ -103,6 +106,10 @@ const CreatePost = () => {
                         this.quill.setSelection(cursorPosition + 20);
                     }
                 }
+            },
+            imageResize: {
+                parchment: Quill.import('parchment'),
+                modules: ['Resize', 'DisplaySize']
             }
         };
     }, []);

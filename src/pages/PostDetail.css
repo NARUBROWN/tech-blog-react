@@ -138,7 +138,7 @@
     transform: translateX(-50%);
 
     /* Allow breaking out of padding */
-    width: auto;
+    /* width: auto; Removed to respect HTML width attribute */
     /* Preserve aspect ratio for small images */
     max-width: calc(100% + 4rem);
     /* Allow filling the entire card width (parent + padding) */
