@@ -8,9 +8,10 @@ const Footer = () => {
             <div className="container">
                 <div className="footer-content">
                     <div className="footer-section">
-                        <h3>About TechBlog</h3>
+                        <h3>About NARUBROWN's Blog</h3>
                         <p>
-                            Sharing the latest in web development, React ecosystem, and software engineering practices.
+                            이 사이트는 백엔드 엔지니어 김원정의 포트폴리오이자 기술 기록 공간입니다.
+                            실무에서 마주한 문제와 그 해결 과정을 구조와 코드로 정리합니다.
                         </p>
                     </div>
 
@@ -25,15 +26,14 @@ const Footer = () => {
                     <div className="footer-section">
                         <h3>Connect</h3>
                         <ul className="footer-links">
-                            <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                            <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
-                            <li><a href="/rss.xml">RSS Feed</a></li>
+                            <li><a href="https://github.com/NARUBROWN" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                            <li><a href="https://linkedin.com/in/naru-brown" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} TechBlog. Built with React & Vite.</p>
+                    <p>&copy; {new Date().getFullYear()} 김원정. 사랑을 담아서 만들었습니다.</p>
                 </div>
             </div>
         </footer>
