@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { uploadImage } from '../api/image';
 import { Image as ImageIcon, X, Upload } from 'lucide-react';
 import './ImageUpload.css';
@@ -7,6 +7,10 @@ const ImageUpload = ({ onUpload, initialUrl = '', label = 'Upload Image', classN
     const [imageUrl, setImageUrl] = useState(initialUrl);
     const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        setImageUrl(initialUrl);
+    }, [initialUrl]);
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];

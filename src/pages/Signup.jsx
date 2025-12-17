@@ -56,6 +56,13 @@ const Signup = () => {
                     <div className="role-toggle">
                         <button
                             type="button"
+                            className={`toggle-btn ${role === 'USER' ? 'active' : ''}`}
+                            onClick={() => setRole('USER')}
+                        >
+                            Reader
+                        </button>
+                        <button
+                            type="button"
                             className={`toggle-btn ${role === 'AUTHOR' ? 'active' : ''}`}
                             onClick={() => setRole('AUTHOR')}
                         >

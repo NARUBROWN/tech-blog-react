@@ -15,6 +15,17 @@ export const adminSignup = async (userData) => {
     return response.data;
 };
 
+
+export const normalSignup = async (userData) => {
+    const response = await client.post('/user/normal-signup', userData);
+    return response.data;
+};
+
+export const updateUser = async (id, userData) => {
+    const response = await client.patch(`/user/${id}`, userData);
+    return response.data;
+};
+
 export const logout = async () => {
     const response = await client.post('/auth/logout');
     return response.data;

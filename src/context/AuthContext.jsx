@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi, logout as logoutApi } from '../api/auth';
+import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi, normalSignup as normalSignupApi, updateUser as updateUserApi, logout as logoutApi } from '../api/auth';
 
 const AuthContext = createContext(null);
 
@@ -36,9 +36,25 @@ export const AuthProvider = ({ children }) => {
         try {
             if (role === 'ADMIN') {
                 await adminSignupApi(userData);
+            } else if (role === 'USER') { // Support for Normal User
+                await normalSignupApi(userData);
             } else {
                 await signupApi(userData);
             }
+            return { success: true };
+        } catch (error) {
+            return { success: false, error };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateUserInfo = async (userData) => {
+        setLoading(true);
+        try {
+            const updatedUser = await updateUserApi(user.id, userData);
+            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
             return { success: true };
         } catch (error) {
             return { success: false, error };
@@ -59,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, logout, updateUserInfo, loading }}>
             {children}
         </AuthContext.Provider>
     );

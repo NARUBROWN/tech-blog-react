@@ -8,6 +8,7 @@ import Signup from './pages/Signup';
 import CreatePost from './pages/CreatePost';
 import CreateCategory from './pages/CreateCategory';
 import PostDetail from './pages/PostDetail';
+import ProfileSettings from './pages/ProfileSettings';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -42,6 +43,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CreateCategory />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="settings"
+              element={
+                <ProtectedRoute>
+                  <ProfileSettings />
                 </ProtectedRoute>
               }
             />

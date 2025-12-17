@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { PenSquare, LogOut, User, ChevronDown, FolderPlus } from 'lucide-react';
+import { PenSquare, LogOut, User, ChevronDown, FolderPlus, Settings } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { getCategoryList } from '../api/category';
 
@@ -16,6 +16,7 @@ const Navbar = () => {
     const searchParams = new URLSearchParams(location.search);
     const activeCategory = searchParams.get('categoryName');
     const isAdmin = user?.role === 'ROLE_ADMIN';
+    const canWritePost = user?.role === 'ROLE_AUTHOR' || user?.role === 'ROLE_ADMIN';
 
     const lastScrollY = useRef(0);
     const hideTimer = useRef(null);
@@ -170,14 +171,16 @@ const Navbar = () => {
 
                             {isDropdownOpen && (
                                 <div className="dropdown-menu">
-                                    <Link
-                                        to="/post/create"
-                                        className="dropdown-item"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                    >
-                                        <PenSquare size={16} />
-                                        <span>글 작성</span>
-                                    </Link>
+                                    {canWritePost && (
+                                        <Link
+                                            to="/post/create"
+                                            className="dropdown-item"
+                                            onClick={() => setIsDropdownOpen(false)}
+                                        >
+                                            <PenSquare size={16} />
+                                            <span>글 작성</span>
+                                        </Link>
+                                    )}
 
                                     {isAdmin && (
                                         <Link
@@ -189,6 +192,15 @@ const Navbar = () => {
                                             <span>카테고리 추가</span>
                                         </Link>
                                     )}
+
+                                    <Link
+                                        to="/settings"
+                                        className="dropdown-item"
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    >
+                                        <Settings size={16} />
+                                        <span>설정</span>
+                                    </Link>
 
                                     <div className="dropdown-divider"></div>
 
