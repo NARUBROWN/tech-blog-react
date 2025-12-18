@@ -131,6 +131,32 @@
     margin-bottom: 4rem;
 }
 
+/* Reset Quill Editor Padding for Display */
+.post-content-wrapper .ql-editor {
+    padding: 0;
+    overflow-y: visible;
+    height: auto;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Ensure proper coloring within ql-editor */
+.post-content-wrapper .ql-editor p,
+.post-content-wrapper .ql-editor ol,
+.post-content-wrapper .ql-editor ul,
+.post-content-wrapper .ql-editor pre,
+.post-content-wrapper .ql-editor blockquote,
+.post-content-wrapper .ql-editor h1,
+.post-content-wrapper .ql-editor h2,
+.post-content-wrapper .ql-editor h3,
+.post-content-wrapper .ql-editor h4,
+.post-content-wrapper .ql-editor h5,
+.post-content-wrapper .ql-editor h6 {
+    color: inherit;
+}
+
+/* Maintain styles for images */
 .post-body-text img {
     display: block;
     /* Center horizontally relative to parent */

@@ -1,6 +1,7 @@
 import { useEffect, memo } from 'react';
 import DOMPurify from 'dompurify';
 import mermaid from 'mermaid';
+import 'react-quill-new/dist/quill.snow.css';
 import '../pages/PostDetail.css';
 
 // Configure DOMPurify to allow SVG elements for Mermaid diagrams
@@ -121,9 +122,9 @@ const PostContent = memo(({ content }) => {
     }, [content]);
 
     return (
-        <div className="post-content-wrapper">
+        <div className="post-content-wrapper ql-snow">
             <div
-                className="post-body-text"
+                className="post-body-text ql-editor"
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
             />
         </div>
