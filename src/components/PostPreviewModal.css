@@ -1,0 +1,187 @@
+.preview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.preview-modal-container {
+    background: var(--bg-primary, #ffffff);
+    width: 90%;
+    max-width: 1000px;
+    height: 90vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    animation: previewSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes previewSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.preview-modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.8));
+    backdrop-filter: blur(10px);
+}
+
+.preview-title-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.preview-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.preview-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.preview-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.preview-close-btn:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.preview-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background-color: var(--bg-secondary, #f8fafc);
+}
+
+/* Simulate the post container inside the modal specifically */
+.preview-modal-body .post-detail-container {
+    margin: 0 auto;
+    /* Reset margins for modal context if needed */
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    animation: none;
+}
+
+.preview-modal-footer {
+    padding: 1.25rem 2rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: var(--bg-primary, #ffffff);
+}
+
+.btn-cancel {
+    background: none;
+    border: 1px solid var(--border-color, #e2e8f0);
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: var(--bg-hover, #f1f5f9);
+    color: var(--text-primary);
+}
+
+.btn-confirm-publish {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-confirm-publish:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+}
+
+.btn-confirm-publish:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Dark Mode support */
+@media (prefers-color-scheme: dark) {
+    .preview-modal-container {
+        background: #0f172a;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .preview-modal-header,
+    .preview-modal-footer {
+        background: #0f172a;
+        border-color: #1e293b;
+    }
+
+    .preview-modal-body {
+        background-color: #020617;
+    }
+
+    .preview-label {
+        color: #f8fafc;
+    }
+
+    .btn-cancel {
+        border-color: #334155;
+        color: #cbd5e1;
+    }
+
+    .btn-cancel:hover {
+        background-color: #1e293b;
+        color: white;
+    }
+}

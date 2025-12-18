@@ -4,20 +4,20 @@ import { getCategoryList } from '../api/category';
 import { uploadImage } from '../api/image';
 import ImageUpload from '../components/ImageUpload';
 import { useNavigate } from 'react-router-dom';
-import { X, Check } from 'lucide-react';
+import { X, Check, Sparkles, Clock3, ChevronDown, Tag as TagIcon } from 'lucide-react';
 import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import ImageResize from 'quill-image-resize-module-react';
 import './PostForm.css';
-
-Quill.register('modules/imageResize', ImageResize);
+import { useAuth } from '../context/AuthContext';
+import PostPreviewModal from '../components/PostPreviewModal';
 
 const CreatePost = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [isQuillReady, setIsQuillReady] = useState(false);
     const [error, setError] = useState('');
     const quillRef = useRef(null);
-    const imageRef = useRef(null);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -32,7 +32,12 @@ const CreatePost = () => {
 
     const [categories, setCategories] = useState([]);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
     const [selectedCategoryName, setSelectedCategoryName] = useState('');
+    const tagList = useMemo(
+        () => formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+        [formData.tags]
+    );
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -48,6 +53,30 @@ const CreatePost = () => {
             fetchCategories();
         }
     }, [showCategoryModal, categories.length]);
+
+    useEffect(() => {
+        const loadQuillModules = async () => {
+            if (typeof window !== 'undefined' && !window.Quill) {
+                window.Quill = Quill;
+            }
+
+            try {
+                // Dynamically import image resize module
+                const ImageResizeModule = await import('quill-image-resize-module-react');
+                // Check if it's already registered to avoid re-registration errors
+                if (!Quill.imports['modules/imageResize']) {
+                    Quill.register('modules/imageResize', ImageResizeModule.default);
+                }
+                setIsQuillReady(true);
+            } catch (error) {
+                console.error("Failed to load Quill modules", error);
+                // Even if it fails, we should let the editor load without the module or show error
+                setIsQuillReady(true); // Fallback to let editor load
+            }
+        };
+
+        loadQuillModules();
+    }, []);
 
     const handleCategorySelect = (category) => {
         setFormData(prev => ({ ...prev, categoryId: category.id }));
@@ -117,12 +146,29 @@ const CreatePost = () => {
     const formats = [
         'header',
         'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'bullet', 'indent',
+        'list', 'indent',
         'link', 'image'
     ];
 
-    const handleSubmit = async (e) => {
+    const handlePreview = (e) => {
         e.preventDefault();
+
+        // Basic validation before preview
+        if (!formData.title.trim() || !formData.content.trim()) {
+            setError('Please enter a title and content.');
+            return;
+        }
+
+        if (!formData.categoryId) {
+            setError('Please select a category.');
+            return;
+        }
+
+        setError('');
+        setShowPreview(true);
+    };
+
+    const handleConfirmPublish = async () => {
         setLoading(true);
         setError('');
 
@@ -149,141 +195,185 @@ const CreatePost = () => {
         } catch (err) {
             console.error(err);
             setError('Failed to create post. Please check your inputs.');
+            setShowPreview(false); // Close preview on error so user can fix
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container post-form-page">
-            <div className="post-form-card">
-                <h2>Write New Post</h2>
+        <div className="post-studio">
+            <div className="studio-ambient" aria-hidden="true"></div>
+
+            <div className="post-studio-shell">
                 {error && <div className="form-error">{error}</div>}
 
-                <form onSubmit={handleSubmit} className="post-form">
-                    <div className="form-row">
-                        <div className="form-group flex-2">
-                            <label htmlFor="title">Title *</label>
-                            <input
-                                type="text"
-                                name="title"
-                                id="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                required
-                            />
+                {error && <div className="form-error">{error}</div>}
+
+                <form onSubmit={handlePreview} className="post-studio-form" id="create-post-form">
+                    <div className="studio-toolbar">
+                        <div className="toolbar-left">
+                            <div className="toolbar-chip">
+                                <Sparkles size={16} />
+                                <span>Writing Studio</span>
+                            </div>
+
+                            <button
+                                type="button"
+                                className="category-chip"
+                                onClick={() => setShowCategoryModal(true)}
+                            >
+                                <span>{selectedCategoryName || '카테고리 선택'}</span>
+                                <ChevronDown size={16} />
+                            </button>
+
+                            <div className="toolbar-meta">
+                                <Clock3 size={14} />
+                                <span>초안 모드</span>
+                            </div>
                         </div>
 
-                        <div className="form-group flex-1">
-                            <label htmlFor="categoryId">Category *</label>
-                            <div className="category-select-container">
-                                <input
-                                    type="text"
-                                    value={selectedCategoryName || (formData.categoryId ? `ID: ${formData.categoryId}` : '')}
-                                    readOnly
-                                    placeholder="Select a category"
-                                    onClick={() => setShowCategoryModal(true)}
-                                    className="category-input-readonly"
-                                />
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => setShowCategoryModal(true)}
-                                >
-                                    Select
-                                </button>
-                            </div>
+                        <div className="toolbar-actions">
+                            <span className="toolbar-hint">미리보기 후 발행할 수 있어요</span>
+                            <button type="submit" className="btn-publish" disabled={loading}>
+                                {loading ? 'Publishing...' : 'Publish'}
+                            </button>
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="content">Content *</label>
-                        <ReactQuill
-                            ref={quillRef}
-                            theme="snow"
-                            value={formData.content}
-                            onChange={handleContentChange}
-                            className="content-editor-quill"
-                            modules={modules}
-                            formats={formats}
-                        />
-                    </div>
-
-                    <div className="form-row">
-                        <div className="form-group flex-1">
-                            <ImageUpload
-                                label="Thumbnail Image"
-                                onUpload={(url) => setFormData(prev => ({ ...prev, thumbnailUrl: url }))}
-                                initialUrl={formData.thumbnailUrl}
-                            />
-                        </div>
-                        <div className="form-group flex-1">
-                            <label htmlFor="tags">Tags (comma separated)</label>
-                            <input
-                                type="text"
-                                name="tags"
-                                id="tags"
-                                value={formData.tags}
-                                onChange={handleChange}
-                                placeholder="React, Java, Web"
-                            />
-                        </div>
-                    </div>
-
-                    <details className="seo-details">
-                        <summary>SEO Settings</summary>
-                        <div className="seo-fields">
-                            <div className="form-group">
-                                <label htmlFor="seoTitle">SEO Title</label>
+                    <div className="studio-grid">
+                        <section className="writer-panel">
+                            <div className="title-stack">
+                                <div className="eyebrow">새 포스트</div>
                                 <input
                                     type="text"
-                                    name="seoTitle"
-                                    id="seoTitle"
-                                    value={formData.seoTitle}
+                                    name="title"
+                                    id="title"
+                                    className="post-title-input"
+                                    placeholder="제목을 입력하세요"
+                                    value={formData.title}
                                     onChange={handleChange}
+                                    required
+                                />
+                                <p className="title-hint">
+                                    이미지는 에디터 상단의 아이콘으로 업로드할 수 있어요.
+                                </p>
+                            </div>
+
+                            <div className="editor-shell">
+                                {isQuillReady ? (
+                                    <ReactQuill
+                                        ref={quillRef}
+                                        theme="snow"
+                                        value={formData.content}
+                                        onChange={handleContentChange}
+                                        className="content-editor-quill"
+                                        modules={modules}
+                                        formats={formats}
+                                        placeholder="Tell your story..."
+                                    />
+                                ) : (
+                                    <div className="editor-loading">Loading Editor...</div>
+                                )}
+                            </div>
+                        </section>
+
+                        <aside className="meta-rail">
+                            <div className="meta-card highlight-card">
+                                <div className="meta-card-header">
+                                    <div>
+                                        <p className="meta-title">커버 이미지</p>
+                                        <span className="meta-subtitle">글의 첫 인상을 만들어요</span>
+                                    </div>
+                                </div>
+                                <ImageUpload
+                                    label="Cover image"
+                                    onUpload={(url) => setFormData(prev => ({ ...prev, thumbnailUrl: url }))}
+                                    initialUrl={formData.thumbnailUrl}
+                                    className="image-upload-compact"
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="seoDescription">SEO Description</label>
-                                <textarea
-                                    name="seoDescription"
-                                    id="seoDescription"
-                                    value={formData.seoDescription}
-                                    onChange={handleChange}
-                                    rows="3"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="seoKeywords">SEO Keywords</label>
+
+                            <div className="meta-card">
+                                <div className="meta-card-header">
+                                    <div className="meta-title-row">
+                                        <TagIcon size={16} />
+                                        <p className="meta-title">태그</p>
+                                    </div>
+                                    <span className="meta-subtitle">콤마로 구분</span>
+                                </div>
                                 <input
                                     type="text"
-                                    name="seoKeywords"
-                                    id="seoKeywords"
-                                    value={formData.seoKeywords}
+                                    name="tags"
+                                    id="tags"
+                                    className="meta-input"
+                                    value={formData.tags}
                                     onChange={handleChange}
+                                    placeholder="React, Java, Web"
                                 />
+                                {tagList.length > 0 && (
+                                    <div className="tag-preview">
+                                        {tagList.map((tag, index) => (
+                                            <span key={`${tag}-${index}`} className="tag-chip">#{tag}</span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    </details>
 
-                    <div className="form-actions">
-                        <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
-                            {loading ? 'Publishing...' : 'Publish Post'}
+                            <div className="meta-card">
+                                <div className="meta-card-header">
+                                    <p className="meta-title">SEO</p>
+                                    <span className="meta-subtitle">검색 노출 메타데이터</span>
+                                </div>
+                                <div className="seo-grid">
+                                    <input
+                                        type="text"
+                                        name="seoTitle"
+                                        className="meta-input"
+                                        placeholder="SEO Title"
+                                        value={formData.seoTitle}
+                                        onChange={handleChange}
+                                    />
+                                    <textarea
+                                        name="seoDescription"
+                                        className="meta-input"
+                                        placeholder="SEO Description"
+                                        value={formData.seoDescription}
+                                        onChange={handleChange}
+                                        rows="3"
+                                    />
+                                    <input
+                                        type="text"
+                                        name="seoKeywords"
+                                        className="meta-input"
+                                        placeholder="SEO Keywords"
+                                        value={formData.seoKeywords}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+
+                    <div className="mobile-publish-bar">
+                        <span className="toolbar-hint">작성한 내용이 마음에 들면 발행하세요.</span>
+                        <button type="submit" className="btn-publish" disabled={loading}>
+                            {loading ? 'Publishing...' : 'Publish'}
                         </button>
                     </div>
                 </form>
             </div>
 
             {showCategoryModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="modal-header">
+                <div className="category-modal-overlay">
+                    <div className="category-modal">
+                        <div className="category-modal-header">
                             <h3>Select Category</h3>
                             <button onClick={() => setShowCategoryModal(false)} className="btn-icon">
                                 <X size={20} />
                             </button>
                         </div>
-                        <div className="modal-body">
+                        <div className="category-modal-body">
                             {categories.length > 0 ? (
                                 <div className="category-list">
                                     {categories.map(cat => (
@@ -304,6 +394,18 @@ const CreatePost = () => {
                     </div>
                 </div>
             )}
+
+            <PostPreviewModal
+                isOpen={showPreview}
+                onClose={() => setShowPreview(false)}
+                onPublish={handleConfirmPublish}
+                data={{
+                    ...formData,
+                    categoryName: selectedCategoryName
+                }}
+                isPublishing={loading}
+                author={user}
+            />
         </div>
     );
 };

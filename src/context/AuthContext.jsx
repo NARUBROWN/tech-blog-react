@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }) => {
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
+
+        console.log(user);
     }, []);
 
     const login = async (username, password) => {
