@@ -76,6 +76,153 @@ const PostDetail = () => {
         }
     }, [post?.id, user]);
 
+    useEffect(() => {
+        if (!post) return;
+
+        const siteName = 'NARUBROWN의 기술 블로그';
+        const defaultTitle = document.title || siteName;
+        const plainText = (html) => (html ? html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : '');
+        const getAbsoluteUrl = (url) => {
+            if (!url) return null;
+            try {
+                return new URL(url, window.location.origin).toString();
+            } catch (error) {
+                console.error('Failed to normalize URL for SEO metadata', error);
+                return null;
+            }
+        };
+
+        const metaTitle = (post.seoTitle?.trim() || post.title || siteName).trim();
+        const fullTitle = `${metaTitle} | ${siteName}`;
+        const descriptionSource = post.seoDescription?.trim() || plainText(post.content);
+        const description = descriptionSource
+            ? (descriptionSource.length > 160 ? `${descriptionSource.slice(0, 157)}...` : descriptionSource)
+            : siteName;
+        const keywords = (post.seoKeywords || post.tags?.tagNames?.join(', ') || '').trim();
+        const canonicalUrl = `https://na2ru2.me/post/${post.slug || slug}`;
+        const fallbackOgImage = 'https://na2ru2.me/logo.png';
+        const ogImage = getAbsoluteUrl(post.thumbnailUrl) || fallbackOgImage;
+
+        const createdMeta = [];
+        const previousMetaContent = new Map();
+
+        const upsertMeta = (attr, key, value) => {
+            if (!value) return;
+            let element = document.querySelector(`meta[${attr}="${key}"]`);
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute(attr, key);
+                document.head.appendChild(element);
+                createdMeta.push(element);
+            } else {
+                previousMetaContent.set(element, element.getAttribute('content'));
+            }
+            element.setAttribute('content', value);
+        };
+
+        const metaDefinitions = [
+            { attr: 'name', key: 'description', value: description },
+            { attr: 'name', key: 'keywords', value: keywords },
+            { attr: 'name', key: 'author', value: post.author?.username },
+            { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
+            { attr: 'property', key: 'og:title', value: fullTitle },
+            { attr: 'property', key: 'og:description', value: description },
+            { attr: 'property', key: 'og:type', value: 'article' },
+            { attr: 'property', key: 'og:site_name', value: siteName },
+            { attr: 'property', key: 'og:url', value: canonicalUrl },
+            { attr: 'property', key: 'og:image', value: ogImage },
+            { attr: 'property', key: 'og:locale', value: 'ko_KR' },
+            { attr: 'property', key: 'article:published_time', value: post.publishedAt },
+            { attr: 'property', key: 'article:section', value: post.category?.name },
+            { attr: 'name', key: 'twitter:card', value: 'summary_large_image' },
+            { attr: 'name', key: 'twitter:title', value: fullTitle },
+            { attr: 'name', key: 'twitter:description', value: description },
+            { attr: 'name', key: 'twitter:image', value: ogImage }
+        ];
+
+        metaDefinitions.forEach(meta => upsertMeta(meta.attr, meta.key, meta.value));
+
+        const existingCanonical = document.querySelector('link[rel="canonical"]');
+        const canonicalCreated = !existingCanonical;
+        const previousCanonicalHref = existingCanonical?.getAttribute('href') || '';
+        const canonicalLink = existingCanonical || document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        canonicalLink.setAttribute('href', canonicalUrl);
+        if (canonicalCreated) {
+            document.head.appendChild(canonicalLink);
+        }
+
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": metaTitle,
+            "name": metaTitle,
+            "description": description,
+            "inLanguage": "ko-KR",
+            "url": canonicalUrl,
+            "mainEntityOfPage": canonicalUrl,
+            "datePublished": post.publishedAt,
+            "dateModified": post.updatedAt || post.publishedAt,
+            "image": ogImage ? [ogImage] : undefined,
+            "author": post.author ? {
+                "@type": "Person",
+                "name": post.author.username,
+                "url": canonicalUrl
+            } : undefined,
+            "publisher": {
+                "@type": "Organization",
+                "name": siteName,
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": fallbackOgImage
+                }
+            },
+            "keywords": keywords || undefined,
+            "articleSection": post.category?.name
+        };
+
+        const structuredDataJson = JSON.stringify(structuredData, (_, value) => value === undefined ? undefined : value);
+        const existingLd = document.getElementById('post-structured-data');
+        const ldCreated = !existingLd;
+        const previousLdContent = existingLd?.textContent || '';
+        const ldScript = existingLd || document.createElement('script');
+        ldScript.type = 'application/ld+json';
+        ldScript.id = 'post-structured-data';
+        ldScript.textContent = structuredDataJson;
+        if (ldCreated) {
+            document.head.appendChild(ldScript);
+        }
+
+        document.title = fullTitle;
+
+        return () => {
+            document.title = defaultTitle;
+
+            createdMeta.forEach(meta => meta.remove());
+            previousMetaContent.forEach((content, meta) => {
+                if (content) {
+                    meta.setAttribute('content', content);
+                } else {
+                    meta.removeAttribute('content');
+                }
+            });
+
+            if (canonicalCreated) {
+                canonicalLink.remove();
+            } else if (previousCanonicalHref) {
+                canonicalLink.setAttribute('href', previousCanonicalHref);
+            } else {
+                canonicalLink.removeAttribute('href');
+            }
+
+            if (ldCreated) {
+                ldScript.remove();
+            } else {
+                ldScript.textContent = previousLdContent;
+            }
+        };
+    }, [post, slug]);
+
     const handleLikeToggle = async () => {
         if (!user) {
             alert('Please login to like posts');
