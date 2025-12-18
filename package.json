@@ -16,7 +16,7 @@
     "dompurify": "^3.3.1",
     "lucide-react": "^0.561.0",
     "mermaid": "^11.12.2",
-    "quill-image-resize-module-react": "^3.0.0",
+    "quill-blot-formatter": "^1.0.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-quill-new": "^3.6.0",

@@ -61,17 +61,14 @@ const CreatePost = () => {
             }
 
             try {
-                // Dynamically import image resize module
-                const ImageResizeModule = await import('quill-image-resize-module-react');
-                // Check if it's already registered to avoid re-registration errors
-                if (!Quill.imports['modules/imageResize']) {
-                    Quill.register('modules/imageResize', ImageResizeModule.default);
+                const { default: BlotFormatter } = await import('quill-blot-formatter');
+                if (!Quill.imports['modules/blotFormatter']) {
+                    Quill.register('modules/blotFormatter', BlotFormatter);
                 }
                 setIsQuillReady(true);
             } catch (error) {
                 console.error("Failed to load Quill modules", error);
-                // Even if it fails, we should let the editor load without the module or show error
-                setIsQuillReady(true); // Fallback to let editor load
+                setIsQuillReady(true);
             }
         };
 
@@ -136,10 +133,7 @@ const CreatePost = () => {
                     }
                 }
             },
-            imageResize: {
-                parchment: Quill.import('parchment'),
-                modules: ['Resize', 'DisplaySize']
-            }
+            blotFormatter: {}
         };
     }, []);
 
