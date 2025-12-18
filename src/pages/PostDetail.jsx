@@ -7,6 +7,7 @@ import RecommendedPosts from '../components/RecommendedPosts';
 import { Calendar, User, Tag, Heart, Eye, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import PostContent from '../components/PostContent';
+import RecruitmentSnackbar from '../components/RecruitmentSnackbar';
 import './PostDetail.css';
 import PostDetailSkeleton from '../components/PostDetailSkeleton';
 
@@ -23,6 +24,27 @@ const PostDetail = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [likers, setLikers] = useState([]);
     const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
+    const [showRecruitment, setShowRecruitment] = useState(false);
+    const [isRecruitmentDismissed, setIsRecruitmentDismissed] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (isRecruitmentDismissed) return;
+
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+
+            const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+            if (scrollPercentage >= 0.7) {
+                setShowRecruitment(true);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isRecruitmentDismissed]);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -385,6 +407,14 @@ const PostDetail = () => {
                 onClose={() => setIsLikeModalOpen(false)}
                 title="Likes"
                 users={likers}
+            />
+
+            <RecruitmentSnackbar
+                isVisible={showRecruitment}
+                onClose={() => {
+                    setShowRecruitment(false);
+                    setIsRecruitmentDismissed(true);
+                }}
             />
         </>
     );
