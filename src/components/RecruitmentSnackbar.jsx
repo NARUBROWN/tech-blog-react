@@ -38,7 +38,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
 
             <div className="cta-row">
                 <a
-                    href="https://www.linkedin.com/"
+                    href="https://www.linkedin.com/in/naru-brown/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="linkedin-btn"
