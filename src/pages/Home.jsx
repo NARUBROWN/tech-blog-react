@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
-import { User, Tag, Clock, Image } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import DOMPurify from 'dompurify';
 import Typewriter from '../components/Typewriter';
 import './Home.css';
 import PostListSkeleton from '../components/PostListSkeleton';
+import PostCard from '../components/PostCard';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -74,42 +72,6 @@ const Home = () => {
 
     // Use a text-only version of content for preview if needed, or just show title/tags
     // For safety, we can strip HTML from content or just not show it in the preview card
-    const getPreview = (htmlContent) => {
-        if (!htmlContent) return '';
-
-        // Create a temporary DOM element to parse the HTML
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlContent;
-
-        // Remove code blocks (pre tags and Quill code blocks)
-        const codeBlocks = tempDiv.querySelectorAll('pre, .ql-code-block');
-        codeBlocks.forEach(block => block.remove());
-
-        // Helper to check for Mermaid definitions
-        const isMermaidDefinition = (text) =>
-            text && text.match(/^(graph|sequenceDiagram|classDiagram|stateDiagram|erDiagram|gantt|pie|gitGraph|journey|mindmap|timeline)/);
-
-        // Remove paragraphs that look like Mermaid diagrams
-        const paras = tempDiv.querySelectorAll('p');
-        paras.forEach(p => {
-            if (isMermaidDefinition(p.textContent.trim())) {
-                p.remove();
-            }
-        });
-
-        // Now extract text from what's left
-        const textContent = tempDiv.textContent || tempDiv.innerText || '';
-        const clean = textContent.trim();
-
-        return clean.length > 100 ? clean.substring(0, 100) + '...' : clean;
-    };
-
-    const slugify = (text) => {
-        return text
-            .toString()
-            .trim()
-            .replace(/\s+/g, '-'); // Replace spaces with -
-    };
 
     return (
         <div className="home-page">
@@ -148,61 +110,7 @@ const Home = () => {
                     <>
                         <div className="post-grid">
                             {posts.map((post) => (
-                                <Link to={`/post/${slugify(post.title)}`} key={post.id} className="post-card">
-                                    {post.thumbnailUrl ? (
-                                        <div className="post-card-thumbnail">
-                                            <img src={post.thumbnailUrl} alt={post.title} />
-                                            {post.category && (
-                                                <span className="category-badge-overlay">{post.category.name}</span>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="post-card-thumbnail placeholder">
-                                            <Image size={48} color="#9ca3af" />
-                                            {post.category && (
-                                                <span className="category-badge-overlay">{post.category.name}</span>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    <div className="post-card-content">
-                                        <h3 className="post-card-title">{post.title}</h3>
-
-                                        <p className="post-card-preview">
-                                            {getPreview(post.content)}
-                                        </p>
-
-                                        <div className="post-card-footer">
-                                            <div className="post-card-author">
-                                                <div className="author-avatar-sm">
-                                                    {post.author?.profileImageUrl ? (
-                                                        <img src={post.author.profileImageUrl} alt={post.author.username} />
-                                                    ) : (
-                                                        <User size={16} />
-                                                    )}
-                                                </div>
-                                                <span className="author-name-sm">{post.author?.username}</span>
-                                            </div>
-
-                                            <div className="post-card-meta">
-                                                <Clock size={14} />
-                                                <span>
-                                                    {post.publishedAt
-                                                        ? formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })
-                                                        : 'Draft'}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="post-card-tags">
-                                            {post.tags?.tagNames?.map((tag) => (
-                                                <span key={tag} className="tag-badge">
-                                                    <Tag size={12} /> {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </Link>
+                                <PostCard key={post.id} post={post} />
                             ))}
                         </div>
 
@@ -238,9 +146,10 @@ const Home = () => {
                             </div>
                         )}
                     </>
-                )}
-            </div>
-        </div>
+                )
+                }
+            </div >
+        </div >
     );
 };
 
