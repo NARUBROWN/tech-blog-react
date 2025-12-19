@@ -1,14 +1,24 @@
 
 import React from 'react';
-import { X, Linkedin } from 'lucide-react';
+import { X, Linkedin, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './RecruitmentSnackbar.css';
 
 const RecruitmentSnackbar = ({ isVisible, onClose }) => {
     return (
         <div className={`recruitment-snackbar ${isVisible ? 'visible' : ''}`} role="alert">
-            <div className="snackbar-hero">
-                <span className="signal-dot" aria-hidden="true" />
-                <span className="snackbar-kicker">여보세요? 제 말이 들리나요?</span>
+            <div className="snackbar-header">
+                <div className="snackbar-hero">
+                    <span className="signal-dot" aria-hidden="true" />
+                    <span className="snackbar-kicker">여보세요? 제 말이 들리나요?</span>
+                </div>
+                <button
+                    className="close-btn"
+                    onClick={onClose}
+                    aria-label="Close recruitment offer"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
             <div className="snackbar-content">
@@ -27,16 +37,13 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
                         <span>안정적인 서비스 개발</span>
                     </div>
                 </div>
-                <button
-                    className="close-btn"
-                    onClick={onClose}
-                    aria-label="Close recruitment offer"
-                >
-                    <X size={20} />
-                </button>
             </div>
 
             <div className="cta-row">
+                <Link to="/about" className="about-btn">
+                    <User size={22} />
+                    자기소개서 보기
+                </Link>
                 <a
                     href="https://www.linkedin.com/in/naru-brown/"
                     target="_blank"
