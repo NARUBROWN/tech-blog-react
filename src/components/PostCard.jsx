@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Tag, Clock, Image, ChevronDown, ChevronUp } from 'lucide-react';
+import { User, Tag, Clock, Image, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import './PostCard.css';
 
 const PostCard = ({ post }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showExpandButton, setShowExpandButton] = useState(false);
+    const [isImageLoading, setIsImageLoading] = useState(!!post.thumbnailUrl);
     const tagsRef = useRef(null);
 
     const slugify = (text) => {
@@ -70,7 +71,14 @@ const PostCard = ({ post }) => {
         <Link to={`/post/${slugify(post.title)}`} className="post-card">
             {post.thumbnailUrl ? (
                 <div className="post-card-thumbnail">
-                    <img src={post.thumbnailUrl} alt={post.title} />
+                    {isImageLoading && <Loader2 className="spinner" size={24} />}
+                    <img
+                        src={post.thumbnailUrl}
+                        alt={post.title}
+                        onLoad={() => setIsImageLoading(false)}
+                        onError={() => setIsImageLoading(false)}
+                        style={{ opacity: isImageLoading ? 0 : 1, transition: 'opacity 0.3s' }}
+                    />
                     {post.category && (
                         <span className="category-badge-overlay">{post.category.name}</span>
                     )}

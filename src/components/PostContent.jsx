@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify';
 import mermaid from 'mermaid';
 import 'react-quill-new/dist/quill.snow.css';
 import '../pages/PostDetail.css';
+import './Skeleton.css';
 
 // Configure DOMPurify to allow SVG elements for Mermaid diagrams
 DOMPurify.setConfig({
@@ -118,6 +119,66 @@ const PostContent = memo(({ content }) => {
 
         // Small delay to ensure DOM is ready
         setTimeout(renderMermaid, 100);
+
+        // Helper to wrap element
+        const wrapElement = (el, wrapper) => {
+            el.parentNode.insertBefore(wrapper, el);
+            wrapper.appendChild(el);
+        };
+
+        // Handle Image Skeleton Loading
+        const handleImageSkeleton = () => {
+            const images = document.querySelectorAll('.post-body-text img');
+
+            images.forEach(img => {
+                if (img.complete && img.naturalHeight !== 0) return;
+
+                // Check if already wrapped or processed to avoid duplicates if effect runs again
+                if (img.parentElement.classList.contains('image-skeleton-wrapper')) return;
+
+                // Create wrapper
+                const wrapper = document.createElement('span');
+                wrapper.className = 'image-skeleton-wrapper skeleton';
+                wrapper.style.display = 'inline-block';
+                // We try to approximate size if width/height attributes exist, otherwise block
+                // But often responsive images don't have fixed sizes.
+                // Let's set some reasonable defaults or just block for better visuals
+                wrapper.style.minHeight = '300px';
+                wrapper.style.minWidth = '100%';
+                wrapper.style.maxWidth = '100%';
+                wrapper.style.borderRadius = '8px';
+
+                // Hide image initially
+                img.style.opacity = '0';
+                img.style.transition = 'opacity 0.3s ease-in-out';
+
+                // Wrap image
+                wrapElement(img, wrapper);
+
+                const onLoad = () => {
+                    img.style.opacity = '1';
+                    wrapper.classList.remove('skeleton');
+                    wrapper.style.minHeight = 'auto'; // Reset min-height to let content flow
+                    wrapper.style.background = 'none'; // Remove skeleton shimmer background
+                };
+
+                const onError = () => {
+                    // Even on error, show the broken image icon or handle gracefully
+                    img.style.opacity = '1';
+                    wrapper.classList.remove('skeleton');
+                    wrapper.style.minHeight = 'auto';
+                    wrapper.style.background = 'none';
+                };
+
+                img.addEventListener('load', onLoad, { once: true });
+                img.addEventListener('error', onError, { once: true });
+            });
+        };
+
+        // Run after a slight delay to allow DOM to settle, similar to Mermaid
+        setTimeout(() => {
+            handleImageSkeleton();
+        }, 50);
 
     }, [content]);
 
