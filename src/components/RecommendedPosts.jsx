@@ -10,23 +10,35 @@ const RecommendedPosts = ({ currentPostId }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const controller = new AbortController();
+        let isCancelled = false;
+
         const fetchPosts = async () => {
             try {
                 // Fetch latest posts. In a real app, this might be 'related' posts.
-                const data = await getAllPosts(0, 3);
+                const data = await getAllPosts(0, 3, undefined, { signal: controller.signal });
+                if (isCancelled) return;
                 // Filter out current post if present and limit to 3
                 const filtered = data.content
                     .filter(p => p.id !== currentPostId)
                     .slice(0, 3);
                 setPosts(filtered);
             } catch (error) {
+                if (controller.signal.aborted || error.code === 'ERR_CANCELED') return;
                 console.error("Failed to load recommended posts", error);
             } finally {
-                setLoading(false);
+                if (!isCancelled) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchPosts();
+
+        return () => {
+            isCancelled = true;
+            controller.abort();
+        };
     }, [currentPostId]);
 
     const slugify = (text) => {

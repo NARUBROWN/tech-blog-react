@@ -1,10 +1,10 @@
 import { useState, useEffect, memo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPostBySlug, likePost, unlikePost, getPostLikes, deletePost } from '../api/post';
+import { getPostBySlug, getPostById, likePost, unlikePost, getPostLikes, deletePost, increasePostViewCount } from '../api/post';
 import { useAuth } from '../context/AuthContext';
 import UserListModal from '../components/UserListModal';
 import RecommendedPosts from '../components/RecommendedPosts';
-import { Calendar, User, Tag, Heart, Eye, Trash2 } from 'lucide-react';
+import { Calendar, User, Tag, Heart, Eye, Trash2, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 import PostContent from '../components/PostContent';
 import RecruitmentSnackbar from '../components/RecruitmentSnackbar';
@@ -14,7 +14,7 @@ import PostDetailSkeleton from '../components/PostDetailSkeleton';
 
 
 const PostDetail = () => {
-    const { slug } = useParams();
+    const { slug, id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
     const [post, setPost] = useState(null);
@@ -47,36 +47,48 @@ const PostDetail = () => {
     }, [isRecruitmentDismissed]);
 
     useEffect(() => {
+        if (!slug && !id) return;
+        const controller = new AbortController();
+        let isCancelled = false;
+
         const fetchPost = async () => {
+            setLoading(true);
             try {
-                const data = await getPostBySlug(slug);
+                let data;
+                if (id) {
+                    data = await getPostById(id, { signal: controller.signal });
+                } else {
+                    data = await getPostBySlug(slug, { signal: controller.signal });
+                }
+
+                if (!data || isCancelled) return;
+
+                if (data && data.id) {
+                    increasePostViewCount(data.id).catch(e => console.error("Failed to update view count", e));
+                    data = { ...data, viewCount: (data.viewCount || 0) + 1 };
+                }
                 setPost(data);
-                setIsLiked(data.liked);
+                setIsLiked(Boolean(data.liked));
                 setLikeCount(data.likeCount || 0);
+                setError('');
             } catch (err) {
+                if (controller.signal.aborted || err.code === 'ERR_CANCELED') return;
                 console.error(err);
                 setError('Failed to load post.');
             } finally {
-                setLoading(false);
-            }
-        };
-
-        const fetchLikers = async () => {
-            if (!slug || !post?.id) return;
-            try {
-                const likersData = await getPostLikes(post.id);
-                setLikers(likersData);
-                setLikeCount(likersData.length);
-                if (user) {
-                    setIsLiked(likersData.some(u => u.username === user.username));
+                if (!isCancelled) {
+                    setLoading(false);
                 }
-            } catch (error) {
-                console.error("Failed to fetch likes", error);
             }
         };
 
-        if (slug) fetchPost();
-    }, [slug]);
+        fetchPost();
+
+        return () => {
+            isCancelled = true;
+            controller.abort();
+        };
+    }, [slug, id]);
 
     useEffect(() => {
         if (post?.id) {
@@ -121,7 +133,7 @@ const PostDetail = () => {
             ? (descriptionSource.length > 160 ? `${descriptionSource.slice(0, 157)}...` : descriptionSource)
             : siteName;
         const keywords = (post.seoKeywords || post.tags?.tagNames?.join(', ') || '').trim();
-        const canonicalUrl = `https://na2ru2.me/post/${post.slug || slug}`;
+        const canonicalUrl = `https://na2ru2.me/post/${post.slug || slug || id}`;
         const fallbackOgImage = 'https://na2ru2.me/logo.png';
         const ogImage = getAbsoluteUrl(post.thumbnailUrl) || fallbackOgImage;
 
@@ -243,7 +255,7 @@ const PostDetail = () => {
                 ldScript.textContent = previousLdContent;
             }
         };
-    }, [post, slug]);
+    }, [post, slug, id]);
 
     const handleLikeToggle = async () => {
         if (!user) {
@@ -290,6 +302,19 @@ const PostDetail = () => {
         }
     };
 
+    const handleShare = async () => {
+        if (!post) return;
+        const shareUrl = `${window.location.origin}/post/share/${post.id}`;
+
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            alert('Link copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy link:', err);
+            alert('Failed to copy link.');
+        }
+    };
+
     if (loading) return <PostDetailSkeleton />;
     if (error) return <div className="error-state">{error}</div>;
     if (!post) return <div className="error-state">Post not found</div>;
@@ -332,6 +357,13 @@ const PostDetail = () => {
                                 </div>
                             </div>
                             <div className="header-actions">
+                                <button
+                                    className="action-btn share-btn"
+                                    onClick={handleShare}
+                                    title="Share Post"
+                                >
+                                    <Share2 size={20} />
+                                </button>
                                 {(user && post.author && (user.username === post.author.username || user.role === 'ROLE_ADMIN')) && (
                                     <button
                                         className="action-btn delete-btn"

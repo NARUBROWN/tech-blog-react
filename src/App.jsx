@@ -59,6 +59,7 @@ function App() {
             />
 
             <Route path="post/:slug" element={<PostDetail />} />
+            <Route path="post/share/:id" element={<PostDetail />} />
           </Route>
         </Routes>
       </AuthProvider>

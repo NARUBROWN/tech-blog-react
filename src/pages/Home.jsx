@@ -47,22 +47,34 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
+        const controller = new AbortController();
+        let isCancelled = false;
+
         const fetchPosts = async () => {
             setLoading(true);
+            setError(null);
             try {
-                const data = await getAllPosts(page, 6, categoryName); // 6 items per page
-                // data.content contains the array of posts
+                const data = await getAllPosts(page, 6, categoryName, { signal: controller.signal }); // 6 items per page
+                if (isCancelled) return;
                 setPosts(data.content || []);
                 setTotalPages(data.totalPages || 0);
             } catch (err) {
+                if (controller.signal.aborted || err.code === 'ERR_CANCELED') return;
                 console.error(err);
                 setError('Failed to load posts.');
             } finally {
-                setLoading(false);
+                if (!isCancelled) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchPosts();
+
+        return () => {
+            isCancelled = true;
+            controller.abort();
+        };
     }, [categoryName, page]);
 
     // Cleanup page when category changes
