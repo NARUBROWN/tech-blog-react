@@ -170,3 +170,18 @@
     gap: 1.25rem;
     align-items: center;
 }
+
+.category-header {
+    text-align: center;
+    padding: 10rem 1.5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #0f172a;
+}
+
+.category-header h1 {
+    font-size: clamp(2rem, 3vw + 1rem, 3rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+}
