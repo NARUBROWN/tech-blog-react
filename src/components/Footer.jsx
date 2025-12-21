@@ -16,15 +16,15 @@ const Footer = () => {
                     </div>
 
                     <div className="footer-section">
-                        <h3>Quick Links</h3>
+                        <h3>빠른 링크</h3>
                         <ul className="footer-links">
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/about">About Me</Link></li>
+                            <li><Link to="/">홈</Link></li>
+                            <li><Link to="/about">자기소개서</Link></li>
                         </ul>
                     </div>
 
                     <div className="footer-section">
-                        <h3>Connect</h3>
+                        <h3>연락처</h3>
                         <ul className="footer-links">
                             <li><a href="https://github.com/NARUBROWN" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                             <li><a href="https://linkedin.com/in/naru-brown" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>

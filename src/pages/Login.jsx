@@ -31,8 +31,8 @@ const Login = () => {
     return (
         <div className="auth-container">
             <div className="auth-card">
-                <h2>Welcome Back</h2>
-                <p className="auth-subtitle">Enter your credentials to access your account</p>
+                <h2>로그인</h2>
+                <p className="auth-subtitle">인증 정보를 입력해주세요.</p>
 
                 {error && <div className="auth-error">{error}</div>}
 
@@ -60,7 +60,7 @@ const Login = () => {
                     </div>
 
                     <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Sign In'}
+                        {loading ? '로그인 중...' : '로그인'}
                     </button>
                 </form>
             </div>

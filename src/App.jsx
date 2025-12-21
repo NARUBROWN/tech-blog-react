@@ -7,6 +7,7 @@ import About from './pages/About';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import CreatePost from './pages/CreatePost';
+import PostEdit from './pages/PostEdit';
 import CreateCategory from './pages/CreateCategory';
 import PostDetail from './pages/PostDetail';
 import ProfileSettings from './pages/ProfileSettings';
@@ -36,6 +37,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CreatePost />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="post/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <PostEdit />
                 </ProtectedRoute>
               }
             />

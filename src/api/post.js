@@ -7,6 +7,13 @@ export const createPost = async (postData, categoryId) => {
     return response.data;
 };
 
+export const updatePost = async (categoryId, postId, postData) => {
+    const response = await client.patch('/post', postData, {
+        params: { categoryId, postId }
+    });
+    return response.data;
+};
+
 export const getPostBySlug = async (slug, config = {}) => {
     const response = await client.get(`/post/slug/${slug}`, { ...config });
     return response.data;

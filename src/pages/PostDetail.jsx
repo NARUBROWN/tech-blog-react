@@ -4,7 +4,7 @@ import { getPostBySlug, getPostById, likePost, unlikePost, getPostLikes, deleteP
 import { useAuth } from '../context/AuthContext';
 import UserListModal from '../components/UserListModal';
 import RecommendedPosts from '../components/RecommendedPosts';
-import { Calendar, User, Tag, Heart, Eye, Trash2, Share2 } from 'lucide-react';
+import { Calendar, User, Tag, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import PostContent from '../components/PostContent';
 import RecruitmentSnackbar from '../components/RecruitmentSnackbar';
@@ -373,14 +373,24 @@ const PostDetail = () => {
                                     <Share2 size={20} />
                                 </button>
                                 {(user && post.author && (user.username === post.author.username || user.role === 'ROLE_ADMIN')) && (
-                                    <button
-                                        className="action-btn delete-btn"
-                                        onClick={handleDelete}
-                                        title="Delete Post"
-                                        style={{ color: '#ef4444' }} // Simple inline style for danger color, or move to CSS
-                                    >
-                                        <Trash2 size={20} />
-                                    </button>
+                                    <>
+                                        <button
+                                            className="action-btn edit-btn"
+                                            onClick={() => navigate(`/post/edit/${post.id}`)}
+                                            title="Edit Post"
+                                            style={{ color: '#3b82f6' }}
+                                        >
+                                            <Pencil size={20} />
+                                        </button>
+                                        <button
+                                            className="action-btn delete-btn"
+                                            onClick={handleDelete}
+                                            title="Delete Post"
+                                            style={{ color: '#ef4444' }} // Simple inline style for danger color, or move to CSS
+                                        >
+                                            <Trash2 size={20} />
+                                        </button>
+                                    </>
                                 )}
                             </div>
                         </div>
@@ -419,7 +429,7 @@ const PostDetail = () => {
                         <div className="interaction-group">
                             <div className="stat-display">
                                 <Eye size={20} />
-                                <span>{post.viewCount} reads</span>
+                                <span>{post.viewCount}명 읽음</span>
                             </div>
                         </div>
                     </div>

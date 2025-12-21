@@ -52,7 +52,7 @@ const RecommendedPosts = ({ currentPostId }) => {
 
     return (
         <div className="recommended-posts-container">
-            <h3 className="recommended-title">Recommended Reading</h3>
+            <h3 className="recommended-title">이 글도 읽어보세요</h3>
             <div className="recommended-grid">
                 {posts.map(post => (
                     <Link to={`/post/${slugify(post.title)}`} key={post.id} className="recommended-card">
@@ -73,7 +73,7 @@ const RecommendedPosts = ({ currentPostId }) => {
                                     {post.publishedAt ? format(new Date(post.publishedAt), 'MMM dd') : ''}
                                 </span>
                                 <span className="rec-read-more">
-                                    Read <ArrowRight size={14} />
+                                    읽기 <ArrowRight size={14} />
                                 </span>
                             </div>
                         </div>
