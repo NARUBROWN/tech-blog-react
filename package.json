@@ -6,7 +6,8 @@
   "homepage": "https://na2ru2.me",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-share-pages.js",
+    "generate:share-pages": "node scripts/generate-share-pages.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
