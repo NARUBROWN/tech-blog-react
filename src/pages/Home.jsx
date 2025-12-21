@@ -2,9 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
 import Typewriter from '../components/Typewriter';
+import { AnimatePresence } from 'framer-motion';
 import './Home.css';
 import PostListSkeleton from '../components/PostListSkeleton';
 import PostCard from '../components/PostCard';
+import RecapBanner from '../components/Recap/RecapBanner';
+import RecapStory from '../components/Recap/RecapStory';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -15,6 +18,7 @@ const Home = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const heroRef = useRef(null);
+    const [isRecapOpen, setIsRecapOpen] = useState(false);
 
     useEffect(() => {
         const hero = heroRef.current;
@@ -118,6 +122,11 @@ const Home = () => {
                     <h1>{categoryName}</h1>
                 </div>
             )}
+
+            {!categoryName && <RecapBanner onClick={() => setIsRecapOpen(true)} />}
+            <AnimatePresence>
+                {isRecapOpen && <RecapStory onClose={() => setIsRecapOpen(false)} />}
+            </AnimatePresence>
 
             <div className="content-container">
                 {loading ? (
