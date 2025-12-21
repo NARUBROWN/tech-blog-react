@@ -474,3 +474,80 @@
         display: flex;
     }
 }
+
+@media (max-width: 540px) {
+    .post-studio {
+        padding: 1rem 0 4rem;
+    }
+
+    .studio-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .toolbar-left,
+    .toolbar-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .btn-publish {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .writer-panel {
+        padding: 1rem;
+    }
+
+    .post-title-input {
+        font-size: 1.75rem;
+    }
+
+    .content-editor-quill .ql-toolbar {
+        padding: 8px 10px !important;
+    }
+
+    .content-editor-quill .ql-container {
+        min-height: 45vh;
+        font-size: 1rem;
+    }
+
+    .content-editor-quill .ql-editor {
+        padding: 1rem !important;
+    }
+
+    .content-editor-quill .ql-editor.ql-blank::before {
+        left: 1rem;
+    }
+
+    .meta-card {
+        padding: 0.9rem;
+    }
+
+    .meta-input {
+        font-size: 0.95rem;
+    }
+
+    .tag-chip {
+        font-size: 0.85rem;
+    }
+
+    .image-upload-compact .image-upload-area {
+        min-height: 140px;
+    }
+
+    .category-modal {
+        width: min(92vw, 420px);
+    }
+
+    .category-modal-header,
+    .category-modal-body {
+        padding: 0.9rem 1rem;
+    }
+
+    .category-option {
+        padding: 0.65rem 0.75rem;
+    }
+}

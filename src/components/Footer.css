@@ -56,3 +56,22 @@
     font-size: 0.85rem;
     color: var(--color-text-secondary);
 }
+
+@media (max-width: 480px) {
+    .footer {
+        padding: var(--spacing-lg) 0 var(--spacing-md);
+    }
+
+    .footer-content {
+        gap: var(--spacing-lg);
+    }
+
+    .footer-section h3 {
+        font-size: 0.95rem;
+    }
+
+    .footer-section p,
+    .footer-links a {
+        font-size: 0.85rem;
+    }
+}

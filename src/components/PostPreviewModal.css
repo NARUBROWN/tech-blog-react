@@ -185,3 +185,36 @@
         color: white;
     }
 }
+
+@media (max-width: 540px) {
+    .preview-modal-container {
+        width: 94%;
+        height: 92vh;
+        border-radius: 14px;
+    }
+
+    .preview-modal-header {
+        padding: 0.85rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .preview-label {
+        font-size: 1rem;
+    }
+
+    .preview-modal-body {
+        padding: 1.25rem;
+    }
+
+    .preview-modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-confirm-publish {
+        width: 100%;
+        justify-content: center;
+    }
+}

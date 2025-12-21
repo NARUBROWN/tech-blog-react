@@ -1093,3 +1093,121 @@
     color: #fff;
     box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 480px) {
+    .about-hero {
+        padding: 4rem 0 3rem;
+    }
+
+    .about-hero h1 {
+        font-size: clamp(2rem, 7vw + 0.5rem, 2.6rem);
+    }
+
+    .about-hero p {
+        font-size: 1rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+    .btn-hero-summary,
+    .btn-hero-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .summary-section {
+        padding: 1.5rem;
+        margin: 1.5rem auto 3rem;
+    }
+
+    .summary-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .summary-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-card {
+        min-height: auto;
+        padding: 1.25rem;
+    }
+
+    .summary-card-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .summary-tag-marquee {
+        max-width: 200px;
+    }
+
+    .skills-section,
+    .experience-section,
+    .contact-section,
+    .interests-section,
+    .projects-section,
+    .awards-section,
+    .activities-section {
+        padding: 3.5rem 0;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .skills-grid {
+        gap: 1rem;
+    }
+
+    .timeline::before {
+        left: 14px;
+    }
+
+    .timeline-item {
+        padding-left: 36px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-dot,
+    .timeline-item:nth-child(even) .timeline-dot {
+        left: 6px;
+    }
+
+    .timeline-content {
+        padding: 1.25rem;
+    }
+
+    .contact-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .contact-btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .awards-grid,
+    .interests-grid,
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .interest-card {
+        padding: 1.5rem;
+    }
+
+    .project-content {
+        padding: 1.5rem;
+    }
+
+    .project-links {
+        flex-direction: column;
+    }
+}

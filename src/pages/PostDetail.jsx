@@ -64,8 +64,16 @@ const PostDetail = () => {
                 if (!data || isCancelled) return;
 
                 if (data && data.id) {
-                    increasePostViewCount(data.id).catch(e => console.error("Failed to update view count", e));
-                    data = { ...data, viewCount: (data.viewCount || 0) + 1 };
+                    const STORAGE_KEY = `post_view_${data.id}`;
+                    const lastViewed = localStorage.getItem(STORAGE_KEY);
+                    const now = Date.now();
+                    const SIX_HOURS = 6 * 60 * 60 * 1000;
+
+                    if (!lastViewed || (now - parseInt(lastViewed) > SIX_HOURS)) {
+                        increasePostViewCount(data.id).catch(e => console.error("Failed to update view count", e));
+                        localStorage.setItem(STORAGE_KEY, now.toString());
+                        data = { ...data, viewCount: (data.viewCount || 0) + 1 };
+                    }
                 }
                 setPost(data);
                 setIsLiked(Boolean(data.liked));

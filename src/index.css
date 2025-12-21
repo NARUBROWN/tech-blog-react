@@ -109,3 +109,20 @@ select {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
+
+@media (max-width: 480px) {
+  :root {
+    --spacing-sm: 0.45rem;
+    --spacing-md: 0.75rem;
+    --spacing-lg: 1.1rem;
+    --spacing-xl: 1.6rem;
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}

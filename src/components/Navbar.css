@@ -159,6 +159,59 @@
     }
 }
 
+@media (max-width: 540px) {
+    .navbar {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .navbar-logo {
+        font-size: 0.9rem;
+    }
+
+    .navbar-logo-image {
+        width: 18px;
+        height: 18px;
+    }
+
+    .navbar-links {
+        order: 2;
+        margin-left: auto;
+    }
+
+    .navbar-categories {
+        order: 3;
+        width: 100%;
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-category {
+        font-size: 0.8rem;
+    }
+
+    .user-menu-trigger {
+        padding: 0.35rem 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .user-name {
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dropdown-menu {
+        width: min(200px, 80vw);
+    }
+}
+
 /* User Dropdown Styles */
 .user-dropdown-container {
     position: relative;

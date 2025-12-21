@@ -140,3 +140,34 @@
     justify-content: center;
     background-color: #f1f5f9;
 }
+
+@media (max-width: 480px) {
+    .recommended-posts-container {
+        margin: 3rem auto 1.5rem;
+        padding: 0 var(--spacing-sm);
+    }
+
+    .recommended-title {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .recommended-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .rec-image-wrapper {
+        height: 160px;
+    }
+
+    .rec-content {
+        padding: 1.1rem;
+    }
+
+    .rec-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

@@ -344,6 +344,105 @@
     }
 }
 
+@media (max-width: 480px) {
+    .post-detail-container {
+        margin: 1.5rem 0.75rem;
+        padding: 1.25rem;
+    }
+
+    .post-header-wrapper {
+        margin-bottom: 1.75rem;
+    }
+
+    .post-main-title {
+        font-size: 1.75rem;
+    }
+
+    .post-meta-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+    }
+
+    .author-layout {
+        gap: 0.75rem;
+    }
+
+    .post-featured-image-banner {
+        margin: -1.25rem -1.25rem 1.25rem -1.25rem;
+        width: calc(100% + 2.5rem);
+        height: 180px;
+    }
+
+    .post-content-wrapper {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 3rem;
+    }
+
+    .post-content-wrapper .ql-editor {
+        font-size: 0.95rem;
+    }
+
+    .post-content-wrapper .ql-editor h1 {
+        font-size: 1.4rem;
+    }
+
+    .post-content-wrapper .ql-editor h2 {
+        font-size: 1.25rem;
+    }
+
+    .post-content-wrapper .ql-editor h3 {
+        font-size: 1.1rem;
+    }
+
+    .post-content-wrapper .ql-editor h4 {
+        font-size: 1rem;
+    }
+
+    .post-content-wrapper .ql-editor h5 {
+        font-size: 0.95rem;
+    }
+
+    .post-content-wrapper .ql-editor h6 {
+        font-size: 0.9rem;
+    }
+
+    .post-content-wrapper .ql-editor pre,
+    .post-content-wrapper .ql-editor code {
+        font-size: 0.9rem;
+    }
+
+    .post-body-text img {
+        max-width: 100%;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .post-interaction-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .stat-display {
+        padding: 0;
+    }
+
+    .post-author-bio-card {
+        padding: 1.25rem;
+    }
+
+    .bio-name {
+        font-size: 1.1rem;
+    }
+
+    .bio-description {
+        font-size: 0.9rem;
+    }
+}
+
 /* Dark Mode Overrides */
 @media (prefers-color-scheme: dark) {
     .post-category-badge {
