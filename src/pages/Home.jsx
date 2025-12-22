@@ -18,7 +18,8 @@ const Home = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const heroRef = useRef(null);
-    const [isRecapOpen, setIsRecapOpen] = useState(false);
+    const recapParam = searchParams.get('recap');
+    const isRecapOpen = !categoryName && recapParam === 'true';
 
     useEffect(() => {
         const hero = heroRef.current;
@@ -86,6 +87,18 @@ const Home = () => {
         setPage(0);
     }, [categoryName]);
 
+    const openRecap = () => {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set('recap', 'true');
+        setSearchParams(nextParams);
+    };
+
+    const closeRecap = () => {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.delete('recap');
+        setSearchParams(nextParams);
+    };
+
     // Use a text-only version of content for preview if needed, or just show title/tags
     // For safety, we can strip HTML from content or just not show it in the preview card
 
@@ -123,9 +136,9 @@ const Home = () => {
                 </div>
             )}
 
-            {!categoryName && <RecapBanner onClick={() => setIsRecapOpen(true)} />}
+            {!categoryName && <RecapBanner onClick={openRecap} />}
             <AnimatePresence>
-                {isRecapOpen && <RecapStory onClose={() => setIsRecapOpen(false)} />}
+                {isRecapOpen && <RecapStory onClose={closeRecap} />}
             </AnimatePresence>
 
             <div className="content-container">

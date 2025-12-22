@@ -14,9 +14,9 @@ export const recapData = [
         items: [
             '모놀리스 -> MSA 전환 1회',
             '통합 모니터링 시스템 구축 2회',
-            '성능 병목 재현 -> 원인 분석 -> 구조 개선 사이클 5번',
             '레거시 코드 정리 20% 이상',
-            'AOP를 응용한 관심사 분리 1번'
+            'AOP를 응용한 관심사 분리 1번',
+            '요즘 IT에 에세이 4편 게재'
         ],
         note: '한 번 고치고 끝내는 게 아닌, 반복 가능한 개선 사이클을 만든 해였습니다.',
         bgGradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
@@ -59,7 +59,7 @@ export const recapData = [
         type: 'timeline',
         date: '2025.08',
         title: 'Slow Query 감지 시스템',
-        content: '“DB가 느린 것 같다”에서 “이 쿼리가 137ms 걸린다”로 넘어갔다.',
+        content: '“DB가 느린 것 같다”에서 “이 쿼리가 137ms 걸린다”로 확인할 수 있게끔 했습니다.',
         bgGradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
         textColor: '#ffffff'
     },
@@ -68,7 +68,7 @@ export const recapData = [
         type: 'timeline',
         date: '2025.10',
         title: 'End-to-End 트레이싱',
-        content: '요청이 어디서 시작해 어디서 멈추는지 이제는 숨지 않는다.',
+        content: '요청이 어디서 시작해 어디서 멈추는지 시작부터 끝까지 볼 수 있게 했습니다.',
         bgGradient: 'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)',
         textColor: '#ffffff'
     },
@@ -91,7 +91,7 @@ export const recapData = [
             '트랜잭션 경계가 헷갈릴 때',
             '“이건 왜 여기서 처리하지?”라는 말이 나올 때'
         ],
-        highlight: '대부분의 답은 코드를 더 짜는 게 아니라 경계를 다시 긋는 것이었다.',
+        highlight: '대부분의 답은 코드를 더 짜는 게 아니라 경계를 다시 긋는 것이었습니다.',
         bgGradient: 'linear-gradient(135deg, #2af598 0%, #009efd 100%)',
         textColor: '#ffffff'
     },
@@ -107,7 +107,7 @@ export const recapData = [
             label: '지금',
             items: ['구조부터 생각', '지표 먼저 확인', '설명 가능한 코드 선호']
         },
-        note: '코드는 줄었고, 생각할 포인트는 늘었다.',
+        note: '코드는 줄었지만, 생각할 포인트는 늘었습니다.',
         bgGradient: 'linear-gradient(135deg, #b721ff 0%, #21d4fd 100%)',
         textColor: '#ffffff'
     },
@@ -116,20 +116,20 @@ export const recapData = [
         type: 'standard',
         title: '2025년의 기준',
         heading: '이 코드, 다른 사람이 봐도 이유를 알 수 있을까?',
-        content: '이 질문에 바로 답이 안 나오면 대부분 손볼 지점이 있었다.',
+        content: '이 질문에 바로 답이 안 나오면 대부분 손볼 지점이 있었습니다.',
         bgGradient: 'linear-gradient(135deg, #209cff 0%, #68e0cf 100%)',
         textColor: '#ffffff'
     },
     {
         id: 12,
         type: 'preview',
-        title: '2026 미리보기',
+        title: '2026년 미리보기',
         items: [
-            '이벤트 기반 아키텍처 더 깊게 보기',
-            '상태 정합성을 감이 아닌 실험으로 다루기',
-            '글을 쓰되, 정리된 형태로 남기기'
+            '이벤트 기반 아키텍처를 언제 쓰면 안되는지 실험을 통해 깨닫기',
+            '상태 정합성을 감이 아닌 실험 과학처럼 다루기',
+            '"관측 가능성"을 운영 레벨까지 끌어올리기'
         ],
-        quote: '내년에는 “왜 이렇게 설계했는지”를 더 빠르게 설명하는 사람이 되고 싶다.',
+        quote: '2026년에는 기술을 더 배우는 해가 아니라, 기술 선택을 증명하는 해가 됐으면 좋겠습니다.',
         bgGradient: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
         textColor: '#ffffff'
     },
@@ -137,7 +137,7 @@ export const recapData = [
         id: 13,
         type: 'outro',
         title: '마무리',
-        content: '이 Recap은 자랑보다는 정리에 가깝다. 2025년에 어떤 문제를 어떻게 대했는지에 대한 기록이다.',
+        content: '2025년에는 기능을 늘리기보다, 왜 이렇게 동작하는지를 이해하려고 했습니다. 코드를 고치다 보니 문제는 대부분 구조에 있었습니다. 2026년에는 이 생각을 실제 설계와 선택으로 옮겨보려 합니다.',
         bgGradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
         textColor: '#ffffff'
     }

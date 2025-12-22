@@ -106,10 +106,28 @@ const staggerContainer = {
     }
 };
 
+const ContentWrapper = ({ children, className = "" }) => (
+    <motion.div
+        className={className}
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+    >
+        {children}
+    </motion.div>
+);
+
+const AnimatedItem = ({ children, className = "" }) => (
+    <motion.div variants={contentVariants} className={className}>
+        {children}
+    </motion.div>
+);
+
 const RecapStory = ({ onClose }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
+    const [isPressPaused, setIsPressPaused] = useState(false);
 
     const handleNext = () => {
         if (currentIndex < recapData.length - 1) {
@@ -131,9 +149,10 @@ const RecapStory = ({ onClose }) => {
     };
 
     const handleShare = async () => {
-        const blogUrl = new URL(import.meta.env.BASE_URL, window.location.origin).toString();
+        const blogUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
+        blogUrl.searchParams.set('recap', 'true');
         try {
-            await navigator.clipboard.writeText(blogUrl);
+            await navigator.clipboard.writeText(blogUrl.toString());
             alert('홈페이지 주소가 복사되었습니다! ✨');
         } catch (err) {
             console.error('Failed to copy: ', err);
@@ -144,6 +163,7 @@ const RecapStory = ({ onClose }) => {
         setDirection(-1);
         setCurrentIndex(0);
         setIsPaused(false);
+        setIsPressPaused(false);
     };
 
     const handleContainerClick = (event) => {
@@ -153,15 +173,25 @@ const RecapStory = ({ onClose }) => {
 
         const bounds = event.currentTarget.getBoundingClientRect();
         const clickX = event.clientX - bounds.left;
-        if (clickX < bounds.width / 2) {
+        const leftZoneEnd = bounds.width * 0.47;
+        const rightZoneStart = bounds.width * 0.53;
+
+        if (clickX <= leftZoneEnd) {
+            setIsPaused(false);
+            setIsPressPaused(false);
             handlePrev();
-        } else {
+        } else if (clickX >= rightZoneStart) {
+            setIsPaused(false);
+            setIsPressPaused(false);
             handleNext();
+        } else {
+            setIsPaused(prev => !prev);
         }
     };
 
     const slide = recapData[currentIndex];
     const variants = useMemo(() => getTransitionVariants(slide.type), [slide.type]);
+    const isPlaybackPaused = isPaused || isPressPaused;
 
     // Render Helpers
     const iconMap = {
@@ -190,23 +220,6 @@ const RecapStory = ({ onClose }) => {
     };
 
     const renderContent = (slide) => {
-        const ContentWrapper = ({ children, className = "" }) => (
-            <motion.div
-                className={className}
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-            >
-                {children}
-            </motion.div>
-        );
-
-        const AnimatedItem = ({ children, className = "" }) => (
-            <motion.div variants={contentVariants} className={className}>
-                {children}
-            </motion.div>
-        );
-
         const renderIconRow = (type) => {
             const icons = iconMap[type] || iconMap.default;
             return (
@@ -379,10 +392,10 @@ const RecapStory = ({ onClose }) => {
                 className="recap-container"
                 style={{ background: slide.bgGradient, color: slide.textColor }}
                 onClick={handleContainerClick}
-                onMouseDown={() => setIsPaused(true)}
-                onMouseUp={() => setIsPaused(false)}
-                onTouchStart={() => setIsPaused(true)}
-                onTouchEnd={() => setIsPaused(false)}
+                onMouseDown={() => setIsPressPaused(true)}
+                onMouseUp={() => setIsPressPaused(false)}
+                onTouchStart={() => setIsPressPaused(true)}
+                onTouchEnd={() => setIsPressPaused(false)}
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -393,7 +406,7 @@ const RecapStory = ({ onClose }) => {
                     {recapData.map((_, idx) => (
                         <div key={idx} className="progress-segment">
                             <div
-                                className={`progress-fill ${idx < currentIndex ? 'completed' : ''} ${idx === currentIndex ? 'active' : ''} ${isPaused ? 'paused' : ''}`}
+                                className={`progress-fill ${idx < currentIndex ? 'completed' : ''} ${idx === currentIndex ? 'active' : ''} ${isPlaybackPaused ? 'paused' : ''}`}
                                 onAnimationEnd={() => {
                                     if (idx === currentIndex) handleNext();
                                 }}
