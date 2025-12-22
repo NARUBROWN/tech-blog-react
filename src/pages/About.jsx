@@ -63,6 +63,38 @@ const About = () => {
             document.head.appendChild(canonicalLink);
         }
 
+        const personData = {
+            "@type": "Person",
+            "name": "김원정",
+            "alternateName": "NARUBROWN",
+            "jobTitle": "Back-End Engineer",
+            "email": "mailto:ruffmadman@kakao.com",
+            "url": canonicalUrl,
+            "image": ogImage,
+            "knowsAbout": [
+                "Redis Pub/Sub 실시간 아키텍처",
+                "분산락과 동시성 제어",
+                "MSA 전환과 이벤트 주도 아키텍처",
+                "OpenTelemetry/Jaeger 관측",
+                "JMeter 성능 테스트",
+                "Spring Boot, NestJS, Go 백엔드 개발"
+            ],
+            "alumniOf": [
+                {
+                    "@type": "CollegeOrUniversity",
+                    "name": "인천대학교"
+                },
+                {
+                    "@type": "CollegeOrUniversity",
+                    "name": "인천재능대학교"
+                }
+            ],
+            "sameAs": [
+                "https://github.com/NARUBROWN",
+                "https://linkedin.com/in/naru-brown"
+            ]
+        };
+
         const structuredData = {
             "@context": "https://schema.org",
             "@type": "ProfilePage",
@@ -74,37 +106,8 @@ const About = () => {
                 "name": siteName,
                 "url": "https://na2ru2.me"
             },
-            "about": {
-                "@type": "Person",
-                "name": "김원정",
-                "alternateName": "NARUBROWN",
-                "jobTitle": "Back-End Engineer",
-                "email": "mailto:ruffmadman@kakao.com",
-                "url": canonicalUrl,
-                "image": ogImage,
-                "knowsAbout": [
-                    "Redis Pub/Sub 실시간 아키텍처",
-                    "분산락과 동시성 제어",
-                    "MSA 전환과 이벤트 주도 아키텍처",
-                    "OpenTelemetry/Jaeger 관측",
-                    "JMeter 성능 테스트",
-                    "Spring Boot, NestJS, Go 백엔드 개발"
-                ],
-                "alumniOf": [
-                    {
-                        "@type": "CollegeOrUniversity",
-                        "name": "인천대학교"
-                    },
-                    {
-                        "@type": "CollegeOrUniversity",
-                        "name": "인천재능대학교"
-                    }
-                ],
-                "sameAs": [
-                    "https://github.com/NARUBROWN",
-                    "https://linkedin.com/in/naru-brown"
-                ]
-            },
+            "mainEntity": personData,
+            "about": personData,
             "breadcrumb": "홈 > About"
         };
 
