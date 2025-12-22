@@ -100,7 +100,7 @@
 }
 
 .progress-fill.active {
-    animation: fillProgress 10s linear forwards;
+    animation: fillProgress 5s linear forwards;
 }
 
 .progress-fill.paused {
@@ -188,7 +188,7 @@
     margin-block: auto;
 }
 
-.recap-content > .recap-slide.recap-slide-comparison {
+.recap-content>.recap-slide.recap-slide-comparison {
     max-width: 100%;
 }
 
@@ -230,6 +230,7 @@
 
 /* Slide Types Styling */
 .slide-cover h1 {
+    margin-top: 10px;
     font-size: clamp(2.2rem, 4vw + 1rem, 3rem);
     font-weight: 800;
     margin-bottom: 18px;

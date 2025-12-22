@@ -6,6 +6,12 @@ const SITE_NAME = 'NARUBROWN의 기술 블로그';
 const DEFAULT_SITE_ORIGIN = 'https://na2ru2.me';
 const DEFAULT_PAGE_SIZE = 50;
 const DEFAULT_MAX_PAGES = 200;
+const RECAP_YEAR = '2025';
+const DEFAULT_RECAP_SHARE_PATH = `/recap/share/${RECAP_YEAR}`;
+const DEFAULT_RECAP_CANONICAL_PATH = '/?recap=true';
+const DEFAULT_RECAP_TITLE = '김원정의 2025년 Recap을 확인하세요';
+const DEFAULT_RECAP_DESCRIPTION = '올해의 여정을 확인해보세요.';
+const DEFAULT_RECAP_KEYWORDS = '2025 recap, 김원정, 연말 결산, 백엔드 엔지니어, 기술 블로그';
 
 const shouldSkip = () => {
   const value = String(process.env.SKIP_SHARE_PAGES || '').toLowerCase();
@@ -58,6 +64,7 @@ const toAbsoluteUrl = (url, siteOrigin) => {
 
 const buildMetaTags = (meta) => {
   const tags = [];
+  const ogType = meta.ogType || 'article';
 
   const pushMeta = (attr, key, value) => {
     if (!value) return;
@@ -70,7 +77,7 @@ const buildMetaTags = (meta) => {
   pushMeta('name', 'robots', 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1');
   pushMeta('property', 'og:title', meta.fullTitle);
   pushMeta('property', 'og:description', meta.description);
-  pushMeta('property', 'og:type', 'article');
+  pushMeta('property', 'og:type', ogType);
   pushMeta('property', 'og:site_name', SITE_NAME);
   pushMeta('property', 'og:url', meta.shareUrl);
   pushMeta('property', 'og:image', meta.ogImage);
@@ -176,6 +183,38 @@ const buildStructuredData = (meta) => {
   return JSON.stringify(payload, (_, value) => value === undefined ? undefined : value);
 };
 
+const generateRecapSharePage = async ({ template, distDir, siteOrigin, fallbackOgImage }) => {
+  const recapTitle = process.env.RECAP_SHARE_TITLE || DEFAULT_RECAP_TITLE;
+  const recapDescription = process.env.RECAP_SHARE_DESCRIPTION || DEFAULT_RECAP_DESCRIPTION;
+  const recapKeywords = process.env.RECAP_SHARE_KEYWORDS || DEFAULT_RECAP_KEYWORDS;
+  const recapSharePath = process.env.RECAP_SHARE_PATH || DEFAULT_RECAP_SHARE_PATH;
+  const recapCanonicalPath = process.env.RECAP_CANONICAL_PATH || DEFAULT_RECAP_CANONICAL_PATH;
+  const shareUrl = toAbsoluteUrl(recapSharePath, siteOrigin);
+  const canonicalUrl = toAbsoluteUrl(recapCanonicalPath, siteOrigin);
+  const ogImage = toAbsoluteUrl('/logo.png', siteOrigin) || fallbackOgImage;
+
+  const meta = {
+    title: recapTitle,
+    fullTitle: recapTitle,
+    description: recapDescription,
+    keywords: recapKeywords,
+    author: '김원정 (NARUBROWN)',
+    shareUrl,
+    canonicalUrl,
+    ogImage,
+    fallbackOgImage,
+    ogType: 'website'
+  };
+
+  const metaTags = buildMetaTags(meta);
+  const html = injectMetaTags(template, recapTitle, metaTags, null);
+
+  const sharePath = recapSharePath.replace(/^\/+/, '');
+  const outputDir = path.join(distDir, ...sharePath.split('/'));
+  await fs.mkdir(outputDir, { recursive: true });
+  await fs.writeFile(path.join(outputDir, 'index.html'), html, 'utf8');
+};
+
 const main = async () => {
   if (shouldSkip()) {
     console.log('Skipping share page generation (SKIP_SHARE_PAGES enabled).');
@@ -196,6 +235,8 @@ const main = async () => {
   const pageSize = Number.parseInt(process.env.SHARE_PAGE_SIZE || String(DEFAULT_PAGE_SIZE), 10);
   const maxPages = Number.parseInt(process.env.SHARE_MAX_PAGES || String(DEFAULT_MAX_PAGES), 10);
   const fallbackOgImage = toAbsoluteUrl('/logo.png', siteOrigin);
+
+  await generateRecapSharePage({ template, distDir, siteOrigin, fallbackOgImage });
 
   let posts = [];
   try {

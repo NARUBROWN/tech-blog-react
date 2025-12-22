@@ -70,6 +70,7 @@ function App() {
 
             <Route path="post/:slug" element={<PostDetail />} />
             <Route path="post/share/:id" element={<PostDetail />} />
+            <Route path="recap/share/:year" element={<Navigate to="/?recap=true" replace />} />
           </Route>
         </Routes>
       </AuthProvider>

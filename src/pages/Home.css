@@ -187,11 +187,17 @@
 }
 
 @media (max-width: 480px) {
+    .hero-section .hero-grid-overlay {
+        display: none;
+    }
+
     .hero-immersive {
+        overflow: visible;
         padding: 4.25rem 0 2.75rem;
     }
 
     .hero-section {
+        overflow: visible;
         padding: 3rem 1rem 2.25rem;
     }
 

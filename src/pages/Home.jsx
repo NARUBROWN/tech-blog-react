@@ -22,6 +22,87 @@ const Home = () => {
     const isRecapOpen = !categoryName && recapParam === 'true';
 
     useEffect(() => {
+        if (!isRecapOpen) return;
+
+        const siteName = 'NARUBROWN의 기술 블로그';
+        const defaultTitle = document.title || siteName;
+        const recapTitle = '김원정의 2025년 Recap을 확인하세요';
+        const description = '올해의 여정을 확인해보세요.';
+        const recapUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
+        recapUrl.searchParams.set('recap', 'true');
+        const ogImage = new URL('/logo.png', window.location.origin).toString();
+
+        const previousMetaContent = new Map();
+        const createdMeta = [];
+
+        const upsertMeta = (attr, key, value) => {
+            if (!value) return;
+            let element = document.querySelector(`meta[${attr}="${key}"]`);
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute(attr, key);
+                document.head.appendChild(element);
+                createdMeta.push(element);
+            } else {
+                previousMetaContent.set(element, element.getAttribute('content'));
+            }
+            element.setAttribute('content', value);
+        };
+
+        const metaDefinitions = [
+            { attr: 'name', key: 'description', value: description },
+            { attr: 'name', key: 'keywords', value: '2025 recap, 김원정, 연말 결산, 백엔드 엔지니어, 기술 블로그' },
+            { attr: 'name', key: 'author', value: '김원정 (NARUBROWN)' },
+            { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
+            { attr: 'property', key: 'og:title', value: recapTitle },
+            { attr: 'property', key: 'og:description', value: description },
+            { attr: 'property', key: 'og:type', value: 'website' },
+            { attr: 'property', key: 'og:site_name', value: siteName },
+            { attr: 'property', key: 'og:url', value: recapUrl.toString() },
+            { attr: 'property', key: 'og:image', value: ogImage },
+            { attr: 'property', key: 'og:locale', value: 'ko_KR' },
+            { attr: 'name', key: 'twitter:card', value: 'summary_large_image' },
+            { attr: 'name', key: 'twitter:title', value: recapTitle },
+            { attr: 'name', key: 'twitter:description', value: description },
+            { attr: 'name', key: 'twitter:image', value: ogImage }
+        ];
+
+        metaDefinitions.forEach(meta => upsertMeta(meta.attr, meta.key, meta.value));
+
+        const existingCanonical = document.querySelector('link[rel="canonical"]');
+        const canonicalCreated = !existingCanonical;
+        const previousCanonicalHref = existingCanonical?.getAttribute('href') || '';
+        const canonicalLink = existingCanonical || document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        canonicalLink.setAttribute('href', recapUrl.toString());
+        if (canonicalCreated) {
+            document.head.appendChild(canonicalLink);
+        }
+
+        document.title = recapTitle;
+
+        return () => {
+            document.title = defaultTitle;
+            createdMeta.forEach(meta => meta.remove());
+            previousMetaContent.forEach((content, meta) => {
+                if (content) {
+                    meta.setAttribute('content', content);
+                } else {
+                    meta.removeAttribute('content');
+                }
+            });
+
+            if (canonicalCreated) {
+                canonicalLink.remove();
+            } else if (previousCanonicalHref) {
+                canonicalLink.setAttribute('href', previousCanonicalHref);
+            } else {
+                canonicalLink.removeAttribute('href');
+            }
+        };
+    }, [isRecapOpen]);
+
+    useEffect(() => {
         const hero = heroRef.current;
         if (!hero) return;
 

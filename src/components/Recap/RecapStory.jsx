@@ -149,13 +149,13 @@ const RecapStory = ({ onClose }) => {
     };
 
     const handleShare = async () => {
-        const blogUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
-        blogUrl.searchParams.set('recap', 'true');
+        const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
+        const blogUrl = new URL('recap/share/2025', baseUrl);
         try {
             await navigator.clipboard.writeText(blogUrl.toString());
-            alert('홈페이지 주소가 복사되었습니다! ✨');
+            alert('Recap 주소가 복사되었습니다! ✨');
         } catch (err) {
-            console.error('Failed to copy: ', err);
+            console.error('복사에 실패했습니다. : ', err);
         }
     };
 
