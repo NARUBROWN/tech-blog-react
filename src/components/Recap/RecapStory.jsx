@@ -363,7 +363,7 @@ const RecapStory = ({ onClose }) => {
                                     className="recap-btn btn-primary"
                                     onClick={(e) => { e.stopPropagation(); handleShare(); }}
                                 >
-                                    내 홈페이지 공유하기 🔗
+                                    이 Recap 공유하기 🔗
                                 </button>
                                 <button
                                     className="recap-btn btn-secondary"
@@ -430,6 +430,7 @@ const RecapStory = ({ onClose }) => {
                 <div className="recap-content">
                     <AnimatePresence initial={false} custom={direction} mode="wait">
                         <motion.div
+                            className={`recap-slide recap-slide-${slide.type}`}
                             key={currentIndex}
                             custom={direction}
                             variants={variants}
