@@ -57,3 +57,8 @@ export const increasePostViewCount = async (postId) => {
     const response = await client.post(`/post/view-count/${postId}`);
     return response.data;
 };
+export const searchPostsRecent = async (keyword, page = 0, size = 10, config = {}) => {
+    const params = { keyword, page, size };
+    const response = await client.get('/post/search/recent', { params, ...config });
+    return response.data;
+};

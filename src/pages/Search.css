@@ -1,0 +1,40 @@
+.search-page {
+    min-height: calc(100vh - 80px);
+    padding-top: 8rem;
+}
+
+.search-header-container {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.search-banner {
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.search-banner h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.no-results,
+.search-prompt {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .search-header-container {
+        margin-bottom: 2rem;
+    }
+
+    .search-banner h1 {
+        font-size: 1.35rem;
+    }
+}

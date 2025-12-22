@@ -1,6 +1,6 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { PenSquare, LogOut, User, ChevronDown, FolderPlus, Settings } from 'lucide-react';
+import { PenSquare, LogOut, User, ChevronDown, FolderPlus, Settings, Search } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { getCategoryList } from '../api/category';
 
@@ -12,7 +12,10 @@ const Navbar = () => {
     const [isVisible, setIsVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const activeCategory = searchParams.get('categoryName');
     const isAdmin = user?.role === 'ROLE_ADMIN';
@@ -21,6 +24,8 @@ const Navbar = () => {
     const lastScrollY = useRef(0);
     const hideTimer = useRef(null);
     const isMouseAtTop = useRef(false);
+    const searchContainerRef = useRef(null);
+    const searchInputRef = useRef(null);
 
     useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -125,6 +130,51 @@ const Navbar = () => {
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        if (!isSearchOpen) return;
+        searchInputRef.current?.focus();
+    }, [isSearchOpen]);
+
+    useEffect(() => {
+        if (!isSearchOpen) return;
+        const handleClickOutside = (event) => {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+                setIsSearchOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isSearchOpen]);
+
+    useEffect(() => {
+        setIsSearchOpen(false);
+    }, [location.pathname]);
+
+    const runSearch = (value) => {
+        const trimmed = value.trim();
+        if (!trimmed) {
+            setIsSearchOpen(true);
+            searchInputRef.current?.focus();
+            return;
+        }
+        navigate(`/search?keyword=${encodeURIComponent(trimmed)}&page=0`);
+        setIsSearchOpen(false);
+    };
+
+    const handleSearchSubmit = (event) => {
+        event.preventDefault();
+        runSearch(searchValue);
+    };
+
+    const handleSearchToggle = () => {
+        if (!isSearchOpen) {
+            setIsSearchOpen(true);
+            searchInputRef.current?.focus();
+            return;
+        }
+        runSearch(searchValue);
+    };
+
     return (
         <nav className={`navbar ${!isVisible && !isMobile ? 'hidden' : ''}`}>
             <div className="navbar-content">
@@ -152,6 +202,35 @@ const Navbar = () => {
                         </NavLink>
                     ))}
                 </div>
+
+                <form
+                    className={`navbar-search ${isSearchOpen ? 'open' : ''}`}
+                    onSubmit={handleSearchSubmit}
+                    ref={searchContainerRef}
+                >
+                    <input
+                        ref={searchInputRef}
+                        type="text"
+                        className="navbar-search-input"
+                        placeholder="검색어 입력"
+                        value={searchValue}
+                        onChange={(event) => setSearchValue(event.target.value)}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Escape') {
+                                setIsSearchOpen(false);
+                            }
+                        }}
+                    />
+                    <button
+                        type="button"
+                        className="navbar-search-button"
+                        aria-label="검색"
+                        aria-expanded={isSearchOpen}
+                        onClick={handleSearchToggle}
+                    >
+                        <Search size={18} />
+                    </button>
+                </form>
 
                 <div className="navbar-links">
                     {user ? (
