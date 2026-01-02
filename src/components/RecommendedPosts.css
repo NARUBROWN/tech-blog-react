@@ -111,29 +111,6 @@
     font-weight: 500;
 }
 
-@media (prefers-color-scheme: dark) {
-    .recommended-title {
-        color: #f1f5f9;
-    }
-
-    .recommended-card {
-        background: #1e293b;
-        border-color: #334155;
-    }
-
-    .rec-post-title {
-        color: #f1f5f9;
-    }
-
-    .rec-category {
-        color: #818cf8;
-    }
-
-    .rec-read-more {
-        color: #818cf8;
-    }
-}
-
 .rec-image-wrapper.placeholder {
     display: flex;
     align-items: center;

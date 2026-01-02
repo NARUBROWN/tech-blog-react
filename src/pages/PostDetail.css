@@ -442,37 +442,3 @@
         font-size: 0.9rem;
     }
 }
-
-/* Dark Mode Overrides */
-@media (prefers-color-scheme: dark) {
-    .post-category-badge {
-        background-color: #312e81;
-        /* Indigo-900 */
-        color: #c7d2fe;
-        /* Indigo-200 */
-    }
-
-    .author-img {
-        border-color: #1e293b;
-    }
-
-    .post-tag-chip {
-        background-color: #1e293b;
-        color: #cbd5e1;
-    }
-
-    .post-tag-chip:hover {
-        background-color: #334155;
-        color: #60a5fa;
-    }
-
-    .post-author-bio-card {
-        background-color: #1e293b;
-    }
-
-    .interaction-btn:hover,
-    .like-count-btn:hover {
-        background-color: #334155;
-        color: #f1f5f9;
-    }
-}

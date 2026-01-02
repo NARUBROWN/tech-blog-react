@@ -61,7 +61,7 @@ const Signup = () => {
                         >
                             Reader
                         </button>
-                        <button
+                        {/* <button
                             type="button"
                             className={`toggle-btn ${role === 'AUTHOR' ? 'active' : ''}`}
                             onClick={() => setRole('AUTHOR')}
@@ -74,7 +74,7 @@ const Signup = () => {
                             onClick={() => setRole('ADMIN')}
                         >
                             Admin
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 

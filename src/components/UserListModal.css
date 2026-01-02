@@ -133,35 +133,6 @@
     font-size: 0.95rem;
 }
 
-@media (prefers-color-scheme: dark) {
-    .modal-container {
-        background-color: #1e293b;
-        border: 1px solid #334155;
-    }
-
-    .modal-title {
-        color: #f8fafc;
-    }
-
-    .modal-header,
-    .user-list-item {
-        border-color: #334155;
-    }
-
-    .user-list-item:hover {
-        background-color: #2d3a4f;
-    }
-
-    .user-name {
-        color: #f1f5f9;
-    }
-
-    .user-avatar {
-        background-color: #334155;
-        color: #94a3b8;
-    }
-}
-
 @media (max-width: 480px) {
     .modal-container {
         max-width: 92vw;

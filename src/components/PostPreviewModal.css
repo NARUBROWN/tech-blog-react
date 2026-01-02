@@ -154,38 +154,6 @@
     transform: none;
 }
 
-/* Dark Mode support */
-@media (prefers-color-scheme: dark) {
-    .preview-modal-container {
-        background: #0f172a;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    .preview-modal-header,
-    .preview-modal-footer {
-        background: #0f172a;
-        border-color: #1e293b;
-    }
-
-    .preview-modal-body {
-        background-color: #020617;
-    }
-
-    .preview-label {
-        color: #f8fafc;
-    }
-
-    .btn-cancel {
-        border-color: #334155;
-        color: #cbd5e1;
-    }
-
-    .btn-cancel:hover {
-        background-color: #1e293b;
-        color: white;
-    }
-}
-
 @media (max-width: 540px) {
     .preview-modal-container {
         width: 94%;
