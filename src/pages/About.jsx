@@ -308,7 +308,7 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
         },
         {
             label: '선호 스택',
-            value: 'Spring Boot · NestJS',
+            value: 'Spring Boot · NestJS · FastAPI',
             note: 'MySQL · PostgreSQL · Redis'
         }
     ];
@@ -555,6 +555,45 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
 
     const personalProjects = [
         {
+            date: '2025.12 ~ 진행중',
+            title: '뽑기팡',
+            role: 'Backend · AI · Tech Lead',
+            desc: '전국 뽑기방 지도·인증·중고거래를 통합한 플랫폼에서 백엔드·인공지능 개발을 리드. NestJS 기반 API 서버와 MySQL 데이터 모델링을 주도하고, 위치 기반 가게 검색·방문 인증·제보 플로우를 설계·구현. YOLO 기반 비전 모델과 BERT 기반 사기 탐지 모델을 서비스 연계 관점에서 설계했으며, GCP Compute Engine 환경에서 App/DB 분리 인프라와 AI 확장 전제 아키텍처를 총괄 설계.',
+            techs: [
+                'TypeScript',
+                'NestJS',
+                'MySQL',
+                'TypeORM',
+                'GCP Compute Engine',
+                'Docker',
+                'YOLOv8',
+                'BERT',
+                'Python',
+                'FastAPI',
+                'Dependency Injector'
+            ],
+            links: { github: 'https://github.com/ppopgi-pang' }
+        },
+        {
+            date: '2025.09',
+            title: 'APA (Automated Pull-Request Assistant)',
+            role: 'Backend · AI · DevOps',
+            desc: 'GitHub Webhook과 LLM을 연동한 지능형 코드 리뷰 자동화 에이전트 개발. NestJS 기반의 EDA를 설계하여 PR 이벤트 발생 시 실시간으로 코드를 분석하고 피드백을 제공하는 시스템 구축. Strategy 패턴과 DI를 활용해 OpenAI, Gemini, Ollama(Local LLM) 등 다양한 AI 모델을 환경 변수에 따라 유연하게 교체할 수 있는 구조 설계. 보안 취약점 탐지에 특화된 프롬프트 엔지니어링 적용 및 Docker 멀티 스테이지 빌드를 통한 배포 최적화 달성.',
+            techs: [
+                'TypeScript',
+                'NestJS',
+                'GitHub Actions & API',
+                'OpenAI API',
+                'Google Gemini API',
+                'Ollama',
+                'Docker',
+                'Handlebars',
+                'Fuse.js',
+                'RxJS'
+            ],
+            links: { github: 'https://github.com/NARUBROWN/apa-project' } 
+        },
+        {
             date: '2025.04 ~ 2025.06',
             title: '티켓팅 시스템',
             role: 'Backend Developer',
@@ -563,12 +602,21 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             links: { github: 'https://github.com/appcenter-advanced-study/msa-ticketing-system-wonjeong' }
         },
         {
-            date: '2024.10 ~ 2025.02',
-            title: 'Codingland',
-            role: 'Backend Developer',
-            desc: '코딩 교육 플랫폼 백엔드 개발. N+1 문제를 BatchSize 및 IN 절 최적화로 해결해 API 호출 성능 최대 40배 개선, GitHub Actions와 Docker로 배포 자동화.',
-            techs: ['Java', 'Spring Boot', 'JPA', 'GitHub Actions', 'Docker'],
-            links: { github: 'https://github.com/9oormthon-univ/2024_DANPOONG_TEAM_45_BE' }
+            date: '2024.03 ~ 2024.05', 
+            title: 'Pencil me',
+            role: 'Backend · AI',
+            desc: '생성형 AI 기반의 지능형 일정 관리 플랫폼에서 AI 백엔드 개발을 전담. FastAPI와 LangChain을 활용하여 자연어 대화를 구조화된 일정 데이터(제목, 마감기한, 카테고리)로 자동 변환하는 LLM 파이프라인을 설계 및 구현. Dependency Injector를 도입하여 LLM, Google Search, Crawler 등 외부 서비스 의존성을 효율적으로 관리하는 아키텍처를 구축했으며, Spring 메인 서버와의 연동을 주도. 특히 ChromaDB와 Few-Shot Prompting을 적용해 사용자 의도 파악 및 요약 정확도를 최적화하고, URL 웹 크롤링을 통한 정보 기반 할 일 등록 기능을 개발하여 서비스 유틸리티를 강화.',
+            techs: [
+                'Python',
+                'FastAPI',
+                'LangChain',
+                'OpenAI API',
+                'ChromaDB',
+                'BeautifulSoup',
+                'Google Custom Search API',
+                'Dependency Injector'
+            ],
+            links: { github: 'https://github.com/BCD-q/pencil-me-fastapi' } 
         }
     ];
 
