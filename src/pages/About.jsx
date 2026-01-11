@@ -84,10 +84,6 @@ const About = () => {
                     "@type": "CollegeOrUniversity",
                     "name": "인천대학교"
                 },
-                {
-                    "@type": "CollegeOrUniversity",
-                    "name": "인천재능대학교"
-                }
             ],
             "sameAs": [
                 "https://github.com/NARUBROWN",
@@ -354,7 +350,6 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             icon: <BookOpen size={18} />,
             bullets: [
                 '인천대학교 컴퓨터공학부 (2023.03~2025.02) · 공학사',
-                '인천재능대학교 인공지능컴퓨터정보 (2018.03~2023.02) · 공업전문학사'
             ],
             link: '#education',
             accent: 'teal'
@@ -558,7 +553,15 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             date: '2025.12 ~ 진행중',
             title: '뽑기팡',
             role: 'Backend · AI · Tech Lead',
-            desc: '전국 뽑기방 지도·인증·중고거래를 통합한 플랫폼에서 백엔드·인공지능 개발을 리드. NestJS 기반 API 서버와 MySQL 데이터 모델링을 주도하고, 위치 기반 가게 검색·방문 인증·제보 플로우를 설계·구현. YOLO 기반 비전 모델과 BERT 기반 사기 탐지 모델을 서비스 연계 관점에서 설계했으며, GCP Compute Engine 환경에서 App/DB 분리 인프라와 AI 확장 전제 아키텍처를 총괄 설계.',
+            desc: [
+                '전국 뽑기방 지도·인증·중고거래 통합 플랫폼에서 백엔드·AI 개발 리드.',
+                'NestJS 기반 API 서버와 MySQL 데이터 모델링, 위치 기반 검색·방문 인증·제보 플로우 설계 및 구현.',
+                'YOLO 비전 모델과 BERT 사기 탐지 모델을 서비스 연계 관점에서 설계하고 GCP Compute Engine에서 App/DB 분리 인프라와 AI 확장 전제 아키텍처 총괄 설계.'
+            ],
+            contributions: [
+                { label: 'Backend', value: '100%' },
+                { label: 'AI', value: '100%' }
+            ],
             techs: [
                 'TypeScript',
                 'NestJS',
@@ -578,7 +581,17 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             date: '2025.09',
             title: 'APA (Automated Pull-Request Assistant)',
             role: 'Backend · AI · DevOps',
-            desc: 'GitHub Webhook과 LLM을 연동한 지능형 코드 리뷰 자동화 에이전트 개발. NestJS 기반의 EDA를 설계하여 PR 이벤트 발생 시 실시간으로 코드를 분석하고 피드백을 제공하는 시스템 구축. Strategy 패턴과 DI를 활용해 OpenAI, Gemini, Ollama(Local LLM) 등 다양한 AI 모델을 환경 변수에 따라 유연하게 교체할 수 있는 구조 설계. 보안 취약점 탐지에 특화된 프롬프트 엔지니어링 적용 및 Docker 멀티 스테이지 빌드를 통한 배포 최적화 달성.',
+            desc: [
+                'GitHub Webhook과 LLM을 연동한 지능형 코드 리뷰 자동화 에이전트 개발.',
+                'NestJS 기반 EDA로 PR 이벤트 발생 시 실시간 코드 분석 및 피드백 제공 시스템 구축.',
+                'Strategy 패턴과 DI로 OpenAI, Gemini, Ollama(Local LLM) 등 다양한 AI 모델을 환경 변수에 따라 유연하게 교체 가능한 구조 설계.',
+                '보안 취약점 탐지용 프롬프트 엔지니어링 적용과 Docker 멀티 스테이지 빌드로 배포 최적화.'
+            ],
+            contributions: [
+                { label: 'Backend', value: '100%' },
+                { label: 'AI', value: '100%' },
+                { label: 'DevOps', value: '100%' }
+            ],
             techs: [
                 'TypeScript',
                 'NestJS',
@@ -597,7 +610,15 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             date: '2025.04 ~ 2025.06',
             title: '티켓팅 시스템',
             role: 'Backend Developer',
-            desc: 'Kafka 기반 MSA 티켓팅 시스템 설계. JPA 비관/낙관 락과 트랜잭션 격리 수준 실험으로 동시 예약 정합성 확보, Spring Cloud Gateway + Eureka + Feign으로 서비스 간 통신 표준화.',
+            desc: [
+                'Kafka 기반 MSA 티켓팅 시스템 설계.',
+                'JPA 비관/낙관 락과 트랜잭션 격리 수준 실험으로 동시 예약 정합성 확보, Spring Cloud Gateway + Eureka + Feign으로 서비스 간 통신 표준화.',
+                'Kafka 이벤트 기반 Choreography Saga 패턴을 적용해 예약–티켓–재고 간 분산 트랜잭션 정합성을 확보하고, 중앙 오케스트레이터 없이 보상 이벤트로 상태 롤백이 가능한 구조를 구현.',
+                'Outbox Pattern을 적용해 예약 생성 트랜잭션과 이벤트 발행을 단일 커밋으로 묶어 이벤트 유실·중복을 제거하고 트랜잭션-이벤트 불일치를 차단.'
+            ],
+            contributions: [
+                { label: 'Backend', value: '100%' }
+            ],
             techs: ['Java', 'Spring Boot', 'Kafka', 'Hibernate', 'MSA', 'Spring Cloud Gateway', 'Feign Client', 'Eureka'],
             links: { github: 'https://github.com/appcenter-advanced-study/msa-ticketing-system-wonjeong' }
         },
@@ -605,7 +626,16 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
             date: '2024.03 ~ 2024.05', 
             title: 'Pencil me',
             role: 'Backend · AI',
-            desc: '생성형 AI 기반의 지능형 일정 관리 플랫폼에서 AI 백엔드 개발을 전담. FastAPI와 LangChain을 활용하여 자연어 대화를 구조화된 일정 데이터(제목, 마감기한, 카테고리)로 자동 변환하는 LLM 파이프라인을 설계 및 구현. Dependency Injector를 도입하여 LLM, Google Search, Crawler 등 외부 서비스 의존성을 효율적으로 관리하는 아키텍처를 구축했으며, Spring 메인 서버와의 연동을 주도. 특히 ChromaDB와 Few-Shot Prompting을 적용해 사용자 의도 파악 및 요약 정확도를 최적화하고, URL 웹 크롤링을 통한 정보 기반 할 일 등록 기능을 개발하여 서비스 유틸리티를 강화.',
+            desc: [
+                '생성형 AI 기반 일정 관리 플랫폼에서 AI 백엔드 개발을 전담.',
+                'FastAPI와 LangChain으로 자연어 대화를 일정 데이터(제목, 마감기한, 카테고리)로 변환하는 LLM 파이프라인 설계 및 구현.',
+                'Dependency Injector로 LLM, Google Search, Crawler 의존성을 관리하고 Spring 메인 서버 연동을 주도.',
+                'ChromaDB와 Few-Shot Prompting으로 의도 파악·요약 정확도를 개선하고, URL 크롤링 기반 할 일 등록 기능 개발.'
+            ],
+            contributions: [
+                { label: 'Backend', value: '30%' },
+                { label: 'AI', value: '100%' }
+            ],
             techs: [
                 'Python',
                 'FastAPI',
@@ -1002,24 +1032,56 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                                     {project.date && <span className="project-date">{project.date}</span>}
                                     <h3 className="project-title">{project.title}</h3>
                                     {project.role && <div className="project-role">{project.role}</div>}
-                                    <p className="project-desc">{project.desc}</p>
-                                    <div className="project-techs">
-                                        {project.techs.map(tech => (
-                                            <span key={tech} className="tech-badge">{tech}</span>
-                                        ))}
+                                    {project.contributions && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">기여도</div>
+                                            <ul className="project-contribution-list">
+                                                {project.contributions.map((item) => (
+                                                    <li key={item.label}>
+                                                        <span className="project-contribution-label">{item.label}</span>
+                                                        <span className="project-contribution-value">{item.value}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.desc && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">개요</div>
+                                            {Array.isArray(project.desc) ? (
+                                                <ul className="project-list">
+                                                    {project.desc.map((item, i) => (
+                                                        <li key={i}>{item}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="project-desc">{project.desc}</p>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className="project-list-block">
+                                        <div className="project-section-label">기술 스택</div>
+                                        <div className="project-techs">
+                                            {project.techs.map(tech => (
+                                                <span key={tech} className="tech-badge">{tech}</span>
+                                            ))}
+                                        </div>
                                     </div>
                                     {project.links && (
-                                        <div className="project-links">
-                                            {project.links.github && (
-                                                <a href={project.links.github} className="project-link">
-                                                    <Github size={18} /> Code
-                                                </a>
-                                            )}
-                                            {project.links.demo && (
-                                                <a href={project.links.demo} className="project-link">
-                                                    <ExternalLink size={18} /> Live Demo
-                                                </a>
-                                            )}
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">링크</div>
+                                            <div className="project-links">
+                                                {project.links.github && (
+                                                    <a href={project.links.github} className="project-link">
+                                                        <Github size={18} /> Code
+                                                    </a>
+                                                )}
+                                                {project.links.demo && (
+                                                    <a href={project.links.demo} className="project-link">
+                                                        <ExternalLink size={18} /> Live Demo
+                                                    </a>
+                                                )}
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -1039,11 +1101,6 @@ JPA의 비관·낙관 락, Redis 기반 제어, 큐를 활용한 Lock-Free 접�
                                 school: '인천대학교, 인천 연수구',
                                 major: '컴퓨터공학부, 공학사'
                             },
-                            {
-                                period: '2018.03 ~ 2023.02',
-                                school: '인천재능대학교, 인천 연수구',
-                                major: '인공지능컴퓨터정보, 공업전문학사'
-                            }
                         ].map((edu, index) => (
                             <div className="award-card" key={index}>
                                 <div className="award-header">

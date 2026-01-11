@@ -1070,6 +1070,48 @@
     margin-bottom: 0.35rem;
 }
 
+.project-contribution-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.project-contribution-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.75rem;
+    border-radius: 12px;
+    background: rgba(var(--color-primary-rgb), 0.08);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.project-contribution-label {
+    color: var(--color-text-main);
+    font-weight: 700;
+}
+
+.project-contribution-value {
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+.project-list-block .project-desc {
+    margin-bottom: 0;
+}
+
+.project-list-block .project-techs {
+    margin-bottom: 0;
+}
+
+.project-list-block .project-links {
+    margin-top: 0;
+}
+
 .project-visit {
     margin: 1rem 0 0.5rem;
 }
