@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "http://168.107.3.254:8080/api/:path*"
+            "destination": "https://api.na2ru2.me/:path*"
         },
         {
             "source": "/(.*)",
