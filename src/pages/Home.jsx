@@ -217,7 +217,6 @@ const Home = () => {
                 </div>
             )}
 
-            {!categoryName && <RecapBanner onClick={openRecap} />}
             <AnimatePresence>
                 {isRecapOpen && <RecapStory onClose={closeRecap} />}
             </AnimatePresence>
