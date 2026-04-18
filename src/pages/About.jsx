@@ -11,8 +11,8 @@ const About = () => {
     useEffect(() => {
         const siteName = 'NARUBROWN의 기술 블로그';
         const defaultTitle = document.title || siteName;
-        const pageTitle = `김원정 | 백엔드 엔지니어 포트폴리오 - ${siteName}`;
-        const description = 'Redis Pub/Sub 기반 실시간 아키텍처, MSA/EDA 전환, OpenTelemetry 관측, 성능 튜닝 경험을 담은 김원정 백엔드 엔지니어 포트폴리오.';
+        const pageTitle = `김원정 | AI 엔지니어 포트폴리오 - ${siteName}`;
+        const description = 'LLM·RAG·온톨로지·지식 그래프 기반 AI 시스템 설계와 백엔드 구현 경험을 담은 김원정 AI 엔지니어 포트폴리오.';
         const canonicalUrl = 'https://na2ru2.me/about';
         const ogImage = 'https://na2ru2.me/logo.png';
 
@@ -35,7 +35,7 @@ const About = () => {
 
         const metaDefinitions = [
             { attr: 'name', key: 'description', value: description },
-            { attr: 'name', key: 'keywords', value: '백엔드 개발자, Backend Engineer, 김원정, NARUBROWN, 실시간 아키텍처, Redis Pub/Sub, MSA, EDA, OpenTelemetry, JMeter, Spring Boot, NestJS, 포트폴리오' },
+            { attr: 'name', key: 'keywords', value: 'AI 엔지니어, AI Engineer, 김원정, NARUBROWN, LLM, RAG, 온톨로지, 지식 그래프, 백엔드 개발자, FastAPI, Spring Boot, NestJS, 포트폴리오' },
             { attr: 'name', key: 'author', value: '김원정 (NARUBROWN)' },
             { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
             { attr: 'property', key: 'og:title', value: pageTitle },
@@ -67,17 +67,17 @@ const About = () => {
             "@type": "Person",
             "name": "김원정",
             "alternateName": "NARUBROWN",
-            "jobTitle": "Back-End Engineer",
+            "jobTitle": "AI Engineer",
             "email": "mailto:ruffmadman@kakao.com",
             "url": canonicalUrl,
             "image": ogImage,
             "knowsAbout": [
-                "Redis Pub/Sub 실시간 아키텍처",
-                "분산락과 동시성 제어",
-                "MSA 전환과 이벤트 주도 아키텍처",
-                "OpenTelemetry/Jaeger 관측",
-                "JMeter 성능 테스트",
-                "Spring Boot, NestJS, Go 백엔드 개발"
+                "LLM 기반 AI 서비스 설계",
+                "RAG 파이프라인 구축",
+                "온톨로지와 지식 그래프 설계",
+                "OCR 기반 문서 처리 자동화",
+                "FastAPI, Spring Boot, NestJS 백엔드 개발",
+                "운영 관측과 성능 최적화"
             ],
             "alumniOf": [
                 {
