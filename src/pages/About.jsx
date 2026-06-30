@@ -12,7 +12,7 @@ const About = () => {
         const siteName = 'NARUBROWN의 기술 블로그';
         const defaultTitle = document.title || siteName;
         const pageTitle = `김원정 | AI 엔지니어 포트폴리오 - ${siteName}`;
-        const description = 'LLM·RAG·온톨로지·지식 그래프 기반 AI 시스템 설계와 백엔드 구현 경험을 담은 김원정 AI 엔지니어 포트폴리오.';
+        const description = 'LLM·RAG·OCR·온톨로지·지식 그래프 기반 AI 시스템 설계와 풀스택 구현 경험을 담은 김원정 AI 엔지니어 포트폴리오.';
         const canonicalUrl = 'https://na2ru2.me/about';
         const ogImage = 'https://na2ru2.me/logo.png';
 
@@ -35,7 +35,7 @@ const About = () => {
 
         const metaDefinitions = [
             { attr: 'name', key: 'description', value: description },
-            { attr: 'name', key: 'keywords', value: 'AI 엔지니어, AI Engineer, 김원정, NARUBROWN, LLM, RAG, 온톨로지, 지식 그래프, 백엔드 개발자, FastAPI, Spring Boot, NestJS, 포트폴리오' },
+            { attr: 'name', key: 'keywords', value: 'AI 엔지니어, AI Engineer, Fullstack Engineer, 김원정, NARUBROWN, LLM, RAG, AgenticRAG, OCR, YOLO, 온톨로지, 지식 그래프, 백엔드 개발자, FastAPI, Spring Boot, NestJS, React, 포트폴리오' },
             { attr: 'name', key: 'author', value: '김원정 (NARUBROWN)' },
             { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
             { attr: 'property', key: 'og:title', value: pageTitle },
@@ -73,10 +73,11 @@ const About = () => {
             "image": ogImage,
             "knowsAbout": [
                 "LLM 기반 AI 서비스 설계",
-                "RAG 파이프라인 구축",
+                "RAG와 AgenticRAG 파이프라인 구축",
                 "온톨로지와 지식 그래프 설계",
                 "OCR 기반 문서 처리 자동화",
-                "FastAPI, Spring Boot, NestJS 백엔드 개발",
+                "YOLO 기반 이미지 분리 모델 구현",
+                "FastAPI, React, Spring Boot, NestJS 기반 서비스 개발",
                 "운영 관측과 성능 최적화"
             ],
             "alumniOf": [
@@ -205,7 +206,20 @@ const About = () => {
 
     const experience = [
         {
-            date: '2025.07 ~ 현재',
+            date: '2026.05 ~ 현재',
+            type: '정규직',
+            title: 'AI Engineer · Fullstack Engineer',
+            company: '(주)리빗, 판교',
+            description: [
+                '사내 ERP 자동화와 영수증 OCR 감사 프로젝트에서 AI 파이프라인과 풀스택 기능 구현',
+                'YOLO 파인튜닝으로 스캔 이미지에서 여러 영수증을 개별 영역으로 분리하는 모델 구축',
+                '문서·이미지·프레젠테이션 기반 자료를 검색·추론하는 AgenticRAG 챗봇 파이프라인 구현',
+                'FramesQA 벤치마크 no-oracle 기준 66.1% 정확도를 달성하고, 비교 파이프라인 대비 약 13배 낮은 비용으로 동등 수준의 성능 확보'
+            ],
+            techs: ['FastAPI', 'React', 'LLM', 'RAG', 'AgenticRAG', 'OCR', 'YOLO', 'VLM', 'PostgreSQL', 'ChromaDB']
+        },
+        {
+            date: '2025.07 ~ 2026.04',
             type: '정규직',
             title: 'AI Engineer · Back-End Engineer',
             company: '(주)셈웨어, 서울 금천구',
@@ -289,35 +303,35 @@ const About = () => {
     const summaryMeta = [
         {
             label: '포지션',
-            value: 'AI Engineer · Back-End Engineer',
-            note: 'LLM 서비스 · 지식 그래프 · 플랫폼'
+            value: 'AI Engineer · Fullstack Engineer',
+            note: 'AI 파이프라인 · API · 프론트엔드'
         },
         {
-            label: '핵심 키워드',
-            value: 'LLM · RAG · 온톨로지 · 지식 그래프',
-            note: 'FastAPI · Fuseki · RDF-star · OCR'
+            label: '최근 업무',
+            value: 'ERP OCR 감사 · 멀티홉 챗봇',
+            note: 'YOLO 분리 모델 · AgenticRAG'
         },
         {
-            label: '운영/관측',
-            value: 'OpenTelemetry · Jaeger · Redis',
-            note: '추적 가능성 · 실시간 상태 · 운영 안정성'
+            label: '검증된 성과',
+            value: 'FramesQA 66.1% · 13배 비용 절감',
+            note: 'no-oracle 기준 · 검색 속도 40~50% 개선'
         },
         {
-            label: '선호 스택',
-            value: 'FastAPI · NestJS · Spring Boot',
-            note: 'PostgreSQL · MySQL · Redis'
+            label: '주요 스택',
+            value: 'FastAPI · React · PostgreSQL',
+            note: 'ChromaDB · YOLO · VLM · Playwright'
         }
     ];
 
     const summaryTiles = [
         {
             title: '경력 스냅샷',
-            tag: '실무 3개사 · 4개 제품',
+            tag: '리빗 재직 중 · 실무 4개사',
             icon: <Activity size={18} />,
             bullets: [
-                '교육 AI·채용·운영 플랫폼 백엔드 경험',
-                'LLM·RAG·온톨로지 기반 AI 서비스 설계 및 구현',
-                '실시간 아키텍처와 운영 관측까지 함께 다룬 엔지니어링 경험'
+                '2026.05부터 (주)리빗에서 AI Engineer · Fullstack Engineer로 근무',
+                '영수증 OCR 감사 자동화와 멀티홉 추론 챗봇을 중심으로 실무 AI 기능 구현',
+                '셈웨어에서는 2026.04까지 교육 AI, 온톨로지, 지식 그래프 기반 프로젝트 수행'
             ],
             link: '#experience',
             accent: 'indigo'
@@ -325,6 +339,8 @@ const About = () => {
         {
             title: '주요 프로젝트',
             marqueeItems: [
+                'ERP 자동화 및 영수증 OCR 감사',
+                '멀티홉 추론 챗봇',
                 '사내 교육 진단 AI 플랫폼',
                 '사내 워크북 생성 AI 플랫폼',
                 'SteamUp Academy',
@@ -339,9 +355,9 @@ const About = () => {
             ],
             icon: <Layers size={18} />,
             bullets: [
-                '교육과정 PDF 기반 온톨로지·지식 그래프 구축',
-                'LLM 추출, RAG, OCR을 결합한 교육용 AI 워크플로우 구현',
-                '실시간 대기방, EDA, 결제 도메인까지 아우른 백엔드 설계 경험'
+                'YOLO 파인튜닝으로 스캔 이미지 속 여러 영수증을 개별 영역으로 분리',
+                'ERP 등록 수치와 영수증 OCR 값을 자동 대조하는 감사 흐름 구현',
+                'AgenticRAG 챗봇으로 FramesQA no-oracle 66.1% 정확도와 40~50% 검색 속도 개선 달성'
             ],
             link: '#professional-projects',
             accent: 'violet'
@@ -368,7 +384,54 @@ const About = () => {
 
     const professionalProjects = [
         {
-            date: '2025.02 ~',
+            date: '2026.05 ~',
+            title: 'ERP 자동화 및 영수증 OCR 감사',
+            role: 'AI Engineer · Fullstack Engineer',
+            org: '(주)리빗',
+            summary: '사내 ERP에 등록된 금액과 스캔 영수증에서 OCR로 추출한 값을 대조해 감사 업무를 자동화하는 협력 프로젝트입니다.',
+            techs: ['FastAPI', 'React', 'Playwright', 'YOLO', 'VLM', 'OCR'],
+            problems: [
+                '스캔 자료 한 장에 여러 개의 영수증이 붙어 있어, 전체 이미지를 한 번에 OCR하면 영수증별 값이 섞이거나 인식 정확도가 떨어질 위험이 있었음',
+                '영수증과 배경의 경계가 희미한 자료가 많아, 기존 이미지 분리 방식만으로는 각 영수증 영역을 안정적으로 분리하기 어려웠음',
+                'ERP 수치와 OCR 결과를 사람이 직접 대조하면 반복 작업이 많고 감사 누락 가능성이 있었음'
+            ],
+            solutions: [
+                '배경과 영수증의 경계가 희미한 사례를 직접 라벨링해 실제 스캔 환경에 가까운 학습 데이터셋을 구축했음',
+                'YOLO 모델을 파인튜닝해 한 장의 스캔 이미지에서 여러 영수증을 개별 영역으로 먼저 분리한 뒤 OCR을 수행하도록 파이프라인을 설계했음',
+                'FastAPI 기반 AI 처리 서버와 React 화면을 연결하고, Playwright를 활용해 ERP 자동화 흐름과 OCR 감사 결과를 연동했음'
+            ],
+            results: [
+                '테스트 이미지 1,000장 중 200장을 무작위 샘플링해 검증한 결과, 배경과 영수증 경계가 희미한 상황에서도 영수증 영역을 100% 정확하게 분리했음',
+                '영수증 단위로 OCR을 수행할 수 있는 전처리 단계를 확보해 값 대조 정확도를 높일 수 있는 기반을 마련했음',
+                'ERP 입력값과 영수증 OCR 결과를 자동으로 비교하는 감사 흐름을 구현해 수작업 검수 부담을 줄였음'
+            ]
+        },
+        {
+            date: '2026.05 ~',
+            title: '멀티홉 추론 챗봇',
+            role: 'AI Engineer · Fullstack Engineer',
+            org: '(주)리빗',
+            summary: '파워포인트, 이미지, 문서 등 다양한 형식의 자료를 저장하고, 여러 근거를 조합해야 하는 질문에 대해 AI가 단계적으로 검색·추론해 답변하도록 만든 챗봇 프로젝트입니다.',
+            techs: ['FastAPI', 'React', 'PostgreSQL', 'ChromaDB', 'AgenticRAG', 'FramesQA', 'LLM'],
+            problems: [
+                '일반 RAG는 여러 문서의 근거를 찾아 조합해야 하는 멀티홉 질문에서 검색 누락과 근거 조합 실패가 자주 발생했음',
+                'AgenticRAG 계열 접근은 어려운 질문에 강하지만 지연 시간이 길어 엔터프라이즈 서비스에 그대로 적용하기 어려웠음',
+                '고성능 모델을 반복 호출하면 비용이 커져 실제 서비스 운영 비용을 감당하기 어려웠음'
+            ],
+            solutions: [
+                'Slot Planner로 질문을 여러 하위 슬롯으로 분해하고, 각 슬롯마다 데이터베이스에서 필요한 증거를 재귀적으로 끝까지 찾도록 RLM 기반 검색 흐름을 설계했음',
+                '슬롯 간 의존성 때문에 다음 검색이 막히는 문제를 줄이기 위해, 예상 답변 경로를 미리 탐색하는 투기적 검색 기법으로 캐시를 생성했음',
+                '간단한 판단에는 저렴한 모델을, 복잡한 추론에는 중간급 모델을 사용하는 하이브리드 모델 라우팅으로 비용을 줄였음',
+                'PostgreSQL과 ChromaDB를 함께 사용해 원본 데이터, 메타데이터, 벡터 검색 결과를 연결하고 React 기반 질의 화면까지 구현했음'
+            ],
+            results: [
+                'FramesQA 벤치마크 no-oracle(참고 문헌 없음) 기준 66.1% 정확도를 달성했음',
+                '구글 논문에서 제시된 수준과 동률의 정확도를 확보하면서도 약 13배 낮은 비용으로 파이프라인을 구성했음',
+                '투기적 검색을 적용하지 않은 파이프라인보다 검색 완료 속도를 40~50% 단축했음'
+            ]
+        },
+        {
+            date: '2025.07 ~ 2026.04',
             title: '사내 교육 진단 AI 플랫폼',
             role: 'AI Engineer',
             org: '(주)셈웨어',
@@ -391,7 +454,7 @@ const About = () => {
             ]
         },
         {
-            date: '2025.02 ~',
+            date: '2025.07 ~ 2026.04',
             title: '사내 워크북 생성 AI 플랫폼',
             role: 'AI Engineer',
             org: '(주)셈웨어',
@@ -749,8 +812,8 @@ const About = () => {
                             <span className="summary-chip">한 눈에 보기</span>
                             <div className="summary-divider" aria-hidden="true"></div>
                             <div>
-                                <h2>경력, 학력, 프로젝트를 한 번에 훑어보세요.</h2>
-                                <p>실시간 시스템과 관측 가능성, MSA/EDA 전환 경험을 중심으로 어떤 문제를 풀어왔는지 압축 정리했습니다.</p>
+                                <h2>AI 실무 경력과 프로젝트 성과를 한 번에 훑어보세요.</h2>
+                                <p>리빗에서 진행한 OCR 감사 자동화와 AgenticRAG 챗봇, 그리고 셈웨어까지의 AI/백엔드 프로젝트 경험을 핵심 성과 중심으로 압축 정리했습니다.</p>
                             </div>
                         </div>
 
