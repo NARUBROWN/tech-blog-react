@@ -676,7 +676,6 @@ const About = () => {
         <div className="about-page">
             <div className="about-hero">
                 <div className="about-content">
-                    <div className="hero-eyebrow"><span>AI ENGINEER</span><span className="hero-status">리빗 재직 중</span></div>
                     <h1>
                         안녕하세요, <span style={{ color: 'var(--color-primary)' }}>김원정</span>입니다.
                     </h1>
@@ -805,7 +804,7 @@ const About = () => {
                                         ))}
                                     </div>
                                     {project.results && (
-                                        <div className="project-list-block project-results">
+                                        <div className="project-list-block">
                                             <div className="project-section-label">성과</div>
                                             <ul className="project-list">
                                                 {project.results.map((item, i) => (
