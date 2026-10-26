@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Mail, Github, Linkedin, ExternalLink, Trophy, Zap, Activity, BarChart2, Share2, Layers, Database, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mail, Github, Linkedin, ExternalLink, Trophy, Activity, Layers, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import './About.css';
 
 const About = () => {
     const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+    const showSkillsSection = false;
     const [showSummary, setShowSummary] = useState(false);
     const summaryRef = useRef(null);
 
@@ -12,7 +13,7 @@ const About = () => {
         const siteName = 'NARUBROWN의 기술 블로그';
         const defaultTitle = document.title || siteName;
         const pageTitle = `김원정 | AI 엔지니어 포트폴리오 - ${siteName}`;
-        const description = 'LLM·RAG·OCR·온톨로지·지식 그래프 기반 AI 시스템 설계와 풀스택 구현 경험을 담은 김원정 AI 엔지니어 포트폴리오.';
+        const description = 'LLM, RAG, OCR, VLM 기반 AI 서비스와 백엔드 시스템을 설계하고 구현해 온 김원정의 AI 엔지니어 포트폴리오.';
         const canonicalUrl = 'https://na2ru2.me/about';
         const ogImage = 'https://na2ru2.me/logo.png';
 
@@ -35,7 +36,7 @@ const About = () => {
 
         const metaDefinitions = [
             { attr: 'name', key: 'description', value: description },
-            { attr: 'name', key: 'keywords', value: 'AI 엔지니어, AI Engineer, Fullstack Engineer, 김원정, NARUBROWN, LLM, RAG, AgenticRAG, OCR, YOLO, 온톨로지, 지식 그래프, 백엔드 개발자, FastAPI, Spring Boot, NestJS, React, 포트폴리오' },
+            { attr: 'name', key: 'keywords', value: 'Software Engineer, AI Engineer, Backend Engineer, 김원정, NARUBROWN, LLM, RAG, AgenticRAG, OCR, VLM, YOLO, LoRA, Spine, Go, 온톨로지, 지식 그래프, LCA, 탄소관리, FastAPI, Spring Boot, NestJS, React, 포트폴리오' },
             { attr: 'name', key: 'author', value: '김원정 (NARUBROWN)' },
             { attr: 'name', key: 'robots', value: 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' },
             { attr: 'property', key: 'og:title', value: pageTitle },
@@ -72,11 +73,12 @@ const About = () => {
             "url": canonicalUrl,
             "image": ogImage,
             "knowsAbout": [
-                "LLM 기반 AI 서비스 설계",
-                "RAG와 AgenticRAG 파이프라인 구축",
+                "LLM 기반 AI 서비스 설계와 평가",
+                "멀티홉 RAG의 DAG 실행과 검색 스케줄링 최적화",
                 "온톨로지와 지식 그래프 설계",
-                "OCR 기반 문서 처리 자동화",
+                "OCR과 VLM 기반 문서 처리 및 모델 평가",
                 "YOLO 기반 이미지 분리 모델 구현",
+                "Go 백엔드 프레임워크와 DI, 요청 Pipeline 설계",
                 "FastAPI, React, Spring Boot, NestJS 기반 서비스 개발",
                 "운영 관측과 성능 최적화"
             ],
@@ -208,25 +210,24 @@ const About = () => {
         {
             date: '2026.05 ~ 현재',
             type: '정규직',
-            title: 'AI Engineer · Fullstack Engineer',
+            title: 'AI Engineer',
             company: '(주)리빗, 판교',
             description: [
-                '사내 ERP 자동화와 영수증 OCR 감사 프로젝트에서 AI 파이프라인과 풀스택 기능 구현',
-                'YOLO 파인튜닝으로 스캔 이미지에서 여러 영수증을 개별 영역으로 분리하는 모델 구축',
-                '문서·이미지·프레젠테이션 기반 자료를 검색·추론하는 AgenticRAG 챗봇 파이프라인 구현',
-                'FramesQA 벤치마크 no-oracle 기준 66.1% 정확도를 달성하고, 비교 파이프라인 대비 약 13배 낮은 비용으로 동등 수준의 성능 확보'
+                '사내 OCR 검수 시스템을 개발하고, 문서 분리와 판독성 평가를 위한 AI 파이프라인 및 풀스택 기능을 구현',
+                'LCA 환경영향 산정 시스템과 TANSOLUTION 탄소 관리 서비스의 백엔드 개발 담당',
+                '다양한 사내 자료를 검색하고 추론하는 멀티홉 RAG 챗봇과 검색 실행 흐름을 최적화'
             ],
-            techs: ['FastAPI', 'React', 'LLM', 'RAG', 'AgenticRAG', 'OCR', 'YOLO', 'VLM', 'PostgreSQL', 'ChromaDB']
+            techs: ['Go', 'Spine', 'Playwright', 'YOLO', 'VLM', 'OCR', 'LoRA', 'FastAPI', 'NestJS']
         },
         {
             date: '2025.07 ~ 2026.04',
             type: '정규직',
-            title: 'AI Engineer · Back-End Engineer',
+            title: 'AI Engineer 및 Back-End Engineer',
             company: '(주)셈웨어, 서울 금천구',
             description: [
-                '교육과정 PDF 기반 온톨로지·지식 그래프 구축 파이프라인 설계 및 구현',
+                '교육과정 PDF를 바탕으로 온톨로지와 지식 그래프를 구축하는 파이프라인 설계 및 구현',
                 'Map-Reduce 기반 LLM 추출, RAG, OCR 파이프라인으로 교육용 AI 서비스 개발',
-                'Apache Jena Fuseki, RDF-star 기반 온톨로지 저장소와 검증·롤백 구조 설계',
+                'Apache Jena Fuseki와 RDF-star 기반 온톨로지 저장소, 검증 및 롤백 구조 설계',
                 'Redis Pub/Sub 기반 다중 서버 실시간 대기방 아키텍처 설계 및 OpenTelemetry + Jaeger 기반 E2E 트레이싱 구축'
             ],
             techs: ['FastAPI', 'LLM', 'RAG', 'OCR', 'Apache Jena Fuseki', 'RDF-star', 'Redis', 'OpenTelemetry', 'Jaeger']
@@ -238,6 +239,7 @@ const About = () => {
             company: '(주)스카우트, 서울 강남구',
             description: [
                 '보너스잡 포커스 게재 상품화 및 포인트 결제/회계 도메인 설계',
+                '사내 인사관리 시스템과 OIDC를 지원하는 OAuth 기반 사내 인증 시스템 개발',
                 'JPA 기반 RESTful 구조로 레거시 프로시저 코드 리팩토링',
                 '서비스 계층 도입과 DI 표준화로 유지보수성 개선'
             ],
@@ -252,86 +254,52 @@ const About = () => {
                 '국회 정책 세미나 실시간 전달 시스템 백오피스 API 개발'
             ],
             techs: ['API Development', 'Backoffice']
-        }
-    ];
-
-    const interests = [
-        {
-            icon: <Zap size={24} />,
-            title: "LLM 기반 서비스 설계",
-            desc: `LLM은 단순 호출보다 워크플로우 설계가 더 중요하다고 생각합니다.
-추출, 검증, 재시도, 사람 승인 단계를 어떻게 나눌지에 따라 품질이 크게 달라지기 때문에, 실제 서비스에서 안정적으로 동작하는 AI 파이프라인 구조에 관심이 많습니다.`
         },
         {
-            icon: <Activity size={24} />,
-            title: "RAG와 검색 품질",
-            desc: `검색 기반 AI 시스템에서 중요한 건 답변 생성보다 컨텍스트를 얼마나 정확히 가져오느냐라고 생각합니다.
-메타데이터 필터링, 청킹 전략, 재랭킹, recall 보정 같은 요소를 조합해 문맥 오염을 줄이고 검색 품질을 안정화하는 방식에 관심을 두고 있습니다.`
-        },
-        {
-            icon: <BarChart2 size={24} />,
-            title: "온톨로지와 지식 그래프",
-            desc: `문서를 그대로 저장하는 것보다, 개념과 관계를 구조화해 추론 가능한 형태로 바꾸는 작업에 큰 흥미를 느낍니다.
-교육과정처럼 관계가 암묵적인 도메인에서 온톨로지와 지식 그래프를 설계하고, 사람이 해석 가능한 진단 근거를 만드는 방식에 관심이 있습니다.`
-        },
-        {
-            icon: <Share2 size={24} />,
-            title: "AI 시스템 평가와 검증",
-            desc: `AI 시스템은 “그럴듯하다”보다 “어디까지 믿을 수 있는가”가 더 중요하다고 생각합니다.
-정확도만이 아니라 누락, 환각, 증거 유무, 실패 유형을 나눠서 평가하고, 자동 검증과 사람 검토를 함께 두는 운영 방식에 관심을 갖고 있습니다.`
-        },
-        {
-            icon: <Layers size={24} />,
-            title: "AI와 백엔드의 접점",
-            desc: `좋은 AI 서비스는 모델만으로 완성되지 않고, 저장소, 비동기 처리, 권한, 감사 로그, 롤백 같은 백엔드 구조 위에서 비로소 운영 가능해진다고 생각합니다.
-모델 실험을 제품 기능으로 연결하는 API, 데이터, 운영 구조를 함께 설계하는 일에 관심이 있습니다.`
-        },
-        {
-            icon: <Database size={24} />,
-            title: "관측 가능한 AI 운영",
-            desc: `AI 기능도 결국 운영 대상이기 때문에, 호출 비용과 지연 시간, 실패율, 품질 저하를 함께 봐야 한다고 생각합니다.
-프롬프트와 모델 변경이 실제 서비스 품질에 어떤 영향을 주는지 추적 가능한 구조를 만드는 데 관심이 많습니다.`
-        },
-        {
-            icon: <BookOpen size={24} />,
-            title: "기술을 지식으로 남기는 일",
-            desc: `문제 해결이 개인의 경험으로 끝나는 걸 경계합니다.
-실험과 시행착오를 문서로 정리해 팀의 공통 자산으로 만들고, 다시 재사용 가능한 프롬프트·평가 기준·설계 원칙으로 축적하는 과정 자체에 큰 관심을 두고 있습니다.`
+            date: '2020.12 ~ 2021.06',
+            type: '기술 직무',
+            title: '정보체계운용관',
+            company: '육군',
+            description: [
+                'PowerShell로 Windows 보안 설정을 점검하고 조치하는 절차를 자동화했으며 HTML과 JavaScript 보고서를 구현',
+                '자동화 도입 후 군단 보안평가 최우수 등급 획득'
+            ],
+            techs: ['PowerShell', 'Windows', 'HTML', 'JavaScript']
         }
     ];
 
     const summaryMeta = [
         {
             label: '포지션',
-            value: 'AI Engineer · Fullstack Engineer',
-            note: 'AI 파이프라인 · API · 프론트엔드'
+            value: 'AI Engineer',
+            note: 'LLM, OCR, VLM, 백엔드'
         },
         {
-            label: '최근 업무',
-            value: 'ERP OCR 감사 · 멀티홉 챗봇',
-            note: 'YOLO 분리 모델 · AgenticRAG'
+            label: '담당 업무',
+            value: 'AI 기능과 백엔드 시스템 개발',
+            note: 'OCR과 VLM, 멀티홉 RAG, LCA와 탄소관리'
         },
         {
-            label: '검증된 성과',
-            value: 'FramesQA 66.1% · 13배 비용 절감',
-            note: 'no-oracle 기준 · 검색 속도 40~50% 개선'
+            label: '문서 VLM 평가',
+            value: '난독 영역 탐지 20%→80%',
+            note: '20장, 30개 영역 평가에서 사람 판단 일치율 66.7%→80%'
         },
         {
-            label: '주요 스택',
-            value: 'FastAPI · React · PostgreSQL',
-            note: 'ChromaDB · YOLO · VLM · Playwright'
+            label: '핵심 역량',
+            value: 'AI 시스템과 백엔드 설계',
+            note: '멀티홉 RAG, OCR과 VLM, Spine'
         }
     ];
 
     const summaryTiles = [
         {
             title: '경력 스냅샷',
-            tag: '리빗 재직 중 · 실무 4개사',
+            tag: '리빗 재직 중, 4개사 실무 경험',
             icon: <Activity size={18} />,
             bullets: [
-                '2026.05부터 (주)리빗에서 AI Engineer · Fullstack Engineer로 근무',
-                '영수증 OCR 감사 자동화와 멀티홉 추론 챗봇을 중심으로 실무 AI 기능 구현',
-                '셈웨어에서는 2026.04까지 교육 AI, 온톨로지, 지식 그래프 기반 프로젝트 수행'
+                '리빗에서 OCR 검수와 LCA 및 탄소관리 서비스 개발',
+                'AI 검색과 추론부터 Go 프레임워크 Spine까지 설계하고 개선',
+                '교육용 AI, 사내 인사관리 시스템, OIDC 인증 및 백엔드 플랫폼 개발 경험'
             ],
             link: '#experience',
             accent: 'indigo'
@@ -339,25 +307,15 @@ const About = () => {
         {
             title: '주요 프로젝트',
             marqueeItems: [
-                'ERP 자동화 및 영수증 OCR 감사',
-                '멀티홉 추론 챗봇',
-                '사내 교육 진단 AI 플랫폼',
-                '사내 워크북 생성 AI 플랫폼',
-                'SteamUp Academy',
-                'AlgeoMath',
-                '보너스잡',
-                '스카우트 글로벌',
-                '클린베테랑',
-                '통합 모니터링 & 관측 시스템',
-                '국회 정책 세미나 백오피스',
-                '티켓팅 시스템',
-                'Codingland'
+                'YOLO 기반 문서 분리와 OCR 감사 자동화',
+                '문서 VLM 판독성 평가와 LoRA 튜닝',
+                'Spine: Go 프레임워크'
             ],
             icon: <Layers size={18} />,
             bullets: [
-                'YOLO 파인튜닝으로 스캔 이미지 속 여러 영수증을 개별 영역으로 분리',
-                'ERP 등록 수치와 영수증 OCR 값을 자동 대조하는 감사 흐름 구현',
-                'AgenticRAG 챗봇으로 FramesQA no-oracle 66.1% 정확도와 40~50% 검색 속도 개선 달성'
+                'YOLO 기반 문서 분리와 OCR 검수 자동화',
+                '문서 VLM 판독성 평가와 LoRA 튜닝',
+                'Spine 프레임워크 설계, GitHub 스타 100개와 Microgrant 지원사업 선정'
             ],
             link: '#professional-projects',
             accent: 'violet'
@@ -367,67 +325,76 @@ const About = () => {
             tag: '컴퓨터공학 기반',
             icon: <BookOpen size={18} />,
             bullets: [
-                '인천대학교 컴퓨터공학부 (2023.03~2025.02) · 공학사',
+                '인천대학교 컴퓨터공학부 (2023.03~2025.02), 공학사',
             ],
             link: '#education',
             accent: 'teal'
         },
-        {
-            title: '요즘 궁금한 것들',
-            tag: '관심사',
-            icon: <Zap size={18} />,
-            bullets: interests.slice(0, 3).map(item => item.title),
-            link: '#interests',
-            accent: 'amber'
-        }
     ];
 
     const professionalProjects = [
         {
             date: '2026.05 ~',
-            title: 'ERP 자동화 및 영수증 OCR 감사',
-            role: 'AI Engineer · Fullstack Engineer',
+            title: 'ERP 자동화 및 문서 OCR 감사',
+            role: 'AI Engineer',
             org: '(주)리빗',
-            summary: '사내 ERP에 등록된 금액과 스캔 영수증에서 OCR로 추출한 값을 대조해 감사 업무를 자동화하는 협력 프로젝트입니다.',
-            techs: ['FastAPI', 'React', 'Playwright', 'YOLO', 'VLM', 'OCR'],
+            summary: '문서 영역 분리와 OCR 판독을 거쳐 사내 ERP 등록 값과 대조하는 검수 흐름을 개발했습니다.',
+            techs: ['Go', 'Spine', 'HTMX', 'Playwright', 'YOLO', 'VLM', 'OCR'],
             problems: [
-                '스캔 자료 한 장에 여러 개의 영수증이 붙어 있어, 전체 이미지를 한 번에 OCR하면 영수증별 값이 섞이거나 인식 정확도가 떨어질 위험이 있었음',
-                '영수증과 배경의 경계가 희미한 자료가 많아, 기존 이미지 분리 방식만으로는 각 영수증 영역을 안정적으로 분리하기 어려웠음',
+                '한 장에 여러 문서가 함께 찍히고 종이와 배경의 경계가 희미해, OCR 전에 문서별 영역을 분리할 필요가 있었음',
                 'ERP 수치와 OCR 결과를 사람이 직접 대조하면 반복 작업이 많고 감사 누락 가능성이 있었음'
             ],
             solutions: [
-                '배경과 영수증의 경계가 희미한 사례를 직접 라벨링해 실제 스캔 환경에 가까운 학습 데이터셋을 구축했음',
-                'YOLO 모델을 파인튜닝해 한 장의 스캔 이미지에서 여러 영수증을 개별 영역으로 먼저 분리한 뒤 OCR을 수행하도록 파이프라인을 설계했음',
-                'FastAPI 기반 AI 처리 서버와 React 화면을 연결하고, Playwright를 활용해 ERP 자동화 흐름과 OCR 감사 결과를 연동했음'
+                '실제 이미지 1,398장에 문서 영역 2,634개와 낙서 1,480개의 바운딩박스를 라벨링해 학습 데이터를 구성했음',
+                '합성 데이터 검토 후 YOLOv8-N/S를 학습하고, 1280×1280 입력으로 문서별 영역을 분리해 OCR에 전달했음',
+                'Spine 기반 Go 백엔드와 HTMX 화면을 구성하고, Playwright로 ERP 자동화 흐름과 OCR 검수 결과를 연결했음'
             ],
             results: [
-                '테스트 이미지 1,000장 중 200장을 무작위 샘플링해 검증한 결과, 배경과 영수증 경계가 희미한 상황에서도 영수증 영역을 100% 정확하게 분리했음',
-                '영수증 단위로 OCR을 수행할 수 있는 전처리 단계를 확보해 값 대조 정확도를 높일 수 있는 기반을 마련했음',
-                'ERP 입력값과 영수증 OCR 결과를 자동으로 비교하는 감사 흐름을 구현해 수작업 검수 부담을 줄였음'
+                '검증 이미지 280장, 정답 객체 801개에서 mAP50 88.24%(문서 96.89%, 낙서 79.60%)를 기록했음',
+                '낙서 탐지와 경계 정밀도는 추가 개선 과제로 확인했음',
+                '문서 단위 OCR과 ERP 값 자동 대조 흐름을 구현해 반복 검수 업무를 줄였음'
             ]
         },
         {
-            date: '2026.05 ~',
-            title: '멀티홉 추론 챗봇',
-            role: 'AI Engineer · Fullstack Engineer',
+            date: '2026.09',
+            title: '문서 VLM 판독성 평가 및 LoRA 튜닝',
+            role: 'AI Engineer',
             org: '(주)리빗',
-            summary: '파워포인트, 이미지, 문서 등 다양한 형식의 자료를 저장하고, 여러 근거를 조합해야 하는 질문에 대해 AI가 단계적으로 검색·추론해 답변하도록 만든 챗봇 프로젝트입니다.',
-            techs: ['FastAPI', 'React', 'PostgreSQL', 'ChromaDB', 'AgenticRAG', 'FramesQA', 'LLM'],
+            summary: 'VLM의 문서 판독 신뢰도가 실제 읽기 어려움과 어긋나는 문제를 분석하고, 사람 판단 데이터로 판독성 분류를 개선했습니다.',
+            techs: ['VLM', 'LoRA', 'OCR', 'Vision ML'],
+            problems: [
+                '읽기 어려운 영역에도 VLM이 높은 신뢰도를 부여해, 자동 판정만으로 재검토 대상을 고르기 어려웠음'
+            ],
+            solutions: [
+                '사람이 판정한 확신도를 기준으로 학습 데이터를 구성하고 LoRA 튜닝을 진행했음',
+                '별도 문서 단위 모델을 학습하고 LoRA 병합 및 INT4 저장을 진행했음'
+            ],
+            results: [
+                '20장, 30개 영역 평가에서 읽기 어려운 영역 탐지율은 2/10에서 8/10으로, 사람 판단 일치율은 66.67%에서 80%로 높아졌음'
+            ]
+        },
+        {
+            date: '2026.05 ~ 2026.09',
+            title: '멀티홉 RAG 실행 최적화',
+            role: 'AI Engineer',
+            org: '(주)리빗',
+            summary: '문서와 이미지, 프레젠테이션 자료에서 멀티홉 질문의 근거를 단계적으로 검색하고 실행 순서와 대기 시간을 최적화한 챗봇입니다.',
+            techs: ['FastAPI', 'React', 'PostgreSQL', 'ChromaDB', 'AgenticRAG', 'FRAMES', 'LLM'],
             problems: [
                 '일반 RAG는 여러 문서의 근거를 찾아 조합해야 하는 멀티홉 질문에서 검색 누락과 근거 조합 실패가 자주 발생했음',
                 'AgenticRAG 계열 접근은 어려운 질문에 강하지만 지연 시간이 길어 엔터프라이즈 서비스에 그대로 적용하기 어려웠음',
                 '고성능 모델을 반복 호출하면 비용이 커져 실제 서비스 운영 비용을 감당하기 어려웠음'
             ],
             solutions: [
-                'Slot Planner로 질문을 여러 하위 슬롯으로 분해하고, 각 슬롯마다 데이터베이스에서 필요한 증거를 재귀적으로 끝까지 찾도록 RLM 기반 검색 흐름을 설계했음',
-                '슬롯 간 의존성 때문에 다음 검색이 막히는 문제를 줄이기 위해, 예상 답변 경로를 미리 탐색하는 투기적 검색 기법으로 캐시를 생성했음',
-                '간단한 판단에는 저렴한 모델을, 복잡한 추론에는 중간급 모델을 사용하는 하이브리드 모델 라우팅으로 비용을 줄였음',
-                'PostgreSQL과 ChromaDB를 함께 사용해 원본 데이터, 메타데이터, 벡터 검색 결과를 연결하고 React 기반 질의 화면까지 구현했음'
+                '이벤트 기반 DAG로 검색과 답변 생성의 의존 관계를 표현하고, 선행 결과를 기다리는 구간과 검색 자원 대기를 함께 다뤘음',
+                '부모 슬롯이 처리되는 동안 후보 문서를 미리 찾는 투기적 검색을 적용했음. 부모 값이 확정된 뒤에는 계획과 이름 또는 별칭이 맞는 결과만 캐시에 반영하고 원문 판독과 근거 검증은 유지했음',
+                '전역 동시 검색 상한 20개 중 선행 검색은 최대 15개로 제한하고, 오래 기다린 작업의 우선순위를 높여 필수 검색이 밀리지 않도록 조정했음',
+                '초과 검색을 버리지 않고 대기시킨 뒤 필요한 결과를 기다리도록 변경했으며 검색, 판독, 스케줄링을 하나의 파이프라인으로 연결했음'
             ],
             results: [
-                'FramesQA 벤치마크 no-oracle(참고 문헌 없음) 기준 66.1% 정확도를 달성했음',
-                '구글 논문에서 제시된 수준과 동률의 정확도를 확보하면서도 약 13배 낮은 비용으로 파이프라인을 구성했음',
-                '투기적 검색을 적용하지 않은 파이프라인보다 검색 완료 속도를 40~50% 단축했음'
+                'FRAMES 무작위 100문항을 5개 워커로 평가해 이전 버전 대비 평균 응답 시간을 126.90초에서 90.41초로 28.8%, p90을 235.01초에서 143.35초로 39.0% 줄였음',
+                '100문항 모두 오류나 타임아웃 없이 완료됐고 전역 동시 실행 상한 20개를 지켰음',
+                '같은 문항 기준 정확도는 74%에서 64%로 낮아지고 비용은 92.3% 늘었음. 검색, 판독, 스케줄링을 함께 바꾼 전체 구성의 비교라 각 요소의 단독 효과는 분리되지 않았음'
             ]
         },
         {
@@ -443,14 +410,14 @@ const About = () => {
             ],
             solutions: [
                 '도메인 구조와 관계 기준은 사람이 먼저 정의하고, 문서 기반 개념 추출과 관계 제안은 AI가 보조하도록 역할을 분리했음',
-                '대용량 문서를 분할·병렬 처리하고 단계별 검증을 두어 누락과 오분류를 줄이는 파이프라인을 설계했음',
+                '대용량 문서를 나누어 병렬 처리하고 단계별로 검증해 누락과 오분류를 줄이는 파이프라인을 설계했음',
                 '보조 문서와 근거 문맥을 함께 연결해 관계 제안의 설명 가능성을 높였음',
                 '규칙 검증, 검토 승인, 롤백 가능한 반영 절차를 두어 운영 안정성을 확보했음'
             ],
             results: [
                 '교육과정 문서를 지식 그래프 형태로 구조화하고, 학습 결과를 개념 단위로 해석할 수 있는 기반을 마련했음',
                 '문서 추출 품질과 구조적 일관성을 높여 서비스 운영에 적용 가능한 수준의 데이터 파이프라인을 구축했음',
-                'AI 생성 결과에 대한 검증·승인 절차를 정립해 정확성과 운영 안정성을 함께 확보했음'
+                'AI 생성 결과에 대한 검증 및 승인 절차를 정립해 정확성과 운영 안정성을 함께 확보했음'
             ]
         },
         {
@@ -458,22 +425,22 @@ const About = () => {
             title: '사내 워크북 생성 AI 플랫폼',
             role: 'AI Engineer',
             org: '(주)셈웨어',
-            summary: '교육과정 문서를 분석해 학년·과목 맥락에 맞는 학습 자료를 자동 생성하고 렌더링하는 내부 AI 프로젝트입니다.',
+            summary: '교육과정 문서를 분석해 학년과 과목에 맞는 학습 자료를 자동 생성하고 렌더링하는 내부 AI 프로젝트입니다.',
             techs: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'ChromaDB', 'PyMuPDF', 'Playwright', 'OpenRouter', 'RAG'],
             problems: [
                 '긴 교육과정 문서에서 필수 기준 정보를 안정적으로 추출해야 했고, 단순 검색 기반 접근만으로는 필요한 정확도를 확보하기 어려웠음',
-                '한 문서 안에 여러 수준의 정보가 혼재해 있어, 학년·과목 기준으로 다시 구조화하는 과정이 복잡했음',
+                '한 문서 안에 여러 수준의 정보가 혼재해 있어 학년과 과목 기준으로 다시 구조화하는 과정이 복잡했음',
                 '유사 키워드가 반복되어 문맥이 다른 내용이 함께 섞이지 않도록 제어할 필요가 있었음'
             ],
             solutions: [
                 '긴 문서를 구간 단위로 나눠 병렬 처리하고, 누락 검사를 통해 필요한 구간만 재처리하도록 설계했음',
                 '내용 추출, 기준 연결, 결과 생성 단계를 분리해 AI가 맡는 작업의 책임을 명확히 했음',
-                '검색 단계에서 학년·과목·영역 맥락을 함께 반영해 문맥 혼입을 줄였음',
+                '검색 단계에서 학년, 과목, 영역의 맥락을 함께 반영해 문맥 혼입을 줄였음',
                 '문서 업로드부터 결과물 생성과 렌더링까지 자동화된 파이프라인으로 연결했음'
             ],
             results: [
                 '긴 문서를 안정적으로 처리할 수 있는 자동 생성 파이프라인을 구축했음',
-                '학년·과목 맥락이 섞이지 않도록 구조화해 결과물 품질과 일관성을 높였음',
+                '학년과 과목 맥락이 섞이지 않도록 구조화해 결과물 품질과 일관성을 높였음',
                 '토큰 사용량과 처리 비용을 줄이면서도 생성 품질을 개선했음',
                 '문서 업로드 이후 결과물 생성까지 이어지는 end-to-end 자동화 흐름을 구현했음'
             ]
@@ -483,18 +450,18 @@ const About = () => {
             title: 'SteamUp Academy',
             role: 'Backend Engineer',
             org: '(주)셈웨어',
-            summary: '수학·과학·코딩·예술을 아우르는 디지털 STEAM 수업 플랫폼으로 실시간 양방향 수업, 코스웨어 제공과 맞춤형 강의 제작·학급 관리를 지원합니다.',
+            summary: '수학, 과학, 코딩, 예술을 아우르는 디지털 STEAM 수업 플랫폼으로 실시간 양방향 수업과 코스웨어를 제공하고 맞춤형 강의 제작과 학급 관리를 지원합니다.',
             techs: ['Go', 'Echo', 'WebSocket', 'Redis', 'Redis Pub/Sub', 'PostgreSQL'],
             problems: [
-                'WebSocket 기반 실시간 클래스룸에서 다중 서버를 고려하지 않아 입·퇴장/좌석 선택 시 상태 충돌과 중복 처리 위험',
-                '단일 Handler에 비즈니스 로직·DB 접근·응답 스키마가 섞인 1-Tier 구조로 테스트와 확장이 어려움'
+                'WebSocket 기반 실시간 클래스룸에서 다중 서버를 고려하지 않아 입장과 퇴장, 좌석 선택 시 상태 충돌과 중복 처리 위험이 있었음',
+                '단일 Handler에 비즈니스 로직, DB 접근, 응답 스키마가 섞인 1-Tier 구조라 테스트와 확장이 어려웠음'
             ],
             solutions: [
                 '다중 서버 환경을 전제로 실시간 대기방 아키텍처 재설계',
                 'Redis Pub/Sub 이벤트 스트림으로 모든 서버 인스턴스 간 상태 동기화',
                 '스냅샷 + Delta 전략으로 전체 상태 반복 전송을 제거',
                 '좌석 선택 등 경쟁 구간에 Redis 분산락을 적용해 단일 반영 보장',
-                'Handler–Service–DB 3-Tier 아키텍처로 전면 재정비',
+                'Handler, Service, DB로 이어지는 3계층 아키텍처로 전면 재정비',
                 '객체 생성과 의존성 연결을 중앙화하고 Service 계층을 순수 비즈니스 로직 전용으로 분리',
                 '레거시를 유지하며 단계적으로 신규 구조로 마이그레이션'
             ],
@@ -511,7 +478,7 @@ const About = () => {
             title: 'AlgeoMath',
             role: 'Backend Engineer',
             org: '(주)셈웨어',
-            summary: '한국과학창의재단이 개발한 수학 탐구형 온라인 도구로 대수·기하 기반의 시각화, 2D/3D 수학 실습과 블록코딩 학습, 수업 자료 제작 및 과제 관리를 지원합니다.',
+            summary: '한국과학창의재단이 개발한 수학 탐구형 온라인 도구로 대수와 기하 시각화, 2D/3D 수학 실습, 블록코딩 학습, 수업 자료 제작과 과제 관리를 지원합니다.',
             techs: ['NestJS', 'RabbitMQ', 'Knex.js', 'mySQL', 'JMeter', 'Kubernetes', 'OpenTelemetry', 'Jaeger'],
             problems: [
                 '모놀리식 구조로 서비스 간 결합도가 높고 장애 전파 범위가 큼',
@@ -521,10 +488,10 @@ const About = () => {
             ],
             solutions: [
                 '모놀리식을 마이크로서비스 아키텍처로 전환하고 RabbitMQ 기반 EDA 도입',
-                '서비스 간 직접 호출을 제거해 독립 배포/확장 구조 확립',
+                '서비스 간 직접 호출을 제거해 독립 배포와 확장이 가능한 구조를 확립',
                 'JMeter 성능 테스트 시나리오로 서비스별 SLO 정의 및 HPA 스케일 기준 튜닝',
                 '로그인 프로세스를 NestJS Interceptor 기반으로 재설계해 인증 로직과 부가 기능(로그 기록, 보상 지급) 분리',
-                'Knex.js Event Emitter를 활용해 Slow Query 감지 시스템 구축, 100ms 초과 쿼리의 SQL·실행 시간·호출 API 자동 로깅',
+                'Knex.js Event Emitter를 활용해 Slow Query 감지 시스템을 구축하고, 100ms 초과 쿼리의 SQL과 실행 시간, 호출 API를 자동 기록',
                 'OpenTelemetry + Jaeger로 서비스 호출 트레이싱'
             ],
             results: [
@@ -532,7 +499,7 @@ const About = () => {
                 '트래픽 변화에 유연하게 대응하는 자동 확장 환경 구축',
                 '로그인 로직 책임 분리로 유지보수성과 확장성 향상',
                 'DB 성능 병목을 사전에 식별하는 관측 가능성 확보',
-                'MSA 전반을 성능·운영·관측까지 통합 관리 가능한 플랫폼으로 고도화'
+                'MSA의 성능과 운영, 관측 정보를 통합 관리할 수 있는 플랫폼으로 고도화'
             ],
             serviceUrl: 'https://www.algeomath.kr/algeo/main'
         },
@@ -550,15 +517,15 @@ const About = () => {
             solutions: [
                 '모든 기업이 직접 공고를 등록할 수 있는 셀프 서비스 채용 구조로 전환',
                 '포커스 게재(메인 노출) 유료 상품 도입',
-                '포인트 충전·차감·환불 도메인 설계 및 상태 모델링',
-                '포인트 상태를 통합·세분화하여 결제 및 환불 흐름 안정화',
-                'MakeBill API 연동을 통해 세금계산서 발행·재전송·취소 자동화',
+                '포인트 충전, 차감, 환불 도메인 설계 및 상태 모델링',
+                '포인트 상태를 통합하고 세분화해 결제 및 환불 흐름을 안정화',
+                'MakeBill API를 연동해 세금계산서 발행, 재전송, 취소를 자동화',
                 '슈퍼 유저 권한 기반 입금 확정 로직 구현',
-                '다중 상태 검색 및 통계 API 제공으로 회계·정산 업무 간소화'
+                '다중 상태 검색과 통계 API를 제공해 회계 및 정산 업무를 간소화'
             ],
             results: [
                 '유료 상품 기반 수익 모델 확보',
-                '결제·정산·회계 전반이 자동화된 B2B 채용 플랫폼 구축',
+                '결제와 정산, 회계 업무를 자동화한 B2B 채용 플랫폼 구축',
                 '운영 인력 의존도 감소 및 서비스 확장성 향상'
             ],
             serviceUrl: 'https://www.bonusjob.co.kr'
@@ -569,13 +536,13 @@ const About = () => {
             role: 'Back-End Engineer',
             org: '(주)스카우트',
             techs: ['Java', 'Spring Boot', 'JPA', 'QueryDSL', 'mySQL'],
-            summary: 'AI 기반 맞춤 채용과 스카우터 커리어 컨설팅, 취업·추천 보상 등으로 구직자와 기업을 연결하는 국내 대표 온라인 HR 채용 플랫폼입니다.',
+            summary: 'AI 기반 맞춤 채용, 스카우터 커리어 컨설팅, 취업과 추천 보상으로 구직자와 기업을 연결하는 국내 대표 온라인 HR 채용 플랫폼입니다.',
             problems: [
                 '외국인 취업 공고를 제공하는 신규 서비스에서 복잡한 조회 조건으로 인한 API 응답 지연 및 잦은 DB 접근 문제 발생',
                 '신규 서비스임에도 초기부터 확장성과 유지보수성을 고려한 구조 필요'
             ],
             solutions: [
-                'Spring Boot + JPA 기반으로 도메인–레포지토리–서비스 계층 명확히 분리',
+                'Spring Boot와 JPA 기반으로 도메인, 레포지토리, 서비스 계층을 명확히 분리',
                 'RESTful 규약을 준수한 CRUD API 설계',
                 'QueryDSL을 활용해 다중 쿼리를 단일 쿼리로 통합',
                 '중복 로직 제거 및 불필요한 DB 접근 최소화'
@@ -592,7 +559,7 @@ const About = () => {
             title: '클린베테랑',
             role: 'Back-End Engineer',
             org: '(주)스카우트',
-            summary: '스카우트가 운영하는 토탈 홈케어 플랫폼으로, 검증된 매니저가 가사·사업장 청소, 공간 소독과 생활편의 서비스를 앱 기반으로 맞춤 제공하는 청소·위생 서비스입니다.',
+            summary: '스카우트가 운영하는 홈케어 플랫폼으로, 검증된 매니저가 가정과 사업장을 청소하고 공간 소독과 생활편의 서비스를 앱으로 맞춤 제공합니다.',
             techs: ['Java', 'Spring Boot', 'JPA', 'mySQL'],
             problems: [
                 'DB 프로시저 및 함수 직접 호출로 인한 높은 DB 종속성',
@@ -608,7 +575,7 @@ const About = () => {
             results: [
                 'Controller 코드 약 20% 이상 정리',
                 'DB 의존성 및 DB 호출량 감소',
-                '코드 가독성·유지보수성·협업 효율 향상',
+                '코드 가독성과 유지보수성, 협업 효율 향상',
                 '신규 기능 추가 시 개발 리드타임 단축'
             ],
             serviceUrl: 'https://helper.veteranscout.co.kr/'
@@ -618,7 +585,7 @@ const About = () => {
             title: '통합 모니터링 & 관측 시스템',
             role: 'Back-End Engineer',
             org: '(주)스카우트',
-            summary: '온프레미스와 클라우드를 아우르는 통합 모니터링/알림 스택 구축',
+            summary: '온프레미스와 클라우드를 아우르는 통합 모니터링 및 알림 스택 구축',
             techs: ['Docker', 'Prometheus', 'Grafana', 'cAdvisor', 'Windows Exporter', 'AWS EC2'],
             problems: [
                 '체계적인 시스템 모니터링 환경 부재로 장애 인지 지연',
@@ -634,7 +601,7 @@ const About = () => {
                 'Grafana 대시보드 템플릿화로 유지보수성과 확장성 확보'
             ],
             results: [
-                '서버·컨테이너·DB 상태를 실시간으로 파악 가능한 관측 환경 구축',
+                '서버와 컨테이너, DB 상태를 실시간으로 파악할 수 있는 관측 환경 구축',
                 '장애 대응 속도 및 운영 안정성 향상',
                 '클라우드 비용 최적화를 위한 가시성 기반 마련'
             ]
@@ -648,30 +615,45 @@ const About = () => {
             techs: ['Java', 'Spring Boot', 'mySQL'],
             problems: [
                 '국회 정책 세미나 실시간 전달 시스템 운영을 위한 백오피스 API 부재',
-                '운영 데이터 관리/상태 조회/관리 기능을 안정적으로 지원할 서버 구조 필요'
+                '운영 데이터를 관리하고 상태를 안정적으로 조회할 수 있는 서버 구조 필요'
             ],
             solutions: [
-                '실시간 전달 시스템 운영을 지원하는 백오피스 API 설계·구현',
+                '실시간 전달 시스템 운영을 지원하는 백오피스 API 설계 및 구현',
                 '흩어져 있던 엔드포인트를 통합하고 RESTful 규약에 맞게 구조 정비',
                 '운영 환경을 고려해 서버 구조 단순화 및 불필요 흐름 제거로 응답 성능 개선'
             ],
             results: [
                 '실제 세미나 운영에 사용 가능한 백오피스 API 구축',
-                '안정성·일관성·관리 편의성을 고려한 서버 설계 경험 확보',
-                '실시간 시스템/운영 중심 백엔드 개발의 실무 경험 축적'
+                '안정성과 일관성, 관리 편의성을 고려한 서버 설계 경험 확보',
+                '실시간 시스템을 운영하는 백엔드 개발 실무 경험 축적'
             ]
         }
     ];
 
     const personalProjects = [
         {
-            date: '2025.12 ~ 진행중',
-            title: '뽑기팡',
-            role: 'Backend · AI · Tech Lead',
+            date: '2026.01 ~ 진행중',
+            title: 'Spine: Go 백엔드 프레임워크',
+            role: '주요 유지보수자, 설계 및 개발',
             desc: [
-                '전국 뽑기방 지도·인증·중고거래 통합 플랫폼에서 백엔드·AI 개발 리드.',
-                'NestJS 기반 API 서버와 MySQL 데이터 모델링, 위치 기반 검색·방문 인증·제보 플로우 설계 및 구현.',
-                'YOLO 비전 모델과 BERT 사기 탐지 모델을 서비스 연계 관점에서 설계하고 GCP Compute Engine에서 App/DB 분리 인프라와 AI 확장 전제 아키텍처 총괄 설계.'
+                '생성자에 필요한 의존성을 명시하고 DI 컨테이너로 구성 요소를 연결하는 구조를 설계.',
+                'HTTP, Event, WebSocket 요청 실행 흐름을 Pipeline으로 구성해 처리 순서가 코드에 드러나도록 개발.',
+                '2026년 9월 GitHub 100스타를 달성했고, 선린인터넷고 AnA 동아리와 국내 기업 2곳의 내부 서비스에서 사용된 이력이 있음.',
+                '2026년 10월 FOSS for All Microgrant 지원사업에 선정되어 지원을 받음.'
+            ],
+            techs: ['Go', 'Dependency Injection', 'HTTP', 'Event', 'WebSocket', 'Pipeline'],
+            serviceUrl: 'https://spine.na2ru2.me/ko/',
+            serviceUrlLabel: '프로젝트 문서 보기'
+        },
+        {
+            date: '2025.12 ~ 2026.05',
+            title: '뽑기팡',
+            role: 'Backend and AI Tech Lead',
+            desc: [
+                '전국 뽑기방 지도, 인증, 중고거래 통합 플랫폼에서 백엔드와 AI 개발을 리드.',
+                'NestJS 기반 API 서버와 MySQL 데이터 모델을 설계하고 위치 기반 검색, 방문 인증, 제보 흐름을 구현.',
+                '객체 탐지, 이미지 후보 검색, AI 검증을 연결한 라벨링 파이프라인을 만들고 라벨 오류와 데이터 분포를 분석해 학습 데이터를 개선.',
+                '한국어 채팅의 위험 발화를 문맥에 따라 분류하는 모델을 학습하고 평가했으며 GCP에서 App과 DB를 분리하고 AI 확장을 고려한 구조를 설계.'
             ],
             contributions: [
                 { label: 'Backend', value: '100%' },
@@ -692,77 +674,6 @@ const About = () => {
             ],
             links: { github: 'https://github.com/ppopgi-pang' }
         },
-        {
-            date: '2025.09',
-            title: 'APA (Automated Pull-Request Assistant)',
-            role: 'Backend · AI · DevOps',
-            desc: [
-                'GitHub Webhook과 LLM을 연동한 지능형 코드 리뷰 자동화 에이전트 개발.',
-                'NestJS 기반 EDA로 PR 이벤트 발생 시 실시간 코드 분석 및 피드백 제공 시스템 구축.',
-                'Strategy 패턴과 DI로 OpenAI, Gemini, Ollama(Local LLM) 등 다양한 AI 모델을 환경 변수에 따라 유연하게 교체 가능한 구조 설계.',
-                '보안 취약점 탐지용 프롬프트 엔지니어링 적용과 Docker 멀티 스테이지 빌드로 배포 최적화.'
-            ],
-            contributions: [
-                { label: 'Backend', value: '100%' },
-                { label: 'AI', value: '100%' },
-                { label: 'DevOps', value: '100%' }
-            ],
-            techs: [
-                'TypeScript',
-                'NestJS',
-                'GitHub Actions & API',
-                'OpenAI API',
-                'Google Gemini API',
-                'Ollama',
-                'Docker',
-                'Handlebars',
-                'Fuse.js',
-                'RxJS'
-            ],
-            links: { github: 'https://github.com/NARUBROWN/apa-project' } 
-        },
-        {
-            date: '2025.04 ~ 2025.06',
-            title: '티켓팅 시스템',
-            role: 'Backend Developer',
-            desc: [
-                'Kafka 기반 MSA 티켓팅 시스템 설계.',
-                'JPA 비관/낙관 락과 트랜잭션 격리 수준 실험으로 동시 예약 정합성 확보, Spring Cloud Gateway + Eureka + Feign으로 서비스 간 통신 표준화.',
-                'Kafka 이벤트 기반 Choreography Saga 패턴을 적용해 예약–티켓–재고 간 분산 트랜잭션 정합성을 확보하고, 중앙 오케스트레이터 없이 보상 이벤트로 상태 롤백이 가능한 구조를 구현.',
-                'Outbox Pattern을 적용해 예약 생성 트랜잭션과 이벤트 발행을 단일 커밋으로 묶어 이벤트 유실·중복을 제거하고 트랜잭션-이벤트 불일치를 차단.'
-            ],
-            contributions: [
-                { label: 'Backend', value: '100%' }
-            ],
-            techs: ['Java', 'Spring Boot', 'Kafka', 'Hibernate', 'MSA', 'Spring Cloud Gateway', 'Feign Client', 'Eureka'],
-            links: { github: 'https://github.com/appcenter-advanced-study/msa-ticketing-system-wonjeong' }
-        },
-        {
-            date: '2024.03 ~ 2024.05', 
-            title: 'Pencil me',
-            role: 'Backend · AI',
-            desc: [
-                '생성형 AI 기반 일정 관리 플랫폼에서 AI 백엔드 개발을 전담.',
-                'FastAPI와 LangChain으로 자연어 대화를 일정 데이터(제목, 마감기한, 카테고리)로 변환하는 LLM 파이프라인 설계 및 구현.',
-                'Dependency Injector로 LLM, Google Search, Crawler 의존성을 관리하고 Spring 메인 서버 연동을 주도.',
-                'ChromaDB와 Few-Shot Prompting으로 의도 파악·요약 정확도를 개선하고, URL 크롤링 기반 할 일 등록 기능 개발.'
-            ],
-            contributions: [
-                { label: 'Backend', value: '30%' },
-                { label: 'AI', value: '100%' }
-            ],
-            techs: [
-                'Python',
-                'FastAPI',
-                'LangChain',
-                'OpenAI API',
-                'ChromaDB',
-                'BeautifulSoup',
-                'Google Custom Search API',
-                'Dependency Injector'
-            ],
-            links: { github: 'https://github.com/BCD-q/pencil-me-fastapi' } 
-        }
     ];
 
     const handleSummaryToggle = () => {
@@ -787,7 +698,7 @@ const About = () => {
                         안녕하세요, <span style={{ color: 'var(--color-primary)' }}>김원정</span>입니다.
                     </h1>
                     <p style={{ marginTop: '2rem' }}>
-                        새로운 기술에 도전하며 불편함을 개선해 온 엔지니어입니다. 빠른 응답 속도와 안정성을 고민하며 성장했고, 앞으로도 작은 디테일까지 놓치지 않고 개선하는 동료가 되고자 합니다.
+                        세상의 문제를 인공지능으로 해결하는 인공지능 엔지니어입니다.
                     </p>
                     <div className="hero-actions">
                         <button className="btn-hero-summary" onClick={handleSummaryToggle}>
@@ -812,8 +723,8 @@ const About = () => {
                             <span className="summary-chip">한 눈에 보기</span>
                             <div className="summary-divider" aria-hidden="true"></div>
                             <div>
-                                <h2>AI 실무 경력과 프로젝트 성과를 한 번에 훑어보세요.</h2>
-                                <p>리빗에서 진행한 OCR 감사 자동화와 AgenticRAG 챗봇, 그리고 셈웨어까지의 AI/백엔드 프로젝트 경험을 핵심 성과 중심으로 압축 정리했습니다.</p>
+                                <h2>경력과 대표 프로젝트를 한눈에 살펴보세요.</h2>
+                                <p>AI 기능을 제품에 연결하고, 이를 뒷받침하는 시스템을 설계해 온 경험을 담았습니다.</p>
                             </div>
                         </div>
 
@@ -900,9 +811,6 @@ const About = () => {
                 <section className="projects-section animate-on-scroll" id="professional-projects">
                     <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                         <h2 className="section-title">실무 프로젝트</h2>
-                        <p style={{ marginTop: '0.75rem', color: '#6b7280', fontSize: '0.95rem' }}>
-                            비공개 사내 프로젝트는 공개 가능한 범위로 일반화해 기재했습니다.
-                        </p>
                     </div>
                     <div className="projects-grid">
                         {professionalProjects.map((project, index) => (
@@ -952,7 +860,7 @@ const About = () => {
                                     {project.serviceUrl && (
                                         <div className="project-visit">
                                             <a className="project-visit-btn" href={project.serviceUrl} target="_blank" rel="noopener noreferrer">
-                                                <ExternalLink size={16} /> 서비스 바로가기
+                                                <ExternalLink size={16} /> {project.serviceUrlLabel || '서비스 바로가기'}
                                             </a>
                                         </div>
                                     )}
@@ -976,24 +884,7 @@ const About = () => {
                     </div>
                 </section>
 
-                <section className="interests-section animate-on-scroll" id="interests">
-                    <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                        <h2 className="section-title">관심 분야</h2>
-                    </div>
-                    <div className="interests-grid">
-                        {interests.map((item, index) => (
-                            <div className="interest-card" key={index}>
-                                <div className="interest-icon-wrapper">
-                                    {item.icon}
-                                </div>
-                                <h3 className="interest-title">{item.title}</h3>
-                                <p className="interest-desc">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                <section className="skills-section animate-on-scroll">
+                <section hidden={!showSkillsSection} className="skills-section animate-on-scroll">
                     <div
                         style={{ textAlign: 'center', marginBottom: '2rem' }}
                         className="skills-header-container"
@@ -1095,6 +986,18 @@ const About = () => {
                                 org: '필명: 나루브라운',
                                 desc: '“어이 신입, 탈출각이다.”, “닮고 싶은 개발자의 초상” 등 성장과 커리어를 주제로 에세이 연재',
                                 url: 'https://yozm.wishket.com/magazine/@narubrown/'
+                            },
+                            {
+                                year: '2025.11',
+                                title: '앱센터 세미나 연사',
+                                org: '인천대학교 전산원 산하 글로벌 앱센터',
+                                desc: '“자기주도적 성장과 실무 경험”을 주제로 발표'
+                            },
+                            {
+                                year: '2025.04',
+                                title: '2025 유니톤(Unithon) 개발 멘토',
+                                org: '앱센터 & GDGoC 공동 주최',
+                                desc: '유니톤 참가팀의 개발 멘토로 참여'
                             },
                             {
                                 year: '2023.03.01 ~ 2025.03.01',

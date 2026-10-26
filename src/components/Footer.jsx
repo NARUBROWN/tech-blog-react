@@ -10,7 +10,7 @@ const Footer = () => {
                     <div className="footer-section">
                         <h3>About NARUBROWN's Blog</h3>
                         <p>
-                            이 사이트는 백엔드 엔지니어 김원정의 포트폴리오이자 기술 기록 공간입니다.
+                            이 사이트는 인공지능 엔지니어 김원정의 포트폴리오이자 기술 기록 공간입니다.
                             실무에서 마주한 문제와 그 해결 과정을 구조와 코드로 정리합니다.
                         </p>
                     </div>
