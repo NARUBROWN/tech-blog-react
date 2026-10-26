@@ -7,6 +7,14 @@ const About = () => {
     const showSkillsSection = false;
     const [showSummary, setShowSummary] = useState(false);
     const summaryRef = useRef(null);
+    const summaryButtonRef = useRef(null);
+
+    useEffect(() => {
+        if (showSummary) {
+            const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+            summaryRef.current?.scrollIntoView({ behavior, block: 'start' });
+        }
+    }, [showSummary]);
 
     // SEO metadata for Google/Naver crawling on the /about page
     useEffect(() => {
@@ -148,23 +156,6 @@ const About = () => {
                 ldScript.textContent = previousLdContent;
             }
         };
-    }, []);
-
-    useEffect(() => {
-        // Simple intersection observer for fade-in animations on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        const elements = document.querySelectorAll('.animate-on-scroll');
-        elements.forEach(el => observer.observe(el));
-
-        return () => observer.disconnect();
     }, []);
 
     const skillCategories = [
@@ -677,31 +668,23 @@ const About = () => {
     ];
 
     const handleSummaryToggle = () => {
-        setShowSummary(prev => {
-            const next = !prev;
-            if (!prev) {
-                setTimeout(() => {
-                    if (summaryRef.current) {
-                        summaryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 50);
-            }
-            return next;
-        });
+        if (showSummary) summaryButtonRef.current?.focus();
+        setShowSummary(!showSummary);
     };
 
     return (
         <div className="about-page">
             <div className="about-hero">
                 <div className="about-content">
+                    <div className="hero-eyebrow"><span>AI ENGINEER</span><span className="hero-status">리빗 재직 중</span></div>
                     <h1>
                         안녕하세요, <span style={{ color: 'var(--color-primary)' }}>김원정</span>입니다.
                     </h1>
-                    <p style={{ marginTop: '2rem' }}>
+                    <p className="hero-intro">
                         세상의 문제를 인공지능으로 해결하는 인공지능 엔지니어입니다.
                     </p>
                     <div className="hero-actions">
-                        <button className="btn-hero-summary" onClick={handleSummaryToggle}>
+                        <button ref={summaryButtonRef} className="btn-hero-summary" onClick={handleSummaryToggle} aria-expanded={showSummary} aria-controls="about-summary">
                             <Layers size={18} />
                             한 눈에 보기
                         </button>
@@ -713,9 +696,17 @@ const About = () => {
                 </div>
             </div>
 
+            <nav className="about-nav" aria-label="소개 페이지 섹션">
+                <a href="#experience">경력</a>
+                <a href="#professional-projects">실무 프로젝트</a>
+                <a href="#personal-projects">개인 프로젝트</a>
+                <a href="#activities">활동</a>
+                <a href="#education">학력</a>
+                <a href="#contact">연락하기</a>
+            </nav>
+
             <div className="content-container">
-                {showSummary && (
-                    <section className="summary-section animate-fade-in" ref={summaryRef}>
+                <section hidden={!showSummary} className="summary-section" id="about-summary" ref={summaryRef}>
                         <button className="summary-close" onClick={handleSummaryToggle} aria-label="요약 닫기">
                             ✕
                         </button>
@@ -743,20 +734,7 @@ const About = () => {
                                 <div key={idx} className={`summary-card accent-${tile.accent}`}>
                                     <div className="summary-card-head">
                                         <div className="summary-icon">{tile.icon}</div>
-                                        {tile.marqueeItems ? (
-                                            <div className="summary-tag-marquee">
-                                                <div className="summary-tag-track">
-                                                    {tile.marqueeItems.map((item, i) => (
-                                                        <span key={`a-${i}`} className="summary-tag-item">{item}</span>
-                                                    ))}
-                                                    {tile.marqueeItems.map((item, i) => (
-                                                        <span key={`b-${i}`} className="summary-tag-item">{item}</span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <span className="summary-tag">{tile.tag}</span>
-                                        )}
+                                        <span className="summary-tag">{tile.marqueeItems ? `${tile.marqueeItems.length}개 대표 프로젝트` : tile.tag}</span>
                                     </div>
                                     <h3>{tile.title}</h3>
                                     <ul>
@@ -770,11 +748,10 @@ const About = () => {
                                 </div>
                             ))}
                         </div>
-                    </section>
-                )}
+                </section>
 
-                <section className="experience-section animate-on-scroll" id="experience">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <section className="experience-section" id="experience">
+                    <div className="about-section-heading">
                         <h2 className="section-title">경력</h2>
                     </div>
                     <div className="timeline">
@@ -808,8 +785,8 @@ const About = () => {
                     </div>
                 </section>
 
-                <section className="projects-section animate-on-scroll" id="professional-projects">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <section className="projects-section" id="professional-projects">
+                    <div className="about-section-heading">
                         <h2 className="section-title">실무 프로젝트</h2>
                     </div>
                     <div className="projects-grid">
@@ -827,35 +804,42 @@ const About = () => {
                                             <span key={tech} className="tech-badge">{tech}</span>
                                         ))}
                                     </div>
-                                    {project.problems && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">Problem</div>
-                                            <ul className="project-list">
-                                                {project.problems.map((item, i) => (
-                                                    <li key={i}>{item}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                    {project.solutions && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">Solution</div>
-                                            <ul className="project-list">
-                                                {project.solutions.map((item, i) => (
-                                                    <li key={i}>{item}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
                                     {project.results && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">Result</div>
+                                        <div className="project-list-block project-results">
+                                            <div className="project-section-label">성과</div>
                                             <ul className="project-list">
                                                 {project.results.map((item, i) => (
                                                     <li key={i}>{item}</li>
                                                 ))}
                                             </ul>
                                         </div>
+                                    )}
+                                    {(project.problems || project.solutions) && (
+                                        <details className="project-details">
+                                            <summary>문제 해결 과정 <ChevronDown size={16} /></summary>
+                                            <div className="project-details-body">
+                                                {project.problems && (
+                                                    <div className="project-list-block">
+                                                        <div className="project-section-label">문제</div>
+                                                        <ul className="project-list">
+                                                            {project.problems.map((item, i) => (
+                                                                <li key={i}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                {project.solutions && (
+                                                    <div className="project-list-block">
+                                                        <div className="project-section-label">해결 과정</div>
+                                                        <ul className="project-list">
+                                                            {project.solutions.map((item, i) => (
+                                                                <li key={i}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </details>
                                     )}
                                     {project.serviceUrl && (
                                         <div className="project-visit">
@@ -884,7 +868,81 @@ const About = () => {
                     </div>
                 </section>
 
-                <section hidden={!showSkillsSection} className="skills-section animate-on-scroll">
+                <section className="projects-section" id="personal-projects">
+                    <div className="about-section-heading">
+                        <h2 className="section-title">개인 프로젝트</h2>
+                    </div>
+                    <div className="projects-grid">
+                        {personalProjects.map((project, index) => (
+                            <div className="project-card" key={index}>
+                                <div className="project-content">
+                                    {project.date && <span className="project-date">{project.date}</span>}
+                                    <h3 className="project-title">{project.title}</h3>
+                                    {project.role && <div className="project-role">{project.role}</div>}
+                                    {project.contributions && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">기여도</div>
+                                            <ul className="project-contribution-list">
+                                                {project.contributions.map((item) => (
+                                                    <li key={item.label}>
+                                                        <span className="project-contribution-label">{item.label}</span>
+                                                        <span className="project-contribution-value">{item.value}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.desc && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">개요</div>
+                                            {Array.isArray(project.desc) ? (
+                                                <ul className="project-list">
+                                                    {project.desc.map((item, i) => (
+                                                        <li key={i}>{item}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="project-desc">{project.desc}</p>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className="project-list-block">
+                                        <div className="project-section-label">기술 스택</div>
+                                        <div className="project-techs">
+                                            {project.techs.map(tech => (
+                                                <span key={tech} className="tech-badge">{tech}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {project.serviceUrl && (
+                                        <a className="project-link" href={project.serviceUrl} target="_blank" rel="noopener noreferrer">
+                                            {project.serviceUrlLabel || '프로젝트 보기'} <ExternalLink size={16} />
+                                        </a>
+                                    )}
+                                    {project.links && (
+                                        <div className="project-list-block">
+                                            <div className="project-section-label">링크</div>
+                                            <div className="project-links">
+                                                {project.links.github && (
+                                                    <a href={project.links.github} className="project-link">
+                                                        <Github size={18} /> Code
+                                                    </a>
+                                                )}
+                                                {project.links.demo && (
+                                                    <a href={project.links.demo} className="project-link">
+                                                        <ExternalLink size={18} /> Live Demo
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section hidden={!showSkillsSection} className="skills-section">
                     <div
                         style={{ textAlign: 'center', marginBottom: '2rem' }}
                         className="skills-header-container"
@@ -948,8 +1006,8 @@ const About = () => {
                     )}
                 </section>
 
-                <section className="awards-section animate-on-scroll">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <section className="awards-section">
+                    <div className="about-section-heading">
                         <h2 className="section-title">수상</h2>
                     </div>
                     <div className="awards-grid">
@@ -974,8 +1032,8 @@ const About = () => {
                     </div>
                 </section>
 
-                <section className="activities-section animate-on-scroll">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <section className="activities-section" id="activities">
+                    <div className="about-section-heading">
                         <h2 className="section-title">활동</h2>
                     </div>
                     <div className="awards-grid">
@@ -1029,7 +1087,7 @@ const About = () => {
                                 <div className="award-header">
                                     <span className="award-year">{activity.year}</span>
                                     {activity.url && (
-                                        <a href={activity.url} target="_blank" rel="noopener noreferrer">
+                                        <a href={activity.url} target="_blank" rel="noopener noreferrer" aria-label={`${activity.title} 관련 페이지`}>
                                             <span className="award-icon"><ExternalLink size={16} /></span>
                                         </a>
                                     )}
@@ -1042,77 +1100,8 @@ const About = () => {
                     </div>
                 </section>
 
-                <section className="projects-section animate-on-scroll" id="personal-projects">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                        <h2 className="section-title">개인 프로젝트</h2>
-                    </div>
-                    <div className="projects-grid">
-                        {personalProjects.map((project, index) => (
-                            <div className="project-card" key={index}>
-                                <div className="project-content">
-                                    {project.date && <span className="project-date">{project.date}</span>}
-                                    <h3 className="project-title">{project.title}</h3>
-                                    {project.role && <div className="project-role">{project.role}</div>}
-                                    {project.contributions && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">기여도</div>
-                                            <ul className="project-contribution-list">
-                                                {project.contributions.map((item) => (
-                                                    <li key={item.label}>
-                                                        <span className="project-contribution-label">{item.label}</span>
-                                                        <span className="project-contribution-value">{item.value}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                    {project.desc && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">개요</div>
-                                            {Array.isArray(project.desc) ? (
-                                                <ul className="project-list">
-                                                    {project.desc.map((item, i) => (
-                                                        <li key={i}>{item}</li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <p className="project-desc">{project.desc}</p>
-                                            )}
-                                        </div>
-                                    )}
-                                    <div className="project-list-block">
-                                        <div className="project-section-label">기술 스택</div>
-                                        <div className="project-techs">
-                                            {project.techs.map(tech => (
-                                                <span key={tech} className="tech-badge">{tech}</span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    {project.links && (
-                                        <div className="project-list-block">
-                                            <div className="project-section-label">링크</div>
-                                            <div className="project-links">
-                                                {project.links.github && (
-                                                    <a href={project.links.github} className="project-link">
-                                                        <Github size={18} /> Code
-                                                    </a>
-                                                )}
-                                                {project.links.demo && (
-                                                    <a href={project.links.demo} className="project-link">
-                                                        <ExternalLink size={18} /> Live Demo
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                <section className="education-section animate-on-scroll" id="education">
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <section className="education-section" id="education">
+                    <div className="about-section-heading">
                         <h2 className="section-title">학력</h2>
                     </div>
                     <div className="awards-grid">
@@ -1135,7 +1124,7 @@ const About = () => {
                     </div>
                 </section>
 
-                <section className="contact-section animate-on-scroll" id="contact">
+                <section className="contact-section" id="contact">
                     <div style={{ textAlign: 'center' }}>
                         <h2 className="section-title">연락하기</h2>
                         <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--color-text-secondary)' }}>
