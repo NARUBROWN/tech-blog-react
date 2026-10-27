@@ -21,7 +21,7 @@ const ScrollToTopButton = () => {
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth',
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         });
     };
 
@@ -31,6 +31,8 @@ const ScrollToTopButton = () => {
             className={`scroll-top ${isVisible ? 'visible' : ''}`}
             onClick={scrollToTop}
             aria-label="맨 위로 이동"
+            aria-hidden={!isVisible}
+            inert={!isVisible}
         >
             <ArrowUp size={18} />
             <span>맨 위로</span>

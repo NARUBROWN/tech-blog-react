@@ -94,6 +94,7 @@
 
 /* Simulate the post container inside the modal specifically */
 .preview-modal-body .post-detail-container {
+    width: 100%;
     margin: 0 auto;
     /* Reset margins for modal context if needed */
     box-shadow: none;

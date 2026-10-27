@@ -1,10 +1,10 @@
-import { useState, useEffect, memo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug, getPostById, likePost, unlikePost, getPostLikes, deletePost, increasePostViewCount } from '../api/post';
 import { useAuth } from '../context/AuthContext';
 import UserListModal from '../components/UserListModal';
 import RecommendedPosts from '../components/RecommendedPosts';
-import { Calendar, User, Tag, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
+import { ArrowLeft, User, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import PostContent from '../components/PostContent';
 import RecruitmentSnackbar from '../components/RecruitmentSnackbar';
@@ -82,7 +82,7 @@ const PostDetail = () => {
             } catch (err) {
                 if (controller.signal.aborted || err.code === 'ERR_CANCELED') return;
                 console.error(err);
-                setError('Failed to load post.');
+                setError('글을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
             } finally {
                 if (!isCancelled) {
                     setLoading(false);
@@ -267,7 +267,7 @@ const PostDetail = () => {
 
     const handleLikeToggle = async () => {
         if (!user) {
-            alert('Please login to like posts');
+            alert('좋아요를 누르려면 로그인해 주세요.');
             return;
         }
 
@@ -297,7 +297,7 @@ const PostDetail = () => {
     };
 
     const handleDelete = async () => {
-        if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+        if (!window.confirm('이 글을 삭제하시겠습니까? 삭제한 글은 되돌릴 수 없습니다.')) {
             return;
         }
 
@@ -306,7 +306,7 @@ const PostDetail = () => {
             navigate('/');
         } catch (error) {
             console.error('Failed to delete post:', error);
-            alert('Failed to delete post.');
+            alert('글을 삭제하지 못했습니다. 다시 시도해 주세요.');
         }
     };
 
@@ -316,20 +316,20 @@ const PostDetail = () => {
 
         try {
             await navigator.clipboard.writeText(shareUrl);
-            alert('Link copied to clipboard!');
+            alert('글 링크를 복사했습니다.');
         } catch (err) {
             console.error('Failed to copy link:', err);
-            alert('Failed to copy link.');
+            alert('링크를 복사하지 못했습니다. 다시 시도해 주세요.');
         }
     };
 
     if (loading) return <PostDetailSkeleton />;
-    if (error) return <div className="error-state">{error}</div>;
-    if (!post) return <div className="error-state">Post not found</div>;
+    if (error || !post) return <div className="post-detail-state"><p>{error || '글을 찾을 수 없습니다.'}</p><Link to="/">홈으로 돌아가기</Link></div>;
 
     return (
         <>
             <article className="post-detail-container">
+                <Link to="/" className="post-back-link"><ArrowLeft size={16} aria-hidden="true" /> 전체 글</Link>
                 {/* 1. Thumbnail (Twitter Banner Style) */}
                 {post.thumbnailUrl && (
                     <div className="post-featured-image-banner">
@@ -340,7 +340,7 @@ const PostDetail = () => {
                 <header className="post-header-wrapper">
                     <div className="post-header-content">
                         {/* 2. Category */}
-                        <span className="post-category-badge">{post.category?.name || 'Uncategorized'}</span>
+                        <span className="post-category-badge">{post.category?.name || '글'}</span>
 
                         {/* 3. Title */}
                         <h1 className="post-main-title">{post.title}</h1>
@@ -357,10 +357,8 @@ const PostDetail = () => {
                                     <span className="author-username">{post.author?.username}</span>
                                     <div className="meta-sub">
                                         <span className="post-date">
-                                            {post.publishedAt ? format(new Date(post.publishedAt), 'MMM dd, yyyy') : 'Draft'}
+                                            {post.publishedAt ? format(new Date(post.publishedAt), 'yyyy.MM.dd') : '임시 저장'}
                                         </span>
-                                        <span className="dot-divider">·</span>
-                                        <span className="read-time">5 min read</span>
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +366,8 @@ const PostDetail = () => {
                                 <button
                                     className="action-btn share-btn"
                                     onClick={handleShare}
-                                    title="Share Post"
+                                    title="공유하기"
+                                    aria-label="글 공유하기"
                                 >
                                     <Share2 size={20} />
                                 </button>
@@ -377,16 +376,16 @@ const PostDetail = () => {
                                         <button
                                             className="action-btn edit-btn"
                                             onClick={() => navigate(`/post/edit/${post.id}`)}
-                                            title="Edit Post"
-                                            style={{ color: '#3b82f6' }}
+                                            title="글 수정"
+                                            aria-label="글 수정"
                                         >
                                             <Pencil size={20} />
                                         </button>
                                         <button
                                             className="action-btn delete-btn"
                                             onClick={handleDelete}
-                                            title="Delete Post"
-                                            style={{ color: '#ef4444' }} // Simple inline style for danger color, or move to CSS
+                                            title="글 삭제"
+                                            aria-label="글 삭제"
                                         >
                                             <Trash2 size={20} />
                                         </button>
@@ -414,14 +413,15 @@ const PostDetail = () => {
                             <button
                                 className={`interaction-btn like-btn ${isLiked ? 'active' : ''}`}
                                 onClick={handleLikeToggle}
-                                aria-label={isLiked ? "Unlike post" : "Like post"}
+                                aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+                                aria-pressed={isLiked}
                             >
                                 <Heart size={20} fill={isLiked ? "currentColor" : "none"} />
                             </button>
                             <button
                                 className="like-count-btn"
                                 onClick={() => setIsLikeModalOpen(true)}
-                                aria-label="View who liked this post"
+                                aria-label="좋아요 누른 사람 보기"
                             >
                                 <span>{likeCount}</span>
                             </button>
@@ -444,7 +444,7 @@ const PostDetail = () => {
                         </div>
                         <div className="bio-content">
                             <h3 className="bio-name">{post.author?.username}</h3>
-                            <p className="bio-description">{post.author?.bio || "Tech enthusiast and writer."}</p>
+                            {post.author?.bio && <p className="bio-description">{post.author.bio}</p>}
                         </div>
                     </div>
                 </footer>
@@ -455,7 +455,7 @@ const PostDetail = () => {
             <UserListModal
                 isOpen={isLikeModalOpen}
                 onClose={() => setIsLikeModalOpen(false)}
-                title="Likes"
+                title="좋아요"
                 users={likers}
             />
 

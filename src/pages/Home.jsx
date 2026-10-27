@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
-import Typewriter from '../components/Typewriter';
+import { ArrowUpRight, ArrowDown, RotateCcw, Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import './Home.css';
 import PostListSkeleton from '../components/PostListSkeleton';
 import PostCard from '../components/PostCard';
-import RecapBanner from '../components/Recap/RecapBanner';
 import RecapStory from '../components/Recap/RecapStory';
 
 const Home = () => {
@@ -15,9 +14,11 @@ const Home = () => {
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const categoryName = searchParams.get('categoryName');
-    const [page, setPage] = useState(0);
+    const [pageSelection, setPageSelection] = useState({ category: null, index: 0 });
+    const page = pageSelection.category === categoryName ? pageSelection.index : 0;
+    const setPage = (index) => setPageSelection({ category: categoryName, index });
+    const [retryCount, setRetryCount] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const heroRef = useRef(null);
     const recapParam = searchParams.get('recap');
     const isRecapOpen = !categoryName && recapParam === 'true';
 
@@ -103,36 +104,6 @@ const Home = () => {
     }, [isRecapOpen]);
 
     useEffect(() => {
-        const hero = heroRef.current;
-        if (!hero) return;
-
-        const setPointerVars = (xPercent, yPercent) => {
-            hero.style.setProperty('--pointer-x', `${xPercent}%`);
-            hero.style.setProperty('--pointer-y', `${yPercent}%`);
-        };
-
-        const updatePointer = (event) => {
-            const rect = hero.getBoundingClientRect();
-            const x = ((event.clientX - rect.left) / rect.width) * 100;
-            const y = ((event.clientY - rect.top) / rect.height) * 100;
-            const clampedX = Math.max(0, Math.min(100, x));
-            const clampedY = Math.max(0, Math.min(100, y));
-            setPointerVars(clampedX, clampedY);
-        };
-
-        const resetPointer = () => setPointerVars(50, 45);
-
-        hero.addEventListener('pointermove', updatePointer, { passive: true });
-        hero.addEventListener('pointerleave', resetPointer);
-        resetPointer();
-
-        return () => {
-            hero.removeEventListener('pointermove', updatePointer);
-            hero.removeEventListener('pointerleave', resetPointer);
-        };
-    }, []);
-
-    useEffect(() => {
         const controller = new AbortController();
         let isCancelled = false;
 
@@ -147,7 +118,7 @@ const Home = () => {
             } catch (err) {
                 if (controller.signal.aborted || err.code === 'ERR_CANCELED') return;
                 console.error(err);
-                setError('Failed to load posts.');
+                setError('잠시 후 다시 시도해 주세요.');
             } finally {
                 if (!isCancelled) {
                     setLoading(false);
@@ -161,18 +132,7 @@ const Home = () => {
             isCancelled = true;
             controller.abort();
         };
-    }, [categoryName, page]);
-
-    // Cleanup page when category changes
-    useEffect(() => {
-        setPage(0);
-    }, [categoryName]);
-
-    const openRecap = () => {
-        const nextParams = new URLSearchParams(searchParams);
-        nextParams.set('recap', 'true');
-        setSearchParams(nextParams);
-    };
+    }, [categoryName, page, retryCount]);
 
     const closeRecap = () => {
         const nextParams = new URLSearchParams(searchParams);
@@ -180,52 +140,61 @@ const Home = () => {
         setSearchParams(nextParams);
     };
 
-    // Use a text-only version of content for preview if needed, or just show title/tags
-    // For safety, we can strip HTML from content or just not show it in the preview card
-
     return (
         <div className="home-page">
             {!categoryName ? (
-                <div className="hero-immersive" ref={heroRef}>
-                    <div className="hero-section">
-                        <div className="hero-grid-overlay" aria-hidden="true"></div>
-                        <div className="hero-content">
-                            <h1>
-                                <Typewriter
-                                    phrases={[
-                                        "동시성을 구조로 다루는",
-                                        "성능을 수치로 증명하는",
-                                        "관심사를 코드로 분리하는",
-                                        "레거시를 현실적으로 개선하는",
-                                        "운영까지 책임지는",
-                                        "아키텍처를 문서로 남기는",
-                                        "팀의 시행착오를 줄이는",
-                                        "복잡함을 단순한 구조로 바꾸는"
-                                    ]}
-                                /> <br></br>개발자
-                            </h1>
-                            <p>실무에서 마주한 문제를 구조로 풀고, 그 선택을 수치와 기록으로 남깁니다.</p>
-                            <div className="hero-actions">
-                                <Link to="/about" className="btn btn-primary btn-lg">자기소개서 확인하기</Link>
-                            </div>
+                <header className="home-intro">
+                    <div className="home-intro-copy">
+                        <p className="home-byline">기술 블로그</p>
+                        <h1>문제를 풀고,<br />경험을 기록합니다.</h1>
+                        <p className="home-description">세상의 문제를 인공지능으로 해결하는 엔지니어입니다.<br className="home-desktop-break" /> 직접 만들고 개선하며 얻은 경험을 나눕니다.</p>
+                        <div className="home-actions">
+                            <Link to="/about" className="home-button">자기소개서 보기 <ArrowUpRight size={17} aria-hidden="true" /></Link>
+                            <a href="#posts" className="home-text-link">글 읽기 <ArrowDown size={16} aria-hidden="true" /></a>
                         </div>
                     </div>
-                </div>
+                    <aside className="home-project-links" aria-label="프로젝트 바로가기">
+                        <Link to="/about#professional-projects">
+                            <span className="home-project-label">실무 프로젝트 <ArrowUpRight size={17} aria-hidden="true" /></span>
+                            <span className="home-project-description">다양한 프로젝트를 확인하세요</span>
+                        </Link>
+                        <Link to="/about#personal-projects">
+                            <span className="home-project-label">Spine <ArrowUpRight size={17} aria-hidden="true" /></span>
+                            <span className="home-project-description">현재 유지보수하고 있는 Go 백엔드 프레임워크</span>
+                        </Link>
+                        <Link to="/about#activities">
+                            <span className="home-project-label">활동 <ArrowUpRight size={17} aria-hidden="true" /></span>
+                            <span className="home-project-description">에세이를 기고하고 교육과 멘토링에도 참여하고 있습니다</span>
+                        </Link>
+                    </aside>
+                </header>
             ) : (
-                <div className="category-header">
+                <header className="home-category-header">
+                    <Link to="/" className="home-text-link">전체 글로 돌아가기</Link>
                     <h1>{categoryName}</h1>
-                </div>
+                    <p>직접 경험한 문제와 해결 과정을 기록합니다.</p>
+                </header>
             )}
 
             <AnimatePresence>
                 {isRecapOpen && <RecapStory onClose={closeRecap} />}
             </AnimatePresence>
 
-            <div className="content-container">
+            <section id="posts" className="content-container home-posts" aria-labelledby="home-posts-title" aria-busy={loading}>
+                <div className="home-posts-heading">
+                    <div><h2 id="home-posts-title">{categoryName ? '카테고리 글' : '최근 글'}</h2></div>
+                    <Link to="/search" className="home-text-link"><Search size={16} aria-hidden="true" /> 글 검색</Link>
+                </div>
                 {loading ? (
                     <PostListSkeleton count={6} />
                 ) : error ? (
-                    <div className="error-container">{error}</div>
+                    <div className="home-list-state" role="status">
+                        <h3>글을 잠시 불러올 수 없어요.</h3>
+                        <p>{error}</p>
+                        <button className="home-button home-button-secondary" onClick={() => setRetryCount(count => count + 1)}><RotateCcw size={15} aria-hidden="true" /> 다시 불러오기</button>
+                    </div>
+                ) : posts.length === 0 ? (
+                    <div className="home-list-state" role="status"><h3>아직 등록된 글이 없습니다.</h3><p>새로운 기록이 올라오면 이곳에서 만나보세요.</p></div>
                 ) : (
                     <>
                         <div className="post-grid">
@@ -249,6 +218,8 @@ const Home = () => {
                                                 <button
                                                     key={i}
                                                     className={`pagination-btn ${i === page ? 'active' : ''}`}
+                                                    aria-label={(i + 1) + '페이지'}
+                                                    aria-current={i === page ? 'page' : undefined}
                                                     onClick={() => setPage(i)}
                                                 >
                                                     {i + 1}
@@ -268,8 +239,8 @@ const Home = () => {
                     </>
                 )
                 }
-            </div >
-        </div >
+            </section>
+        </div>
     );
 };
 

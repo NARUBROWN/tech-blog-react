@@ -8,10 +8,12 @@ const Footer = () => {
             <div className="container">
                 <div className="footer-content">
                     <div className="footer-section">
-                        <h3>About NARUBROWN's Blog</h3>
+                        <h3 className="footer-brand">
+                            <img src="/logo.png" alt="" aria-hidden="true" />
+                            <span>NARUBROWN의 기술 블로그</span>
+                        </h3>
                         <p>
-                            이 사이트는 인공지능 엔지니어 김원정의 포트폴리오이자 기술 기록 공간입니다.
-                            실무에서 마주한 문제와 그 해결 과정을 구조와 코드로 정리합니다.
+                            실무에서 마주한 문제와 그 해결 과정을 글로 정리합니다.
                         </p>
                     </div>
 
@@ -33,7 +35,7 @@ const Footer = () => {
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} 김원정. 사랑을 담아서 만들었습니다.</p>
+                    <p>&copy; {new Date().getFullYear()} 김원정. 사랑을 담아서 만들었습니다. ❤️</p>
                 </div>
             </div>
         </footer>

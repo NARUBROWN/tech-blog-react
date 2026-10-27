@@ -107,6 +107,9 @@
 .about-page :is(.project-link, .project-visit-btn, .summary-link):hover { text-decoration: underline; }
 /* Compact supporting experience. */
 .about-page .awards-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); column-gap: 36px; }
+.about-page .activity-groups { display: grid; gap: 30px; }
+.about-page .activity-group-title { margin: 0 0 4px; color: var(--about-muted); font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+.about-page .activity-group .awards-grid { column-gap: 36px; }
 .about-page .award-card { min-width: 0; padding: 22px 0; border-top: 1px solid var(--about-line); display: flex; flex-direction: column; gap: 8px; }
 .about-page .award-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .about-page .award-year { font-size: 12px; color: var(--about-muted); font-variant-numeric: tabular-nums; }
@@ -171,6 +174,7 @@
     .about-page .project-content { padding: 22px; }
     .about-page .project-title { font-size: 20px; }
     .about-page .awards-grid { grid-template-columns: 1fr; }
+    .about-page .activity-groups { gap: 24px; }
     .about-page .summary-section { padding: 22px; }
     .about-page .summary-meta { gap: 20px 16px; }
     .about-page .summary-header h2 { font-size: 20px; }

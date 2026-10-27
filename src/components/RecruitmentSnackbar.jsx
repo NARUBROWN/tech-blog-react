@@ -6,18 +6,14 @@ import './RecruitmentSnackbar.css';
 
 const RecruitmentSnackbar = ({ isVisible, onClose }) => {
     return (
-        <div className={`recruitment-snackbar ${isVisible ? 'visible' : ''}`} role="alert">
+        <div className={`recruitment-snackbar ${isVisible ? 'visible' : ''}`} role="status" aria-hidden={!isVisible} inert={!isVisible}>
             <div className="snackbar-header">
-                <div className="snackbar-hero">
-                    <span className="signal-dot" aria-hidden="true" />
-                    <span className="snackbar-kicker">여보세요? 제 말이 들리나요?</span>
-                </div>
                 <button
                     className="close-btn"
                     onClick={onClose}
-                    aria-label="Close recruitment offer"
+                    aria-label="자기소개서 안내 닫기"
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
             </div>
 
@@ -41,7 +37,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
 
             <div className="cta-row">
                 <Link to="/about" className="about-btn">
-                    <User size={22} />
+                    <User size={16} />
                     자기소개서 보기
                 </Link>
                 <a
@@ -50,7 +46,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
                     rel="noopener noreferrer"
                     className="linkedin-btn"
                 >
-                    <Linkedin size={18} />
+                    <Linkedin size={16} />
                     LinkedIn으로 연락하기
                     <span className="cta-arrow" aria-hidden="true">→</span>
                 </a>

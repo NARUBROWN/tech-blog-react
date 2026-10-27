@@ -1035,66 +1035,105 @@ const About = () => {
                     <div className="about-section-heading">
                         <h2 className="section-title">활동</h2>
                     </div>
-                    <div className="awards-grid">
+                    <div className="activity-groups">
                         {[
                             {
+                                category: '기고·발표',
+                                activities: [
+                            {
                                 year: '2025.07 ~ 현재',
-                                title: '요즘IT 필진 활동',
+                                title: '요즘IT 테크 에세이 기고',
                                 org: '필명: 나루브라운',
                                 desc: '“어이 신입, 탈출각이다.”, “닮고 싶은 개발자의 초상” 등 성장과 커리어를 주제로 에세이 연재',
                                 url: 'https://yozm.wishket.com/magazine/@narubrown/'
                             },
                             {
                                 year: '2025.11',
-                                title: '앱센터 세미나 연사',
+                                title: '글로벌 앱센터 세미나 연사',
                                 org: '인천대학교 전산원 산하 글로벌 앱센터',
                                 desc: '“자기주도적 성장과 실무 경험”을 주제로 발표'
-                            },
-                            {
-                                year: '2025.04',
-                                title: '2025 유니톤(Unithon) 개발 멘토',
-                                org: '앱센터 & GDGoC 공동 주최',
-                                desc: '유니톤 참가팀의 개발 멘토로 참여'
-                            },
-                            {
-                                year: '2023.03.01 ~ 2025.03.01',
-                                title: '글로벌 앱센터 센터장',
-                                org: '인천대학교 전산원 산하 글로벌 앱센터',
-                                desc: '서버 파트장 및 센터장으로 팀 운영과 백엔드 기술 공유',
-                                url: 'https://home.inuappcenter.kr/team/common?year=16.5'
-                            },
-                            {
-                                year: '2024.12.18',
-                                title: '구름톤 유니브 단풍톤 본선 진출',
-                                org: 'Codingland 프로젝트',
-                                desc: '코딩 교육 취약 계층을 위한 플랫폼으로 본선 진출'
-                            },
-                            {
-                                year: '2023.06.01 ~ 2025.02.01',
-                                title: '구름톤 유니브 학교 대표',
-                                org: '인천대학교',
-                                desc: '학교 대표로 활동하며 스터디와 해커톤 운영'
                             },
                             {
                                 year: '2024.08.31',
                                 title: 'SESSION 2024 연사',
                                 org: '인천대학교',
                                 desc: '“OCP 위배를 극복한 전략 패턴 적용 사례” 발표'
+                            },
+                            {
+                                year: '2026.11',
+                                title: '인천대학교 취업 토크콘서트 초청 연사',
+                                org: '인천대학교 대학일자리플러스센터',
+                                desc: '재학생과 취업 준비생에게 AI·백엔드 개발자 커리어와 실무 경험을 공유'
                             }
-                        ].map((activity, index) => (
-                            <div className="award-card" key={index}>
-                                <div className="award-header">
-                                    <span className="award-year">{activity.year}</span>
-                                    {activity.url && (
-                                        <a href={activity.url} target="_blank" rel="noopener noreferrer" aria-label={`${activity.title} 관련 페이지`}>
-                                            <span className="award-icon"><ExternalLink size={16} /></span>
-                                        </a>
-                                    )}
+                                ]
+                            },
+                            {
+                                category: '교육·멘토링',
+                                activities: [
+                                    {
+                                        year: '2026.11',
+                                        title: 'AI 캡스톤 디자인 멘토',
+                                        org: '인천대학교 컴퓨터공학부',
+                                        desc: '4학년 프로젝트에서 생성형 AI 모델 서빙과 데이터 파이프라인 설계, 실무 문제 해결을 멘토링'
+                                    },
+                                    {
+                                        year: '2025.04',
+                                        title: '2025 유니톤(Unithon) 개발 멘토',
+                                        org: '인천대학교 글로벌 앱센터·GDGoC 공동 주최',
+                                        desc: '참가팀의 백엔드 아키텍처 설계와 API 구현을 멘토링'
+                                    }
+                                ]
+                            },
+                            {
+                                category: '대회',
+                                activities: [
+                                    {
+                                        year: '2024.12.18',
+                                        title: '구름톤 유니브 단풍톤 본선 진출',
+                                        org: 'Codingland 프로젝트',
+                                        desc: '코딩 교육 취약 계층을 위한 플랫폼으로 본선 진출'
+                                    }
+                                ]
+                            },
+                            {
+                                category: '커뮤니티 운영',
+                                activities: [
+                                    {
+                                        year: '2023.03 ~ 2025.03',
+                                        title: '글로벌 앱센터 센터장',
+                                        org: '인천대학교 전산원 산하 글로벌 앱센터',
+                                        desc: '서버 파트장과 센터장으로 팀 운영 및 백엔드 기술 공유 주도',
+                                        url: 'https://home.inuappcenter.kr/team/common?year=16.5'
+                                    },
+                                    {
+                                        year: '2023.06 ~ 2025.02',
+                                        title: '구름톤 유니브 인천대학교 대표',
+                                        org: '인천대학교',
+                                        desc: '학교 대표로 스터디와 해커톤 운영'
+                                    }
+                                ]
+                            }
+                        ].map((group) => (
+                            <section className="activity-group" key={group.category} aria-label={group.category}>
+                                <h3 className="activity-group-title">{group.category}</h3>
+                                <div className="awards-grid">
+                                    {group.activities.map((activity) => (
+                                        <article className="award-card" key={`${activity.title}-${activity.year}`}>
+                                            <div className="award-header">
+                                                <span className="award-year">{activity.year}</span>
+                                                {activity.url && (
+                                                    <a href={activity.url} target="_blank" rel="noopener noreferrer" aria-label={`${activity.title} 관련 페이지`}>
+                                                        <span className="award-icon"><ExternalLink size={16} /></span>
+                                                    </a>
+                                                )}
+                                            </div>
+                                            <h4 className="award-title">{activity.title}</h4>
+                                            <span className="award-org">{activity.org}</span>
+                                            <p className="award-desc">{activity.desc}</p>
+                                        </article>
+                                    ))}
                                 </div>
-                                <h3 className="award-title">{activity.title}</h3>
-                                <span className="award-org">{activity.org}</span>
-                                <p className="award-desc">{activity.desc}</p>
-                            </div>
+                            </section>
                         ))}
                     </div>
                 </section>
