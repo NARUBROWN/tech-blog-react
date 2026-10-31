@@ -1,3 +1,4 @@
+import AnalyticsTracker from './AnalyticsTracker';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ScrollToTopButton from './ScrollToTopButton';
@@ -7,6 +8,7 @@ import './Layout.css';
 const Layout = () => {
     return (
         <div className="app-layout">
+            <AnalyticsTracker />
             <Navbar />
             <main className="main-content">
                 <Outlet />

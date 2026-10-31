@@ -12,6 +12,7 @@ import CreateCategory from './pages/CreateCategory';
 import PostDetail from './pages/PostDetail';
 import ProfileSettings from './pages/ProfileSettings';
 import Search from './pages/Search';
+import Analytics from './pages/Analytics';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
+            <Route path="admin/analytics" element={<Analytics />} />
             <Route path="search" element={<Search />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />

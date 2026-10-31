@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { PenSquare, LogOut, User, ChevronDown, FolderPlus, Settings } from 'lucide-react';
+import { PenSquare, LogOut, User, ChevronDown, FolderPlus, Settings, BarChart3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getCategoryList } from '../api/category';
 
@@ -96,6 +96,7 @@ const Navbar = () => {
                                         </Link>
                                     )}
 
+                                    {isAdmin && <Link to="/admin/analytics" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}><BarChart3 size={16} /><span>방문 통계</span></Link>}
                                     <Link
                                         to="/settings"
                                         className="dropdown-item"

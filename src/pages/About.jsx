@@ -1,8 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Mail, Github, Linkedin, ExternalLink, Trophy, Activity, Layers, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import './About.css';
+import { getInterestCount } from '../api/analytics';
 
 const About = () => {
+    const [interestCount, setInterestCount] = useState(null);
+    useEffect(() => {
+        let active = true;
+        const update = count => { if (active && Number.isFinite(count)) setInterestCount(previous => Math.max(previous || 0, count)); };
+        const recorded = event => update(event.detail?.interestCount);
+        getInterestCount().then(data => update(data.count)).catch(() => {});
+        window.addEventListener('analytics:visit-recorded', recorded);
+        return () => { active = false; window.removeEventListener('analytics:visit-recorded', recorded); };
+    }, []);
     const [isSkillsOpen, setIsSkillsOpen] = useState(false);
     const showSkillsSection = false;
     const [showSummary, setShowSummary] = useState(false);
@@ -692,6 +702,9 @@ const About = () => {
                             연락하기
                         </a>
                     </div>
+                    <p className="about-interest" title="브라우저 식별 기준 누적 방문자 수이며, 관리자 방문은 제외합니다.">
+                        {interestCount !== null && `${interestCount.toLocaleString('ko-KR')}명이 관심을 보였어요`}
+                    </p>
                 </div>
             </div>
 

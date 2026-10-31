@@ -36,7 +36,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
             </div>
 
             <div className="cta-row">
-                <Link to="/about" className="about-btn">
+                <Link data-analytics-event="snackbar_resume" to="/about" className="about-btn">
                     <User size={16} />
                     자기소개서 보기
                 </Link>
@@ -45,6 +45,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="linkedin-btn"
+                    data-analytics-event="snackbar_linkedin"
                 >
                     <Linkedin size={16} />
                     LinkedIn으로 연락하기
