@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getPostBySlug, getPostById, likePost, unlikePost, getReactionState, deletePost, increasePostViewCount } from '../api/post';
 import { useAuth } from '../context/AuthContext';
-import UserListModal from '../components/UserListModal';
 import Comments from '../components/Comments';
 import RecommendedPosts from '../components/RecommendedPosts';
 import { ArrowLeft, User, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
@@ -26,10 +25,7 @@ const PostDetail = () => {
     const [likeBusy, setLikeBusy] = useState(false);
     const [likeReady, setLikeReady] = useState(false);
     const [likeError, setLikeError] = useState('');
-    const [anonymousCount, setAnonymousCount] = useState(0);
     const [likeCount, setLikeCount] = useState(0);
-    const [likers, setLikers] = useState([]);
-    const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
     const [showRecruitment, setShowRecruitment] = useState(false);
     const [isRecruitmentDismissed, setIsRecruitmentDismissed] = useState(false);
 
@@ -109,8 +105,8 @@ const PostDetail = () => {
         const controller = new AbortController();
         setLikeReady(false);
         getReactionState(post.id, { signal: controller.signal }).then(data => {
-            setLikers(data.users); setLikeCount(data.count); setIsLiked(data.liked);
-            setAnonymousCount(data.anonymousCount); setLikeReady(true); setLikeError('');
+            setLikeCount(data.count); setIsLiked(data.liked);
+            setLikeReady(true); setLikeError('');
         }).catch(err => { if (!controller.signal.aborted) setLikeError(err.response?.data?.message || '좋아요를 불러오지 못했어요. 새로고침해 주세요.'); });
         return () => controller.abort();
     }, [post?.id, user?.id]);
@@ -267,7 +263,7 @@ const PostDetail = () => {
         setLikeBusy(true); setLikeError('');
         try {
             const data = isLiked ? await unlikePost(post.id) : await likePost(post.id);
-            setLikers(data.users); setLikeCount(data.count); setIsLiked(data.liked); setAnonymousCount(data.anonymousCount);
+            setLikeCount(data.count); setIsLiked(data.liked);
         } catch (err) { setLikeError(err.response?.data?.message || '좋아요를 처리하지 못했어요. 잠시 후 다시 시도해 주세요.'); }
         finally { setLikeBusy(false); }
     };
@@ -395,13 +391,7 @@ const PostDetail = () => {
                             >
                                 <Heart size={20} fill={isLiked ? "currentColor" : "none"} />
                             </button>
-                            <button
-                                className="like-count-btn"
-                                onClick={() => setIsLikeModalOpen(true)}
-                                aria-label="좋아요 누른 사람 보기"
-                            >
-                                <span>{likeCount}</span>
-                            </button>
+                            <span className="like-count" aria-label={`좋아요 ${likeCount}개`} aria-live="polite">{likeCount}</span>
                         </div>
                         <div className="interaction-group">
                             <div className="stat-display">
@@ -430,14 +420,6 @@ const PostDetail = () => {
                 {likeReady && <Comments key={post.id} postId={post.id} isAdmin={user?.role === 'ROLE_ADMIN'} onVisibilityChange={setCommentsVisible} />}
                 <RecommendedPosts currentPostId={post.id} />
             </article>
-
-            <UserListModal
-                isOpen={isLikeModalOpen}
-                onClose={() => setIsLikeModalOpen(false)}
-                title="좋아요"
-                users={likers}
-                anonymousCount={anonymousCount}
-            />
 
             <RecruitmentSnackbar
                 isVisible={showRecruitment && !commentsVisible}

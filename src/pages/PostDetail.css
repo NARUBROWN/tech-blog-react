@@ -48,8 +48,8 @@
 .post-tag-chip { display: inline-block; padding: 4px 8px; border: 1px solid #e6edf3; border-radius: 4px; background: #f5f8fb; color: #47617a; font-size: 12px; }
 .post-interaction-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
 .interaction-group { display: flex; align-items: center; gap: 3px; }
-.interaction-btn, .like-count-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 8px; border-radius: 6px; color: var(--post-muted); font-size: 14px; }
-.interaction-btn:hover, .like-count-btn:hover { background: #f5f8fb; color: var(--post-ink); }
+.interaction-btn, .like-count { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 8px; border-radius: 6px; color: var(--post-muted); font-size: 14px; }
+.interaction-btn:hover { background: #f5f8fb; color: var(--post-ink); }
 .like-btn.active { color: #d54a4a; }
 .stat-display { display: flex; align-items: center; gap: 7px; color: var(--post-muted); font-size: 13px; }
 .post-author-bio-card { display: flex; align-items: center; gap: 16px; padding: 22px; border: 1px solid var(--post-line); border-radius: 9px; }
