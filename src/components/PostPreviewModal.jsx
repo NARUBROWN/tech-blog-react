@@ -1,5 +1,5 @@
 import { X, Send, User } from 'lucide-react';
-import { format } from 'date-fns';
+import { formatPostDate } from '../utils/postDate';
 import PostContent from './PostContent';
 import './PostPreviewModal.css';
 
@@ -50,7 +50,7 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
                                             <span className="author-username">{author?.username || '작성자'}</span>
                                             <div className="meta-sub">
                                                 <span className="post-date">
-                                                    {format(new Date(), 'yyyy.MM.dd')}
+                                                    {formatPostDate(new Date())}
                                                 </span>
                                             </div>
                                         </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPosts } from '../api/post';
-import { format } from 'date-fns';
+import { formatPostDate, toPostDateTime } from '../utils/postDate';
 import { ArrowRight, Image } from 'lucide-react';
 import './RecommendedPosts.css';
 
@@ -69,9 +69,9 @@ const RecommendedPosts = ({ currentPostId }) => {
                             <span className="rec-category">{post.category?.name || 'Blog'}</span>
                             <h4 className="rec-post-title">{post.title}</h4>
                             <div className="rec-meta">
-                                <span className="rec-date">
-                                    {post.publishedAt ? format(new Date(post.publishedAt), 'MMM dd') : ''}
-                                </span>
+                                <time className="rec-date" dateTime={toPostDateTime(post.publishedAt) || undefined}>
+                                    {formatPostDate(post.publishedAt, '')}
+                                </time>
                                 <span className="rec-read-more">
                                     읽기 <ArrowRight size={14} />
                                 </span>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { User, Tag, Clock, Image, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatPostDateTime, formatPostRelativeTime, toPostDateTime } from '../utils/postDate';
 import './PostCard.css';
 
 const PostCard = ({ post }) => {
@@ -113,11 +113,9 @@ const PostCard = ({ post }) => {
 
                     <div className="post-card-meta">
                         <Clock size={14} />
-                        <span>
-                            {post.publishedAt
-                                ? formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })
-                                : 'Draft'}
-                        </span>
+                        <time dateTime={toPostDateTime(post.publishedAt) || undefined} title={formatPostDateTime(post.publishedAt)}>
+                            {formatPostRelativeTime(post.publishedAt)}
+                        </time>
                     </div>
                 </div>
 

@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/generate-share-pages.js",
     "generate:share-pages": "node scripts/generate-share-pages.js",
+    "test": "node --test scripts/*.test.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

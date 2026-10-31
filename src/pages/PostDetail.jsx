@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import Comments from '../components/Comments';
 import RecommendedPosts from '../components/RecommendedPosts';
 import { ArrowLeft, User, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
-import { format } from 'date-fns';
+import { formatPostDate, formatPostDateTime, toPostDateTime } from '../utils/postDate';
 import PostContent from '../components/PostContent';
 import RecruitmentSnackbar from '../components/RecruitmentSnackbar';
 import './PostDetail.css';
@@ -167,7 +167,7 @@ const PostDetail = () => {
             { attr: 'property', key: 'og:url', value: canonicalUrl },
             { attr: 'property', key: 'og:image', value: ogImage },
             { attr: 'property', key: 'og:locale', value: 'ko_KR' },
-            { attr: 'property', key: 'article:published_time', value: post.publishedAt },
+            { attr: 'property', key: 'article:published_time', value: toPostDateTime(post.publishedAt) },
             { attr: 'property', key: 'article:section', value: post.category?.name },
             { attr: 'name', key: 'twitter:card', value: 'summary_large_image' },
             { attr: 'name', key: 'twitter:title', value: fullTitle },
@@ -196,8 +196,8 @@ const PostDetail = () => {
             "inLanguage": "ko-KR",
             "url": canonicalUrl,
             "mainEntityOfPage": canonicalUrl,
-            "datePublished": post.publishedAt,
-            "dateModified": post.updatedAt || post.publishedAt,
+            "datePublished": toPostDateTime(post.publishedAt) || undefined,
+            "dateModified": toPostDateTime(post.updatedAt) || toPostDateTime(post.publishedAt) || undefined,
             "image": ogImage ? [ogImage] : undefined,
             "author": post.author ? {
                 "@type": "Person",
@@ -328,9 +328,9 @@ const PostDetail = () => {
                                 <div className="author-details">
                                     <span className="author-username">{post.author?.username}</span>
                                     <div className="meta-sub">
-                                        <span className="post-date">
-                                            {post.publishedAt ? format(new Date(post.publishedAt), 'yyyy.MM.dd') : '임시 저장'}
-                                        </span>
+                                        <time className="post-date" dateTime={toPostDateTime(post.publishedAt) || undefined} title={formatPostDateTime(post.publishedAt)}>
+                                            {formatPostDate(post.publishedAt, post.publishedAt ? '날짜 정보 없음' : '임시 저장')}
+                                        </time>
                                     </div>
                                 </div>
                             </div>

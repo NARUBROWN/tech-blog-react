@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { toPostDateTime } from '../src/utils/postDate.js';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -286,8 +287,8 @@ const main = async () => {
       canonicalUrl,
       ogImage,
       fallbackOgImage,
-      publishedAt: post.publishedAt || '',
-      updatedAt: post.updatedAt || '',
+      publishedAt: toPostDateTime(post.publishedAt),
+      updatedAt: toPostDateTime(post.updatedAt),
       section
     };
 

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Tag as TagIcon, User, Calendar, Save } from 'lucide-react';
 import RichTextEditor from '../components/RichTextEditor';
 import './PostForm.css'; // Reusing the same CSS
-import { format } from 'date-fns';
+import { formatPostDate } from '../utils/postDate';
 
 const PostEdit = () => {
     const { id } = useParams();
@@ -153,7 +153,7 @@ const PostEdit = () => {
                                     </div>
                                     <div className="meta-item">
                                         <Calendar size={14} />
-                                        <span>발행일: <strong>{originalPost.publishedAt ? format(new Date(originalPost.publishedAt), 'yyyy.MM.dd') : '미발행'}</strong></span>
+                                        <span>발행일: <strong>{formatPostDate(originalPost.publishedAt, originalPost.publishedAt ? '날짜 정보 없음' : '미발행')}</strong></span>
                                     </div>
                                 </div>
                             )}
