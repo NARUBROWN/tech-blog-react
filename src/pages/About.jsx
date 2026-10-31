@@ -683,7 +683,7 @@ const About = () => {
     };
 
     return (
-        <div className="about-page">
+        <div className="about-page" data-performance-page="/about" data-performance-ready="true">
             <div className="about-hero">
                 <div className="about-content">
                     <h1>

@@ -141,7 +141,7 @@ const Home = () => {
     };
 
     return (
-        <div className="home-page">
+        <div className="home-page" data-performance-page="/" data-performance-ready={!loading && !error}>
             {!categoryName ? (
                 <header className="home-intro">
                     <div className="home-intro-copy">

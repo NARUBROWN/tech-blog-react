@@ -55,7 +55,7 @@ const Search = () => {
     };
 
     return (
-        <div className="search-page">
+        <div className="search-page" data-performance-page="/search" data-performance-ready={!loading && (!query || !result.error)}>
             <header className="search-header">
                 <Link to="/" className="search-back"><ArrowLeft size={16} aria-hidden="true" /> 홈으로</Link>
                 <h1>글 검색</h1>

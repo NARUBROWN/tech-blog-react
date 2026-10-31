@@ -1,3 +1,5 @@
+import { startPerformanceTracking } from './performance';
+
 // 공개 페이지에서만 사용하는 자체 계측입니다. 입력값이나 키 입력 내용은 수집하지 않습니다.
 let startChain = Promise.resolve();
 
@@ -46,6 +48,7 @@ export function startPageTracking(path, visitId) {
         if (!disabled) window.dispatchEvent(new CustomEvent('analytics:visit-recorded', { detail: result }));
     }).catch(() => { disabled = true; });
     startChain = ready;
+    const stopPerformance = startPerformanceTracking(path, visitId, ready, () => !disabled);
 
     const tick = () => {
         const now = performance.now();
@@ -136,6 +139,7 @@ export function startPageTracking(path, visitId) {
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('pagehide', pagehide);
     return () => {
+        stopPerformance();
         tick(); stopped = true; void flush();
         window.clearInterval(heartbeat); window.clearInterval(ticking);
         document.removeEventListener('click', click, true);

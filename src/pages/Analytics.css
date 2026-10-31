@@ -35,6 +35,34 @@
 .analytics-nowrap { white-space: nowrap; }
 .analytics-error { padding: 16px; border: 1px solid #eccaca; border-radius: 6px; color: #9f3030; font-size: 14px; }
 .analytics-loading { color: #617287; }
+.analytics-performance { padding: 28px; margin: 28px 0; border: 1px solid #dce5ee; border-radius: 8px; background: #fbfcfe; }
+.analytics-performance h2 { margin-top: 8px; }
+.analytics-performance h3 { font-size: 15px; margin: 26px 0 12px; }
+.analytics-performance-period { color: #617287; font-size: 12px; padding-top: 8px; }
+.analytics-performance-table { min-width: 820px; background: white; }
+.analytics-performance-table td:first-child { min-width: 220px; max-width: 340px; overflow-wrap: anywhere; }
+.analytics-performance-table td:not(:first-child) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.analytics-performance-table th:nth-child(5),.analytics-performance-table th:nth-child(6) { color: #086bb5; }
+.analytics-performance-table td:nth-child(5),.analytics-performance-table td:nth-child(6) { background: #f3f8fd; font-weight: 600; }
+.analytics-performance-footnote { margin: 12px 0 20px; }
+.analytics-page td .analytics-sample-note { font-size: 10px; font-weight: 400; color: #946521; }
+.analytics-performance-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 12px; }
+.analytics-performance-tabs button[aria-pressed="true"] { background: #172638; border-color: #172638; color: white; }
+.analytics-performance-cards,.analytics-performance-scroll-hint { display: none; }
+@media(max-width:600px) {
+    .analytics-performance-summary-table { display: none; }
+    .analytics-performance-cards { display: grid; gap: 12px; }
+    .analytics-performance-cards article { background: white; border: 1px solid #dce5ee; border-radius: 6px; padding: 16px; }
+    .analytics-performance-cards h4 { margin: 0 0 8px; font-size: 14px; }
+    .analytics-performance-cards p,.analytics-performance-cards small { margin: 0; color: #617287; font-size: 11px; line-height: 1.8; }
+    .analytics-performance-cards dl { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 10px; }
+    .analytics-performance-cards dt { font-size: 11px; color: #617287; }
+    .analytics-performance-cards dd { margin: 4px 0 0; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .analytics-performance-cards dl>div:nth-child(-n+2) { background: #f3f8fd; border-radius: 4px; padding: 10px; }
+    .analytics-performance-cards dl>div:nth-child(-n+2) dd { color: #086bb5; font-size: 18px; }
+    .analytics-performance-scroll-hint { display: block; color: #617287; font-size: 11px; line-height: 1.7; }
+}
+@media(max-width:480px) { .analytics-performance { padding: 16px; } }
 .analytics-pagination { display: flex; align-items: center; justify-content: center; gap: 16px; padding-top: 20px; font-size: 12px; color: #617287; }
 .analytics-chart { display: flex; gap: 3px; height: 180px; align-items: stretch; border-bottom: 1px solid #dce5ee; padding-top: 16px; }
 .analytics-chart-day { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }

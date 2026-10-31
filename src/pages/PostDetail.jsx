@@ -300,7 +300,7 @@ const PostDetail = () => {
 
     return (
         <>
-            <article className="post-detail-container">
+            <article className="post-detail-container" data-performance-page={id ? `/post/share/${id}` : `/post/${slug}`} data-performance-ready="true">
                 <Link to="/" className="post-back-link"><ArrowLeft size={16} aria-hidden="true" /> 전체 글</Link>
                 {/* 1. Thumbnail (Twitter Banner Style) */}
                 {post.thumbnailUrl && (

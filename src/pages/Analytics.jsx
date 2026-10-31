@@ -4,6 +4,7 @@ import { BarChart3, RefreshCw, ArrowUpRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getAnalytics, getAnalyticsEvents } from '../api/analytics';
 import './Analytics.css';
+import PerformanceAnalytics from '../components/PerformanceAnalytics';
 
 const types = { snackbar_resume: '스낵바 → 이력서', snackbar_linkedin: '스낵바 → LinkedIn', resume_selection: '이력서 문장 선택', resume_outbound: '이력서 외부 링크' };
 const number = value => Number(value || 0).toLocaleString('ko-KR');
@@ -65,6 +66,7 @@ export default function Analytics() {
         <p className="analytics-note">수집 시작 이후의 데이터입니다. 방문자는 브라우저 식별 기준이며 관리자 자신의 방문은 제외합니다. 체류시간은 탭이 보이고 활성화된 시간을 측정하며, 1분 이상 입력이나 스크롤이 없으면 누적을 멈춥니다.</p>
         {error && <p className="analytics-error" role="alert">{error}</p>}
         {loading && <p className="analytics-loading" role="status">통계를 불러오고 있습니다.</p>}
+        <PerformanceAnalytics days={days} revision={revision} />
         {summary && <>
             <section className="analytics-kpis" aria-label="핵심 지표">{[
                 ['페이지 조회', number(summary.views)], ['방문자', number(summary.visitors)], ['방문 세션', number(summary.sessions)], ['평균 활성 체류', duration(summary.averageActiveMs)], ['이력서 방문자', number(summary.resumeVisitors)], ['이력서 조회', number(summary.resumeViews)], ['이력서 문장 선택', number(summary.selections)], ['이력서 외부 이동', number(summary.outboundClicks)],
