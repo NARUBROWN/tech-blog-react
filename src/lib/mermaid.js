@@ -17,9 +17,10 @@ export async function renderMermaidSvg(source) {
             startOnLoad: false,
             securityLevel: 'strict',
             theme: 'neutral',
-            htmlLabels: false,
+            // 기존 글의 <br/>와 목록 라벨은 SVG 텍스트 경로에서 오류가 발생하므로 HTML 라벨로 렌더링합니다.
+            htmlLabels: true,
             suppressErrorRendering: true,
-            flowchart: { htmlLabels: false, useMaxWidth: true },
+            flowchart: { htmlLabels: true, useMaxWidth: true },
             themeVariables: { fontFamily: 'system-ui, sans-serif', primaryColor: '#f5f8fb', primaryTextColor: '#172536', primaryBorderColor: '#8ca5bd', lineColor: '#596879' },
         });
         return engine;
