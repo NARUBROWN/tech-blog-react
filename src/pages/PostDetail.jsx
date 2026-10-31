@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { getPostBySlug, getPostById, likePost, unlikePost, getPostLikes, deletePost, increasePostViewCount } from '../api/post';
+import { getPostBySlug, getPostById, likePost, unlikePost, getReactionState, deletePost, increasePostViewCount } from '../api/post';
 import { useAuth } from '../context/AuthContext';
 import UserListModal from '../components/UserListModal';
+import Comments from '../components/Comments';
 import RecommendedPosts from '../components/RecommendedPosts';
 import { ArrowLeft, User, Heart, Eye, Trash2, Share2, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
@@ -21,6 +22,10 @@ const PostDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isLiked, setIsLiked] = useState(false);
+    const [likeBusy, setLikeBusy] = useState(false);
+    const [likeReady, setLikeReady] = useState(false);
+    const [likeError, setLikeError] = useState('');
+    const [anonymousCount, setAnonymousCount] = useState(0);
     const [likeCount, setLikeCount] = useState(0);
     const [likers, setLikers] = useState([]);
     const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
@@ -99,24 +104,15 @@ const PostDetail = () => {
     }, [slug, id]);
 
     useEffect(() => {
-        if (post?.id) {
-            const updateLikeState = async () => {
-                try {
-                    const likersData = await getPostLikes(post.id);
-                    setLikers(likersData);
-                    setLikeCount(likersData.length);
-                    if (user) {
-                        setIsLiked(likersData.some(u => u.username === user.username));
-                    } else {
-                        setIsLiked(false);
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch likes", error);
-                }
-            }
-            updateLikeState();
-        }
-    }, [post?.id, user]);
+        if (!post?.id) return undefined;
+        const controller = new AbortController();
+        setLikeReady(false);
+        getReactionState(post.id, { signal: controller.signal }).then(data => {
+            setLikers(data.users); setLikeCount(data.count); setIsLiked(data.liked);
+            setAnonymousCount(data.anonymousCount); setLikeReady(true); setLikeError('');
+        }).catch(err => { if (!controller.signal.aborted) setLikeError(err.response?.data?.message || '좋아요를 불러오지 못했어요. 새로고침해 주세요.'); });
+        return () => controller.abort();
+    }, [post?.id, user?.id]);
 
     useEffect(() => {
         if (!post) return;
@@ -266,34 +262,13 @@ const PostDetail = () => {
     }, [post, slug, id]);
 
     const handleLikeToggle = async () => {
-        if (!user) {
-            alert('좋아요를 누르려면 로그인해 주세요.');
-            return;
-        }
-
-        if (!post) return;
-
-        const previousLiked = isLiked;
-        const previousCount = likeCount;
-
-        setIsLiked(!isLiked);
-        setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
-
+        if (!post || likeBusy || !likeReady) return;
+        setLikeBusy(true); setLikeError('');
         try {
-            if (previousLiked) {
-                await unlikePost(post.id);
-            } else {
-                await likePost(post.id);
-            }
-
-            const freshLikers = await getPostLikes(post.id);
-            setLikers(freshLikers);
-            setLikeCount(freshLikers.length);
-        } catch (error) {
-            console.error('Failed to toggle like:', error);
-            setIsLiked(previousLiked);
-            setLikeCount(previousCount);
-        }
+            const data = isLiked ? await unlikePost(post.id) : await likePost(post.id);
+            setLikers(data.users); setLikeCount(data.count); setIsLiked(data.liked); setAnonymousCount(data.anonymousCount);
+        } catch (err) { setLikeError(err.response?.data?.message || '좋아요를 처리하지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+        finally { setLikeBusy(false); }
     };
 
     const handleDelete = async () => {
@@ -413,6 +388,7 @@ const PostDetail = () => {
                             <button
                                 className={`interaction-btn like-btn ${isLiked ? 'active' : ''}`}
                                 onClick={handleLikeToggle}
+                                disabled={likeBusy || !likeReady}
                                 aria-label={isLiked ? "좋아요 취소" : "좋아요"}
                                 aria-pressed={isLiked}
                             >
@@ -434,6 +410,7 @@ const PostDetail = () => {
                         </div>
                     </div>
 
+                    {likeError && <p className="comments-error" role="alert">{likeError}</p>}
                     <div className="post-author-bio-card">
                         <div className="bio-avatar">
                             {post.author?.profileImageUrl ? (
@@ -449,6 +426,7 @@ const PostDetail = () => {
                     </div>
                 </footer>
 
+                {likeReady && <Comments key={post.id} postId={post.id} isAdmin={user?.role === 'ROLE_ADMIN'} />}
                 <RecommendedPosts currentPostId={post.id} />
             </article>
 
@@ -457,6 +435,7 @@ const PostDetail = () => {
                 onClose={() => setIsLikeModalOpen(false)}
                 title="좋아요"
                 users={likers}
+                anonymousCount={anonymousCount}
             />
 
             <RecruitmentSnackbar

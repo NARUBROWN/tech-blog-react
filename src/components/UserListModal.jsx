@@ -1,7 +1,7 @@
 import { X, User } from 'lucide-react';
 import './UserListModal.css';
 
-const UserListModal = ({ isOpen, onClose, title, users }) => {
+const UserListModal = ({ isOpen, onClose, title, users, anonymousCount = 0 }) => {
     if (!isOpen) return null;
 
     return (
@@ -14,8 +14,8 @@ const UserListModal = ({ isOpen, onClose, title, users }) => {
                     </button>
                 </div>
                 <div className="modal-content">
-                    {users.length === 0 ? (
-                        <p className="no-users-message">No likes yet.</p>
+                    {users.length === 0 && anonymousCount === 0 ? (
+                        <p className="no-users-message">아직 좋아요가 없어요.</p>
                     ) : (
                         <ul className="user-list">
                             {users.map((user) => (
@@ -32,6 +32,7 @@ const UserListModal = ({ isOpen, onClose, title, users }) => {
                             ))}
                         </ul>
                     )}
+                {anonymousCount > 0 && <p className="no-users-message">익명 사용자 {anonymousCount}명도 좋아요를 눌렀습니다.</p>}
                 </div>
             </div>
         </div>

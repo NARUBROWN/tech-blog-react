@@ -62,3 +62,6 @@ export const searchPostsRecent = async (keyword, page = 0, size = 10, config = {
     const response = await client.get('/post/search/recent', { params, ...config });
     return response.data;
 };
+
+export const getReactionState = async (postId, config = {}) =>
+    (await client.get(`/like/${postId}/state`, config)).data;
