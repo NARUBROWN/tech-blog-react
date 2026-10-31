@@ -1,0 +1,72 @@
+.post-studio .rich-text-editor .ql-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 0; padding: 12px; }
+.post-studio .rich-text-editor .ql-toolbar .ql-formats { display: inline-flex; align-items: center; gap: 2px; margin: 0 10px 0 0; padding-right: 10px; border-right: 1px solid #dce5ee; }
+.post-studio .rich-text-editor .ql-toolbar .ql-formats:last-child { border: 0; margin-right: 0; padding-right: 0; }
+.post-studio .rich-text-editor .ql-toolbar button { width: 30px; height: 30px; border-radius: 4px; }
+.post-studio .rich-text-editor .ql-toolbar button:hover { background: #e8eff6; }
+.post-studio .rich-text-editor .ql-picker { font-size: 13px; }
+.post-studio .rich-text-editor .ql-picker-label { min-height: 30px; display: flex; align-items: center; }
+.post-studio .rich-text-editor .ql-picker-options { z-index: 20; border-radius: 6px; }
+.post-studio .ql-editor .ql-mermaid-block { margin: 20px 0; padding: 16px; border: 1px solid #b8c9d9; border-radius: 6px; background: #f7f9fb; cursor: pointer; white-space: normal; }
+.post-studio .ql-editor .ql-mermaid-block::before { content: 'Mermaid 다이어그램 — 클릭하여 수정'; display: block; margin-bottom: 10px; font: 600 12px/1.6 system-ui, sans-serif; color: #0969b9; }
+.post-studio .ql-editor .ql-mermaid-block pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.7 ui-monospace, monospace; background: transparent; color: #334557; padding: 0; }
+.post-studio .editor-feedback { margin-top: 10px; font-size: 13px; color: #596879; }
+.post-studio .editor-feedback-error { color: #a52c28; }
+.mermaid-modal-overlay { position: fixed; inset: 0; z-index: 2500; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(23,37,54,.5); }
+.mermaid-modal { display: flex; flex-direction: column; width: min(1040px,100%); max-height: 90dvh; overflow: hidden; border: 1px solid #dce5ee; border-radius: 10px; background: #fff; color: #172536; box-shadow: 0 16px 48px rgba(23,37,54,.18); }
+.mermaid-modal-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 24px; border-bottom: 1px solid #dce5ee; }
+.mermaid-modal-header h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 17px; }
+.mermaid-modal-header button { display: inline-flex; padding: 6px; color: #596879; }
+.mermaid-modal-body { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; overflow-y: auto; }
+.mermaid-source-label { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 24px; border-right: 1px solid #dce5ee; font-size: 13px; font-weight: 600; }
+.mermaid-source-label textarea { width: 100%; min-height: 300px; resize: vertical; padding: 14px; border: 1px solid #dce5ee; border-radius: 6px; background: #f7f9fb; color: #172536; font: 13px/1.8 ui-monospace, monospace; tab-size: 4; }
+.mermaid-source-label > span { color: #596879; font-size: 12px; font-weight: 400; }
+.mermaid-live-preview { min-width: 0; padding: 24px; font-size: 13px; }
+.mermaid-live-preview h3 { margin: 0 0 20px; font-size: 13px; }
+.mermaid-diagram { max-width: 100%; overflow-x: auto; }
+.mermaid-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.mermaid-validation-error { color: #a52c28; }
+.mermaid-validation-error pre { margin-top: 10px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+.mermaid-modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid #dce5ee; }
+.mermaid-modal-footer button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 10px 18px; border: 1px solid #dce5ee; border-radius: 6px; font-size: 14px; }
+.mermaid-modal-footer .mermaid-apply { color: #fff; background: #0969b9; border-color: #0969b9; }
+.mermaid-modal-footer button:disabled { opacity: .5; cursor: not-allowed; }
+.mermaid-modal :is(button,textarea):focus-visible { outline: 3px solid #3294e6; outline-offset: 3px; }
+@media (max-width:600px) {
+    .post-studio .rich-text-editor .ql-toolbar { padding: 8px; gap: 8px 0; }
+    .post-studio .rich-text-editor .ql-toolbar .ql-formats { margin-right: 6px; padding-right: 6px; }
+    .mermaid-modal-overlay { padding: 12px; }
+    .mermaid-modal { max-height: 94dvh; }
+    .mermaid-modal-body { grid-template-columns: 1fr; }
+    .mermaid-source-label { padding: 16px; border-right: 0; border-bottom: 1px solid #dce5ee; }
+    .mermaid-source-label textarea { min-height: 180px; }
+    .mermaid-live-preview { padding: 16px; }
+    .mermaid-modal-header, .mermaid-modal-footer { padding: 14px 16px; }
+    .mermaid-modal-footer button { flex: 1; }
+}
+.post-studio .rich-text-editor .ql-picker.ql-header :is(.ql-picker-label,.ql-picker-item)::before { content: '본문'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="1"]::before { content: '제목 1'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="2"]::before { content: '제목 2'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="3"]::before { content: '제목 3'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="4"]::before { content: '제목 4'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="5"]::before { content: '제목 5'; }
+.post-studio .rich-text-editor .ql-picker.ql-header [data-value="6"]::before { content: '제목 6'; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-options { min-width: 140px; max-height: min(360px, 50dvh); overflow-y: auto; padding: 8px 12px; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item { padding: 6px 0; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item::before { font-size: 14px; line-height: 1.5; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="1"]::before { font-size: 22px; font-weight: 700; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="2"]::before { font-size: 20px; font-weight: 700; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="3"]::before { font-size: 18px; font-weight: 650; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="4"]::before { font-size: 16px; font-weight: 650; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="5"]::before { font-weight: 650; }
+.post-studio .rich-text-editor .ql-picker.ql-header .ql-picker-item[data-value="6"]::before { font-size: 13px; font-weight: 650; }
+.post-studio .ql-editor :is(h4,h5,h6) { margin: 1.4em 0 .6em; line-height: 1.5; font-weight: 650; }
+.post-studio .ql-editor h4 { font-size: 1.15em; }
+.post-studio .ql-editor h5 { font-size: 1em; }
+.post-studio .ql-editor h6 { font-size: .9em; }
+.post-studio .rich-text-editor .ql-picker.ql-font :is(.ql-picker-label,.ql-picker-item)::before { content: '기본 글꼴'; }
+.post-studio .rich-text-editor .ql-picker.ql-font [data-value="serif"]::before { content: '명조'; }
+.post-studio .rich-text-editor .ql-picker.ql-font [data-value="monospace"]::before { content: '고정폭'; }
+.post-studio .rich-text-editor .ql-picker.ql-size :is(.ql-picker-label,.ql-picker-item)::before { content: '보통'; }
+.post-studio .rich-text-editor .ql-picker.ql-size [data-value="small"]::before { content: '작게'; }
+.post-studio .rich-text-editor .ql-picker.ql-size [data-value="large"]::before { content: '크게'; }
+.post-studio .rich-text-editor .ql-picker.ql-size [data-value="huge"]::before { content: '아주 크게'; }

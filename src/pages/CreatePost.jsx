@@ -1,12 +1,10 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { createPost } from '../api/post';
 import { getCategoryList } from '../api/category';
-import { uploadImage } from '../api/image';
 import ImageUpload from '../components/ImageUpload';
 import { useNavigate } from 'react-router-dom';
-import { X, Check, Sparkles, Clock3, ChevronDown, Tag as TagIcon } from 'lucide-react';
-import ReactQuill, { Quill } from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import { X, Check, Eye, ChevronDown, Tag as TagIcon } from 'lucide-react';
+import RichTextEditor from '../components/RichTextEditor';
 import './PostForm.css';
 import { useAuth } from '../context/AuthContext';
 import PostPreviewModal from '../components/PostPreviewModal';
@@ -15,9 +13,7 @@ const CreatePost = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
-    const [isQuillReady, setIsQuillReady] = useState(false);
     const [error, setError] = useState('');
-    const quillRef = useRef(null);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -54,26 +50,6 @@ const CreatePost = () => {
         }
     }, [showCategoryModal, categories.length]);
 
-    useEffect(() => {
-        const loadQuillModules = async () => {
-            if (typeof window !== 'undefined' && !window.Quill) {
-                window.Quill = Quill;
-            }
-
-            try {
-                const { default: BlotFormatter } = await import('quill-blot-formatter');
-                if (!Quill.imports['modules/blotFormatter']) {
-                    Quill.register('modules/blotFormatter', BlotFormatter);
-                }
-                setIsQuillReady(true);
-            } catch (error) {
-                console.error("Failed to load Quill modules", error);
-                setIsQuillReady(true);
-            }
-        };
-
-        loadQuillModules();
-    }, []);
 
     const handleCategorySelect = (category) => {
         setFormData(prev => ({ ...prev, categoryId: category.id }));
@@ -92,69 +68,17 @@ const CreatePost = () => {
         setFormData(prev => ({ ...prev, content: value }));
     };
 
-    const imageHandler = () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (file) {
-                try {
-                    const result = await uploadImage(file);
-                    const range = quillRef.current.getEditor().getSelection(true);
-                    quillRef.current.getEditor().insertEmbed(range.index, 'image', result.url);
-                } catch (error) {
-                    console.error('Image upload failed:', error);
-                    alert('Image upload failed');
-                }
-            }
-        };
-    };
-
-    const modules = useMemo(() => {
-        return {
-            toolbar: {
-                container: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                    ['link', 'image'],
-                    ['clean'],
-                    ['mermaid']
-                ],
-                handlers: {
-                    'image': imageHandler,
-                    'mermaid': function () {
-                        const cursorPosition = this.quill.getSelection().index;
-                        this.quill.insertText(cursorPosition, 'graph TD;\n  A-->B;', 'code-block', true);
-                        this.quill.setSelection(cursorPosition + 20);
-                    }
-                }
-            },
-            blotFormatter: {}
-        };
-    }, []);
-
-    const formats = [
-        'header',
-        'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'indent',
-        'link', 'image'
-    ];
-
     const handlePreview = (e) => {
         e.preventDefault();
 
         // Basic validation before preview
         if (!formData.title.trim() || !formData.content.trim()) {
-            setError('Please enter a title and content.');
+            setError('제목과 본문을 입력해 주세요.');
             return;
         }
 
         if (!formData.categoryId) {
-            setError('Please select a category.');
+            setError('카테고리를 선택해 주세요.');
             return;
         }
 
@@ -184,11 +108,11 @@ const CreatePost = () => {
             // API requires categoryId as query param
             const result = await createPost(payload, formData.categoryId);
             console.log('Post created:', result);
-            alert('Post created successfully!');
+            alert('글을 발행했습니다.');
             navigate('/');
         } catch (err) {
             console.error(err);
-            setError('Failed to create post. Please check your inputs.');
+            setError('글을 발행하지 못했습니다. 입력 내용을 확인하고 다시 시도해 주세요.');
             setShowPreview(false); // Close preview on error so user can fix
         } finally {
             setLoading(false);
@@ -197,20 +121,14 @@ const CreatePost = () => {
 
     return (
         <div className="post-studio">
-            <div className="studio-ambient" aria-hidden="true"></div>
 
             <div className="post-studio-shell">
-                {error && <div className="form-error">{error}</div>}
-
-                {error && <div className="form-error">{error}</div>}
+                {error && <div className="form-error" role="alert">{error}</div>}
 
                 <form onSubmit={handlePreview} className="post-studio-form" id="create-post-form">
                     <div className="studio-toolbar">
                         <div className="toolbar-left">
-                            <div className="toolbar-chip">
-                                <Sparkles size={16} />
-                                <span>Writing Studio</span>
-                            </div>
+                            <h1 className="toolbar-chip">글쓰기</h1>
 
                             <button
                                 type="button"
@@ -220,17 +138,12 @@ const CreatePost = () => {
                                 <span>{selectedCategoryName || '카테고리 선택'}</span>
                                 <ChevronDown size={16} />
                             </button>
-
-                            <div className="toolbar-meta">
-                                <Clock3 size={14} />
-                                <span>초안 모드</span>
-                            </div>
                         </div>
 
                         <div className="toolbar-actions">
-                            <span className="toolbar-hint">미리보기 후 발행할 수 있어요</span>
                             <button type="submit" className="btn-publish" disabled={loading}>
-                                {loading ? 'Publishing...' : 'Publish'}
+                                <Eye size={16} aria-hidden="true" />
+                                {loading ? '발행 중...' : '미리보기'}
                             </button>
                         </div>
                     </div>
@@ -238,7 +151,7 @@ const CreatePost = () => {
                     <div className="studio-grid">
                         <section className="writer-panel">
                             <div className="title-stack">
-                                <div className="eyebrow">새 포스트</div>
+                                <label className="eyebrow" htmlFor="title">제목</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -255,20 +168,7 @@ const CreatePost = () => {
                             </div>
 
                             <div className="editor-shell">
-                                {isQuillReady ? (
-                                    <ReactQuill
-                                        ref={quillRef}
-                                        theme="snow"
-                                        value={formData.content}
-                                        onChange={handleContentChange}
-                                        className="content-editor-quill"
-                                        modules={modules}
-                                        formats={formats}
-                                        placeholder="Tell your story..."
-                                    />
-                                ) : (
-                                    <div className="editor-loading">Loading Editor...</div>
-                                )}
+                                <RichTextEditor value={formData.content} onChange={handleContentChange} />
                             </div>
                         </section>
 
@@ -277,11 +177,11 @@ const CreatePost = () => {
                                 <div className="meta-card-header">
                                     <div>
                                         <p className="meta-title">커버 이미지</p>
-                                        <span className="meta-subtitle">글의 첫 인상을 만들어요</span>
+                                        <span className="meta-subtitle">글 목록에 표시되는 이미지</span>
                                     </div>
                                 </div>
                                 <ImageUpload
-                                    label="Cover image"
+                                    label="커버 이미지"
                                     onUpload={(url) => setFormData(prev => ({ ...prev, thumbnailUrl: url }))}
                                     initialUrl={formData.thumbnailUrl}
                                     className="image-upload-compact"
@@ -292,9 +192,9 @@ const CreatePost = () => {
                                 <div className="meta-card-header">
                                     <div className="meta-title-row">
                                         <TagIcon size={16} />
-                                        <p className="meta-title">태그</p>
+                                        <label className="meta-title" htmlFor="tags">태그</label>
                                     </div>
-                                    <span className="meta-subtitle">콤마로 구분</span>
+                                    <span className="meta-subtitle">쉼표로 구분</span>
                                 </div>
                                 <input
                                     type="text"
@@ -316,43 +216,50 @@ const CreatePost = () => {
 
                             <div className="meta-card">
                                 <div className="meta-card-header">
-                                    <p className="meta-title">SEO</p>
-                                    <span className="meta-subtitle">검색 노출 메타데이터</span>
+                                    <p className="meta-title">검색 설정</p>
+                                    <span className="meta-subtitle">선택 사항</span>
                                 </div>
                                 <div className="seo-grid">
-                                    <input
-                                        type="text"
-                                        name="seoTitle"
-                                        className="meta-input"
-                                        placeholder="SEO Title"
-                                        value={formData.seoTitle}
-                                        onChange={handleChange}
-                                    />
-                                    <textarea
-                                        name="seoDescription"
-                                        className="meta-input"
-                                        placeholder="SEO Description"
-                                        value={formData.seoDescription}
-                                        onChange={handleChange}
-                                        rows="3"
-                                    />
-                                    <input
-                                        type="text"
-                                        name="seoKeywords"
-                                        className="meta-input"
-                                        placeholder="SEO Keywords"
-                                        value={formData.seoKeywords}
-                                        onChange={handleChange}
-                                    />
+                                    <label>검색 제목
+                                        <input
+                                            type="text"
+                                            name="seoTitle"
+                                            className="meta-input"
+                                            placeholder="검색 결과에 표시할 제목"
+                                            value={formData.seoTitle}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
+                                    <label>검색 설명
+                                        <textarea
+                                            name="seoDescription"
+                                            className="meta-input"
+                                            placeholder="검색 결과에 표시할 짧은 소개"
+                                            value={formData.seoDescription}
+                                            onChange={handleChange}
+                                            rows="3"
+                                        />
+                                    </label>
+                                    <label>검색 키워드
+                                        <input
+                                            type="text"
+                                            name="seoKeywords"
+                                            className="meta-input"
+                                            placeholder="AI, 백엔드, 개발"
+                                            value={formData.seoKeywords}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
                                 </div>
                             </div>
                         </aside>
                     </div>
 
                     <div className="mobile-publish-bar">
-                        <span className="toolbar-hint">작성한 내용이 마음에 들면 발행하세요.</span>
+                        <span className="toolbar-hint">미리보기에서 확인 후 발행하세요.</span>
                         <button type="submit" className="btn-publish" disabled={loading}>
-                            {loading ? 'Publishing...' : 'Publish'}
+                            <Eye size={16} aria-hidden="true" />
+                                {loading ? '발행 중...' : '미리보기'}
                         </button>
                     </div>
                 </form>
@@ -360,10 +267,10 @@ const CreatePost = () => {
 
             {showCategoryModal && (
                 <div className="category-modal-overlay">
-                    <div className="category-modal">
+                    <div className="category-modal" role="dialog" aria-modal="true" aria-label="카테고리 선택">
                         <div className="category-modal-header">
-                            <h3>Select Category</h3>
-                            <button onClick={() => setShowCategoryModal(false)} className="btn-icon">
+                            <h3>카테고리 선택</h3>
+                            <button onClick={() => setShowCategoryModal(false)} className="btn-icon" aria-label="카테고리 선택 닫기">
                                 <X size={20} />
                             </button>
                         </div>
@@ -382,7 +289,7 @@ const CreatePost = () => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="empty-state">No categories found.</p>
+                                <p className="empty-state">등록된 카테고리가 없습니다.</p>
                             )}
                         </div>
                     </div>

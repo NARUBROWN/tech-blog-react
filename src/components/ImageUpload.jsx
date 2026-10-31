@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { uploadImage } from '../api/image';
-import { Image as ImageIcon, X, Upload } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
 import './ImageUpload.css';
 
-const ImageUpload = ({ onUpload, initialUrl = '', label = 'Upload Image', className = '' }) => {
+const ImageUpload = ({ onUpload, initialUrl = '', label = '이미지 업로드', className = '' }) => {
     const [imageUrl, setImageUrl] = useState(initialUrl);
     const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
@@ -23,7 +23,7 @@ const ImageUpload = ({ onUpload, initialUrl = '', label = 'Upload Image', classN
             onUpload(result.url);
         } catch (error) {
             console.error('Image upload failed:', error);
-            alert('Failed to upload image. Please try again.');
+            alert('이미지를 업로드하지 못했습니다. 다시 시도해 주세요.');
         } finally {
             setLoading(false);
         }
@@ -62,16 +62,16 @@ const ImageUpload = ({ onUpload, initialUrl = '', label = 'Upload Image', classN
                 {loading ? (
                     <div className="upload-loading">
                         <div className="spinner"></div>
-                        <span>Uploading...</span>
+                        <span>업로드 중...</span>
                     </div>
                 ) : imageUrl ? (
                     <div className="image-preview-wrapper">
-                        <img src={imageUrl} alt="Uploaded" className="image-preview" />
+                        <img src={imageUrl} alt="업로드한 이미지" className="image-preview" />
                         <button
                             type="button"
                             className="remove-image-btn"
                             onClick={handleRemove}
-                            title="Remove image"
+                            title="이미지 삭제"
                         >
                             <X size={16} />
                         </button>
@@ -79,7 +79,7 @@ const ImageUpload = ({ onUpload, initialUrl = '', label = 'Upload Image', classN
                 ) : (
                     <div className="upload-placeholder">
                         <Upload size={24} className="upload-icon" />
-                        <span>Click to upload</span>
+                        <span>이미지 업로드</span>
                     </div>
                 )}
             </div>

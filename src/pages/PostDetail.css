@@ -32,11 +32,17 @@
 .post-content-wrapper .ql-editor { height: auto; padding: 0; overflow-y: visible; font-family: inherit; font-size: inherit; line-height: inherit; }
 .post-content-wrapper .ql-editor :is(p, ol, ul, pre, blockquote, h1, h2, h3, h4, h5, h6) { color: inherit; }
 .post-content-wrapper .ql-editor :is(h1, h2, h3, h4, h5, h6) { color: var(--post-ink); line-height: 1.45; letter-spacing: -.025em; }
+.post-content-wrapper .ql-editor :is(h4,h5,h6) { margin: 1.4em 0 .6em; font-weight: 650; }
+.post-content-wrapper .ql-editor h4 { font-size: 1.15em; }
+.post-content-wrapper .ql-editor h5 { font-size: 1em; }
+.post-content-wrapper .ql-editor h6 { font-size: .9em; }
 .post-content-wrapper .ql-editor a { color: var(--post-blue); text-decoration: underline; text-underline-offset: 3px; }
 .post-content-wrapper .ql-editor blockquote { border-left: 3px solid #ccd9e5; color: var(--post-muted); padding-left: 18px; }
 .post-content-wrapper .ql-editor pre { overflow-x: auto; max-width: 100%; border-radius: 6px; }
 .post-content-wrapper .ql-editor .mermaid-diagram { overflow-x: auto; max-width: 100%; }
-.post-body-text img { display: block; max-width: 100%; height: auto; margin: 28px auto; border-radius: 6px; }
+.post-body-text img { display: block; max-width: 100%; height: auto; margin: 28px 0; border-radius: 6px; }
+.post-body-text .ql-align-center img { margin-left: auto; margin-right: auto; }
+.post-body-text .ql-align-right img { margin-left: auto; margin-right: 0; }
 .post-footer-wrapper { padding-top: 28px; border-top: 1px solid var(--post-line); }
 .post-tags-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
 .post-tag-chip { display: inline-block; padding: 4px 8px; border: 1px solid #e6edf3; border-radius: 4px; background: #f5f8fb; color: #47617a; font-size: 12px; }
@@ -65,3 +71,9 @@
     .post-author-bio-card { padding: 18px; }
     .post-detail-state { width: calc(100% - 40px); margin: 48px auto; }
 }
+.post-content-wrapper .mermaid-diagram { margin: 28px 0; padding: 20px; border: 1px solid #dce5ee; border-radius: 6px; background: #fff; }
+.post-content-wrapper .mermaid-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.post-content-wrapper .mermaid-render-error { margin: 24px 0; padding: 16px; border: 1px solid #efc7c5; border-radius: 6px; background: #fff7f6; color: #a52c28; font-size: 13px; }
+.post-content-wrapper .mermaid-render-error summary { cursor: pointer; margin-top: 8px; }
+.post-content-wrapper .mermaid-render-error pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.post-content-wrapper .ql-editor .ql-code-block-container { padding: 18px; border-radius: 6px; overflow-x: auto; background: #f5f8fb; color: #334557; font: 13px/1.8 ui-monospace, monospace; }

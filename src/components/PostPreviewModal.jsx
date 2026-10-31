@@ -1,5 +1,4 @@
-import React from 'react';
-import { X, Send, User, Calendar } from 'lucide-react';
+import { X, Send, User } from 'lucide-react';
 import { format } from 'date-fns';
 import PostContent from './PostContent';
 import './PostPreviewModal.css';
@@ -12,13 +11,12 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
 
     return (
         <div className="preview-modal-overlay">
-            <div className="preview-modal-container">
+            <div className="preview-modal-container" role="dialog" aria-modal="true" aria-label="글 미리보기">
                 <header className="preview-modal-header">
                     <div className="preview-title-area">
-                        <span className="preview-badge">Preview</span>
-                        <span className="preview-label">Check how your post looks</span>
+                        <span className="preview-label">글 미리보기</span>
                     </div>
-                    <button onClick={onClose} className="preview-close-btn" title="Close Preview">
+                    <button onClick={onClose} className="preview-close-btn" aria-label="미리보기 닫기" disabled={isPublishing}>
                         <X size={24} />
                     </button>
                 </header>
@@ -35,10 +33,10 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
                         <header className="post-header-wrapper">
                             <div className="post-header-content">
                                 {/* Category */}
-                                <span className="post-category-badge">{categoryName || 'Uncategorized'}</span>
+                                <span className="post-category-badge">{categoryName || '미분류'}</span>
 
                                 {/* Title */}
-                                <h1 className="post-main-title">{title || 'Untitled Post'}</h1>
+                                <h1 className="post-main-title">{title || '제목 없는 글'}</h1>
 
                                 {/* Author Info */}
                                 <div className="post-meta-row">
@@ -49,13 +47,11 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
                                             <div className="author-placeholder"><User size={20} /></div>
                                         )}
                                         <div className="author-details">
-                                            <span className="author-username">{author?.username || 'You'}</span>
+                                            <span className="author-username">{author?.username || '작성자'}</span>
                                             <div className="meta-sub">
                                                 <span className="post-date">
-                                                    {format(new Date(), 'MMM dd, yyyy')}
+                                                    {format(new Date(), 'yyyy.MM.dd')}
                                                 </span>
-                                                <span className="dot-divider">·</span>
-                                                <span className="read-time">Just now</span>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +77,7 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
 
                 <footer className="preview-modal-footer">
                     <button className="btn-cancel" onClick={onClose} disabled={isPublishing}>
-                        Back to Edit
+                        계속 작성
                     </button>
                     <button
                         className="btn-confirm-publish"
@@ -89,11 +85,11 @@ const PostPreviewModal = ({ isOpen, onClose, onPublish, data, isPublishing, auth
                         disabled={isPublishing}
                     >
                         {isPublishing ? (
-                            <span>Publishing...</span>
+                            <span>발행 중...</span>
                         ) : (
                             <>
                                 <Send size={18} />
-                                <span>Publish Now</span>
+                                <span>발행하기</span>
                             </>
                         )}
                     </button>

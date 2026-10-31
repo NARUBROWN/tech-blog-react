@@ -20,7 +20,7 @@ const RecruitmentSnackbar = ({ isVisible, onClose }) => {
             <div className="snackbar-content">
                 <div className="snackbar-text">
                     <p className="snackbar-message">
-                        여기까지 읽으셨다면,<br />
+                        <span className="snackbar-lead">여기까지 읽으셨다면,</span>
                         제 문제 해결 방식이 마음에 드셨을지도 모르겠습니다.
                     </p>
                     <p className="snackbar-subtext">

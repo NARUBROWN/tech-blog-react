@@ -1,11 +1,9 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getPostById, updatePost } from '../api/post';
-import { uploadImage } from '../api/image';
 import ImageUpload from '../components/ImageUpload';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Sparkles, Clock3, Tag as TagIcon, User, Calendar, Save } from 'lucide-react';
-import ReactQuill, { Quill } from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import { Tag as TagIcon, User, Calendar, Save } from 'lucide-react';
+import RichTextEditor from '../components/RichTextEditor';
 import './PostForm.css'; // Reusing the same CSS
 import { format } from 'date-fns';
 
@@ -14,9 +12,7 @@ const PostEdit = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [isQuillReady, setIsQuillReady] = useState(false);
     const [error, setError] = useState('');
-    const quillRef = useRef(null);
 
     const [originalPost, setOriginalPost] = useState(null);
     const [formData, setFormData] = useState({
@@ -34,26 +30,6 @@ const PostEdit = () => {
         [formData.tags]
     );
 
-    useEffect(() => {
-        const loadQuillModules = async () => {
-            if (typeof window !== 'undefined' && !window.Quill) {
-                window.Quill = Quill;
-            }
-
-            try {
-                const { default: BlotFormatter } = await import('quill-blot-formatter');
-                if (!Quill.imports['modules/blotFormatter']) {
-                    Quill.register('modules/blotFormatter', BlotFormatter);
-                }
-                setIsQuillReady(true);
-            } catch (error) {
-                console.error("Failed to load Quill modules", error);
-                setIsQuillReady(true);
-            }
-        };
-
-        loadQuillModules();
-    }, []);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -74,7 +50,7 @@ const PostEdit = () => {
                 });
             } catch (err) {
                 console.error('Failed to load post for editing:', err);
-                setError('Failed to load post data.');
+                setError('글을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
             } finally {
                 setLoading(false);
             }
@@ -94,63 +70,11 @@ const PostEdit = () => {
         setFormData(prev => ({ ...prev, content: value }));
     };
 
-    const imageHandler = () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (file) {
-                try {
-                    const result = await uploadImage(file);
-                    const range = quillRef.current.getEditor().getSelection(true);
-                    quillRef.current.getEditor().insertEmbed(range.index, 'image', result.url);
-                } catch (error) {
-                    console.error('Image upload failed:', error);
-                    alert('Image upload failed');
-                }
-            }
-        };
-    };
-
-    const modules = useMemo(() => {
-        return {
-            toolbar: {
-                container: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                    ['link', 'image'],
-                    ['clean'],
-                    ['mermaid']
-                ],
-                handlers: {
-                    'image': imageHandler,
-                    'mermaid': function () {
-                        const cursorPosition = this.quill.getSelection().index;
-                        this.quill.insertText(cursorPosition, 'graph TD;\n  A-->B;', 'code-block', true);
-                        this.quill.setSelection(cursorPosition + 20);
-                    }
-                }
-            },
-            blotFormatter: {}
-        };
-    }, []);
-
-    const formats = [
-        'header',
-        'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'indent',
-        'link', 'image'
-    ];
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!formData.title.trim() || !formData.content.trim()) {
-            alert('Please enter a title and content.');
+            alert('제목과 본문을 입력해 주세요.');
             return;
         }
 
@@ -176,7 +100,7 @@ const PostEdit = () => {
             }
 
             const result = await updatePost(originalPost.category.id, originalPost.id, payload);
-            alert('Post updated successfully!');
+            alert('글을 수정했습니다.');
             if (result && result.slug) {
                 navigate(`/post/${result.slug}`);
             } else {
@@ -184,43 +108,36 @@ const PostEdit = () => {
             }
         } catch (err) {
             console.error(err);
-            alert('Failed to update post.');
+            alert('글을 수정하지 못했습니다. 다시 시도해 주세요.');
         } finally {
             setSaving(false);
         }
     };
 
-    if (loading) return <div className="post-studio"><div className="editor-loading">Loading post...</div></div>;
+    if (loading) return <div className="post-studio"><div className="editor-loading">글을 불러오는 중...</div></div>;
     if (error) return <div className="post-studio"><div className="form-error">{error}</div></div>;
 
     return (
         <div className="post-studio">
-            <div className="studio-ambient" aria-hidden="true"></div>
 
             <div className="post-studio-shell">
                 <form onSubmit={handleSubmit} className="post-studio-form">
                     <div className="studio-toolbar">
                         <div className="toolbar-left">
-                            <div className="toolbar-chip">
-                                <Sparkles size={16} />
-                                <span>Editing Studio</span>
-                            </div>
+                            <h1 className="toolbar-chip">글 수정</h1>
 
                             {/* Read-only Category Display */}
                             <div className="category-chip static">
-                                <span>{originalPost?.category?.name || 'Uncategorized'}</span>
+                                <span>{originalPost?.category?.name || '미분류'}</span>
                             </div>
 
-                            <div className="toolbar-meta">
-                                <Clock3 size={14} />
-                                <span>Edit Mode</span>
-                            </div>
+
                         </div>
 
                         <div className="toolbar-actions">
                             <button type="submit" className="btn-publish" disabled={saving}>
-                                <Save size={16} style={{ marginRight: '6px' }} />
-                                {saving ? 'Saving...' : 'Save Changes'}
+                                <Save size={16} aria-hidden="true" />
+                                {saving ? '저장 중...' : '수정 저장'}
                             </button>
                         </div>
                     </div>
@@ -232,11 +149,11 @@ const PostEdit = () => {
                                 <div className="post-read-only-meta">
                                     <div className="meta-item">
                                         <User size={14} />
-                                        <span>Author: <strong>{originalPost.author?.username || 'Unknown'}</strong></span>
+                                        <span>작성자: <strong>{originalPost.author?.username || '알 수 없음'}</strong></span>
                                     </div>
                                     <div className="meta-item">
                                         <Calendar size={14} />
-                                        <span>Published: <strong>{originalPost.publishedAt ? format(new Date(originalPost.publishedAt), 'MMM dd, yyyy') : 'Draft'}</strong></span>
+                                        <span>발행일: <strong>{originalPost.publishedAt ? format(new Date(originalPost.publishedAt), 'yyyy.MM.dd') : '미발행'}</strong></span>
                                     </div>
                                 </div>
                             )}
@@ -246,7 +163,8 @@ const PostEdit = () => {
                                     type="text"
                                     name="title"
                                     className="post-title-input"
-                                    placeholder="Title"
+                                    placeholder="제목을 입력하세요"
+                                    aria-label="제목"
                                     value={formData.title}
                                     onChange={handleChange}
                                     required
@@ -254,20 +172,7 @@ const PostEdit = () => {
                             </div>
 
                             <div className="editor-shell">
-                                {isQuillReady ? (
-                                    <ReactQuill
-                                        ref={quillRef}
-                                        theme="snow"
-                                        value={formData.content}
-                                        onChange={handleContentChange}
-                                        className="content-editor-quill"
-                                        modules={modules}
-                                        formats={formats}
-                                        placeholder="Write something amazing..."
-                                    />
-                                ) : (
-                                    <div className="editor-loading">Loading Editor...</div>
-                                )}
+                                <RichTextEditor value={formData.content} onChange={handleContentChange} />
                             </div>
                         </section>
 
@@ -275,11 +180,11 @@ const PostEdit = () => {
                             <div className="meta-card highlight-card">
                                 <div className="meta-card-header">
                                     <div>
-                                        <p className="meta-title">Cover Image</p>
+                                        <p className="meta-title">커버 이미지</p>
                                     </div>
                                 </div>
                                 <ImageUpload
-                                    label="Cover image"
+                                    label="커버 이미지"
                                     onUpload={(url) => setFormData(prev => ({ ...prev, thumbnailUrl: url }))}
                                     initialUrl={formData.thumbnailUrl}
                                     className="image-upload-compact"
@@ -290,12 +195,13 @@ const PostEdit = () => {
                                 <div className="meta-card-header">
                                     <div className="meta-title-row">
                                         <TagIcon size={16} />
-                                        <p className="meta-title">Tags</p>
+                                        <p className="meta-title">태그</p>
                                     </div>
                                 </div>
                                 <input
                                     type="text"
                                     name="tags"
+                                    aria-label="태그"
                                     className="meta-input"
                                     value={formData.tags}
                                     onChange={handleChange}
@@ -312,33 +218,39 @@ const PostEdit = () => {
 
                             <div className="meta-card">
                                 <div className="meta-card-header">
-                                    <p className="meta-title">SEO</p>
+                                    <p className="meta-title">검색 설정</p>
                                 </div>
                                 <div className="seo-grid">
-                                    <input
-                                        type="text"
-                                        name="seoTitle"
-                                        className="meta-input"
-                                        placeholder="SEO Title"
-                                        value={formData.seoTitle}
-                                        onChange={handleChange}
-                                    />
-                                    <textarea
-                                        name="seoDescription"
-                                        className="meta-input"
-                                        placeholder="SEO Description"
-                                        value={formData.seoDescription}
-                                        onChange={handleChange}
-                                        rows="3"
-                                    />
-                                    <input
-                                        type="text"
-                                        name="seoKeywords"
-                                        className="meta-input"
-                                        placeholder="SEO Keywords"
-                                        value={formData.seoKeywords}
-                                        onChange={handleChange}
-                                    />
+                                    <label>검색 제목
+                                        <input
+                                            type="text"
+                                            name="seoTitle"
+                                            className="meta-input"
+                                            placeholder="검색 결과에 표시할 제목"
+                                            value={formData.seoTitle}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
+                                    <label>검색 설명
+                                        <textarea
+                                            name="seoDescription"
+                                            className="meta-input"
+                                            placeholder="검색 결과에 표시할 짧은 소개"
+                                            value={formData.seoDescription}
+                                            onChange={handleChange}
+                                            rows="3"
+                                        />
+                                    </label>
+                                    <label>검색 키워드
+                                        <input
+                                            type="text"
+                                            name="seoKeywords"
+                                            className="meta-input"
+                                            placeholder="AI, 백엔드, 개발"
+                                            value={formData.seoKeywords}
+                                            onChange={handleChange}
+                                        />
+                                    </label>
                                 </div>
                             </div>
                         </aside>

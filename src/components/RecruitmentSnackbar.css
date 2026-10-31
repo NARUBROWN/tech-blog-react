@@ -18,10 +18,11 @@
     pointer-events: none;
 }
 .recruitment-snackbar.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.recruitment-snackbar .snackbar-header { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.recruitment-snackbar .snackbar-header { position: absolute; top: 12px; right: 12px; }
 .recruitment-snackbar .close-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: #596879; }
 .recruitment-snackbar .close-btn:hover { background: #f5f8fb; color: #172536; }
-.recruitment-snackbar .snackbar-message { color: #172536; font-size: 15px; font-weight: 650; line-height: 1.65; }
+.recruitment-snackbar .snackbar-message { color: #172536; font-size: 15px; font-weight: 650; line-height: 1.65; word-break: keep-all; overflow-wrap: break-word; }
+.recruitment-snackbar .snackbar-lead { display: block; padding-right: 32px; }
 .recruitment-snackbar .snackbar-subtext { margin-top: 8px; color: #596879; font-size: 13px; line-height: 1.6; }
 .recruitment-snackbar .snackbar-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .recruitment-snackbar .snackbar-tags span { padding: 4px 8px; border: 1px solid #e6edf3; border-radius: 4px; background: #f5f8fb; color: #47617a; font-size: 11px; }

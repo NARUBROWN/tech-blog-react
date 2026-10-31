@@ -1,197 +1,125 @@
-import { useEffect, memo } from 'react';
+import { useEffect, useMemo, useRef, memo } from 'react';
 import DOMPurify from 'dompurify';
-import mermaid from 'mermaid';
+import { decodeMermaidSource, isMermaidSource, renderMermaidSvg } from '../lib/mermaid';
 import 'react-quill-new/dist/quill.snow.css';
+import './QuillContent.css';
 import '../pages/PostDetail.css';
 import './Skeleton.css';
 
-// Configure DOMPurify to allow SVG elements for Mermaid diagrams
-DOMPurify.setConfig({
-    ADD_TAGS: ['svg', 'path', 'g', 'defs', 'marker', 'style', 'title', 'desc', 'ellipse', 'line', 'polygon', 'polyline', 'rect', 'text', 'tspan', 'use', 'symbol', 'foreignObject', 'circle'],
-    ADD_ATTR: ['class', 'style', 'stroke', 'stroke-width', 'fill', 'd', 'viewBox', 'xmlns', 'x', 'y', 'width', 'height', 'transform', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray', 'stroke-dashoffset', 'opacity', 'font-family', 'font-size', 'text-anchor', 'dominant-baseline', 'alignment-baseline', 'preserveAspectRatio', 'xmlns:xlink', 'xlink:href']
-});
+const stripFence = source => source.trim().replace(/^```mermaid\s*\n?/i, '').replace(/\n?```\s*$/, '').trim();
+const codeText = node => node.querySelector('.ql-code-block')
+    ? [...node.querySelectorAll('.ql-code-block')].map(line => line.textContent).join('\n')
+    : node.innerText || node.textContent;
 
 const PostContent = memo(({ content }) => {
-    useEffect(() => {
-        if (!content) return;
+    const rootRef = useRef(null);
+    const html = useMemo(() => DOMPurify.sanitize(content || '', { ADD_ATTR: ['target'] }), [content]);
 
-        // Initialize Mermaid without auto-start
-        mermaid.initialize({
-            startOnLoad: false,
-            theme: 'default',
-            securityLevel: 'loose',
+    useEffect(() => {
+        const root = rootRef.current;
+        if (!root) return;
+        let cancelled = false;
+        const cleanups = [];
+        root.querySelectorAll('a[target="_blank"]').forEach(link => {
+            link.setAttribute('rel', 'noopener noreferrer');
         });
 
-        const renderMermaid = async () => {
-            const isMermaidDefinition = (text) =>
-                text.match(/^(graph|sequenceDiagram|classDiagram|stateDiagram|erDiagram|gantt|pie|gitGraph|journey|mindmap|timeline)/);
-
-            let renderIndex = 0;
-
-            const renderAndReplace = async (textChunk, nodesToReplace) => {
-                const id = `mermaid-${renderIndex++}-${Date.now()}`;
-                try {
-                    const { svg } = await mermaid.render(id, textChunk);
-                    const div = document.createElement('div');
-                    div.className = 'mermaid-diagram';
-                    div.innerHTML = svg;
-
-                    const firstNode = nodesToReplace[0];
-                    const parent = firstNode?.parentNode;
-                    if (parent) {
-                        parent.insertBefore(div, firstNode);
-                        nodesToReplace.forEach(node => parent.removeChild(node));
-                    }
-                } catch (error) {
-                    console.error('Mermaid rendering error for block:', renderIndex - 1, error);
-                    nodesToReplace.forEach(node => node.classList?.add('mermaid-error'));
-                }
-            };
-
-            // Standard <pre> blocks
-            const preBlocks = document.querySelectorAll('.post-body-text pre');
-            for (const block of preBlocks) {
-                const blockContent = block.textContent.trim();
-                if (isMermaidDefinition(blockContent)) {
-                    await renderAndReplace(blockContent, [block]);
-                }
-            }
-
-            // Quill code blocks
-            const quillBlocks = document.querySelectorAll('.post-body-text .ql-code-block');
-            const visited = new Set();
-            for (const block of quillBlocks) {
-                if (visited.has(block)) continue;
-
-                const nodesToReplace = [];
-                let current = block;
-                while (current && current.classList.contains('ql-code-block')) {
-                    visited.add(current);
-                    nodesToReplace.push(current);
-                    current = current.nextElementSibling;
-                }
-
-                const blockContent = nodesToReplace.map(node => node.textContent).join('\n').trim();
-                if (isMermaidDefinition(blockContent)) {
-                    await renderAndReplace(blockContent, nodesToReplace);
-                }
-            }
-
-            // Plain paragraphs
-            const container = document.querySelector('.post-body-text');
-            if (container) {
-                const children = Array.from(container.children);
-                for (let i = 0; i < children.length; i++) {
-                    const node = children[i];
-                    if (!(node.tagName === 'P')) continue;
-
-                    const firstLine = node.textContent.trim();
-                    if (!isMermaidDefinition(firstLine)) continue;
-
-                    const nodesToReplace = [node];
-                    const contentLines = [firstLine];
-
-                    let j = i + 1;
-                    while (j < children.length) {
-                        const next = children[j];
-                        if (!(next.tagName === 'P')) break;
-
-                        const text = next.textContent;
-                        if (!text || text.trim() === '') {
-                            nodesToReplace.push(next);
-                            j++;
-                            break;
-                        }
-
-                        contentLines.push(text);
-                        nodesToReplace.push(next);
-                        j++;
-                    }
-
-                    const blockContent = contentLines.join('\n').trim();
-                    if (isMermaidDefinition(blockContent)) {
-                        await renderAndReplace(blockContent, nodesToReplace);
-                        i = j - 1;
-                    }
-                }
+        const renderBlock = async (source, nodes) => {
+            try {
+                const svg = await renderMermaidSvg(source);
+                if (cancelled || !nodes.every(node => root.contains(node))) return;
+                const diagram = document.createElement('div');
+                diagram.className = 'mermaid-diagram';
+                diagram.setAttribute('role', 'img');
+                diagram.setAttribute('aria-label', 'Mermaid 다이어그램');
+                diagram.innerHTML = svg;
+                nodes[0].before(diagram);
+                nodes.forEach(node => node.remove());
+            } catch {
+                if (cancelled || !root.contains(nodes[0])) return;
+                const error = document.createElement('div');
+                error.className = 'mermaid-render-error';
+                const message = document.createElement('p');
+                message.textContent = '다이어그램을 표시하지 못했습니다. 원본 코드를 확인해 주세요.';
+                const details = document.createElement('details');
+                const summary = document.createElement('summary');
+                summary.textContent = 'Mermaid 원본 코드';
+                const pre = document.createElement('pre');
+                pre.textContent = source;
+                details.append(summary, pre);
+                error.append(message, details);
+                nodes[0].before(error);
+                nodes.forEach(node => node.remove());
             }
         };
 
-        // Small delay to ensure DOM is ready
-        setTimeout(renderMermaid, 100);
-
-        // Helper to wrap element
-        const wrapElement = (el, wrapper) => {
-            el.parentNode.insertBefore(wrapper, el);
-            wrapper.appendChild(el);
+        const renderDiagrams = async () => {
+            // 저장된 전용 블록은 원문 속성으로 읽어 Quill의 HTML 변환을 피합니다.
+            for (const block of root.querySelectorAll('.ql-mermaid-block')) {
+                if (cancelled) return;
+                await renderBlock(decodeMermaidSource(block), [block]);
+            }
+            // Quill 1/2와 기존 pre 코드 블록을 함께 지원합니다.
+            for (const block of root.querySelectorAll('.ql-code-block-container, pre, .mermaid')) {
+                if (cancelled) return;
+                if (!root.contains(block) || block.closest('.mermaid-diagram, .mermaid-render-error, .ql-mermaid-block')) continue;
+                const source = stripFence(codeText(block));
+                if (isMermaidSource(source) || /^```mermaid/i.test(block.textContent.trim())) await renderBlock(source, [block]);
+            }
+            // 이전 편집기가 일반 문단으로 저장했던 다이어그램을 복원합니다.
+            const paragraphs = [...root.children];
+            for (let index = 0; index < paragraphs.length; index++) {
+                if (cancelled) return;
+                const first = paragraphs[index];
+                if (first.tagName !== 'P' || !root.contains(first) || !isMermaidSource(first.innerText)) continue;
+                const nodes = [first];
+                let source = first.innerText;
+                for (let next = index + 1; next < paragraphs.length; next++) {
+                    const line = paragraphs[next];
+                    const text = line.innerText?.trim();
+                    if (line.tagName !== 'P' || !text) break;
+                    // 도표 뒤의 일반 문장까지 합치지 않습니다.
+                    if (!/^(?:%%|subgraph\b|end\b|direction\b|classDef\b|class\b|style\b|linkStyle\b|participant\b|actor\b|Note\b|note\b|loop\b|alt\b|else\b|opt\b|par\b|and\b|rect\b|activate\b|deactivate\b|autonumber\b|[A-Za-z_][\w-]*\s*(?:[-<>=:[({]|$))/.test(text)) break;
+                    nodes.push(line);
+                    source += `\n${line.innerText}`;
+                }
+                await renderBlock(source.trim(), nodes);
+                index += nodes.length - 1;
+            }
         };
+        renderDiagrams();
 
-        // Handle Image Skeleton Loading
-        const handleImageSkeleton = () => {
-            const images = document.querySelectorAll('.post-body-text img');
-
-            images.forEach(img => {
-                if (img.complete && img.naturalHeight !== 0) return;
-
-                // Check if already wrapped or processed to avoid duplicates if effect runs again
-                if (img.parentElement.classList.contains('image-skeleton-wrapper')) return;
-
-                // Create wrapper
-                const wrapper = document.createElement('span');
+        root.querySelectorAll('img').forEach(img => {
+            if (img.complete) {
+                img.style.opacity = '1';
+                if (img.parentElement.classList.contains('image-skeleton-wrapper')) {
+                    img.parentElement.classList.remove('skeleton');
+                    img.parentElement.style.minHeight = 'auto';
+                }
+                return;
+            }
+            let wrapper = img.parentElement;
+            if (!wrapper.classList.contains('image-skeleton-wrapper')) {
+                wrapper = document.createElement('span');
                 wrapper.className = 'image-skeleton-wrapper skeleton';
-                wrapper.style.display = 'inline-block';
-                // We try to approximate size if width/height attributes exist, otherwise block
-                // But often responsive images don't have fixed sizes.
-                // Let's set some reasonable defaults or just block for better visuals
-                wrapper.style.minHeight = '300px';
-                wrapper.style.minWidth = '100%';
-                wrapper.style.maxWidth = '100%';
-                wrapper.style.borderRadius = '8px';
+                Object.assign(wrapper.style, { display: 'inline-block', minHeight: '200px', width: '100%', maxWidth: '100%', borderRadius: '6px' });
+                img.before(wrapper);
+                wrapper.appendChild(img);
+            }
+            img.style.opacity = '0';
+            const finish = () => {
+                img.style.opacity = '1';
+                wrapper.classList.remove('skeleton');
+                wrapper.style.minHeight = 'auto';
+            };
+            img.addEventListener('load', finish, { once: true });
+            img.addEventListener('error', finish, { once: true });
+            cleanups.push(() => { img.removeEventListener('load', finish); img.removeEventListener('error', finish); });
+        });
+        return () => { cancelled = true; cleanups.forEach(cleanup => cleanup()); };
+    }, [html]);
 
-                // Hide image initially
-                img.style.opacity = '0';
-                img.style.transition = 'opacity 0.3s ease-in-out';
-
-                // Wrap image
-                wrapElement(img, wrapper);
-
-                const onLoad = () => {
-                    img.style.opacity = '1';
-                    wrapper.classList.remove('skeleton');
-                    wrapper.style.minHeight = 'auto'; // Reset min-height to let content flow
-                    wrapper.style.background = 'none'; // Remove skeleton shimmer background
-                };
-
-                const onError = () => {
-                    // Even on error, show the broken image icon or handle gracefully
-                    img.style.opacity = '1';
-                    wrapper.classList.remove('skeleton');
-                    wrapper.style.minHeight = 'auto';
-                    wrapper.style.background = 'none';
-                };
-
-                img.addEventListener('load', onLoad, { once: true });
-                img.addEventListener('error', onError, { once: true });
-            });
-        };
-
-        // Run after a slight delay to allow DOM to settle, similar to Mermaid
-        setTimeout(() => {
-            handleImageSkeleton();
-        }, 50);
-
-    }, [content]);
-
-    return (
-        <div className="post-content-wrapper ql-snow">
-            <div
-                className="post-body-text ql-editor"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
-            />
-        </div>
-    );
+    return <div className="post-content-wrapper ql-snow"><div ref={rootRef} className="post-body-text ql-editor" dangerouslySetInnerHTML={{ __html: html }} /></div>;
 });
-
 PostContent.displayName = 'PostContent';
-
 export default PostContent;
