@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getComments, createComment, updateComment, deleteComment } from '../api/comments';
 import './Comments.css';
 
 const message = error => error.response?.data?.message || '요청을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.';
 const date = value => new Date(value).toLocaleString('ko-KR', { dateStyle: 'medium', timeStyle: 'short' });
 
-export default function Comments({ postId, isAdmin = false }) {
+export default function Comments({ postId, isAdmin = false, onVisibilityChange }) {
+    const sectionRef = useRef(null);
     const [page, setPage] = useState(0);
     const [revision, setRevision] = useState(0);
     const [result, setResult] = useState(null);
@@ -13,6 +14,13 @@ export default function Comments({ postId, isAdmin = false }) {
     const [busy, setBusy] = useState(false);
     const [editing, setEditing] = useState(null);
     const [draft, setDraft] = useState({ nickname: '익명', password: '', content: '' });
+
+    useEffect(() => {
+        if (!onVisibilityChange) return undefined;
+        const observer = new IntersectionObserver(([entry]) => onVisibilityChange(entry.isIntersecting));
+        if (sectionRef.current) observer.observe(sectionRef.current);
+        return () => { observer.disconnect(); onVisibilityChange(false); };
+    }, [onVisibilityChange]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -49,7 +57,7 @@ export default function Comments({ postId, isAdmin = false }) {
     };
 
     return (
-        <section className="comments-section" aria-labelledby="comments-heading">
+        <section ref={sectionRef} className="comments-section" aria-labelledby="comments-heading">
             <div className="comments-heading">
                 <h2 id="comments-heading">댓글 <span>{result?.totalElements || 0}</span></h2>
                 <p>로그인 없이 의견을 남겨보세요.</p>

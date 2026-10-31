@@ -22,6 +22,7 @@ const PostDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isLiked, setIsLiked] = useState(false);
+    const [commentsVisible, setCommentsVisible] = useState(false);
     const [likeBusy, setLikeBusy] = useState(false);
     const [likeReady, setLikeReady] = useState(false);
     const [likeError, setLikeError] = useState('');
@@ -426,7 +427,7 @@ const PostDetail = () => {
                     </div>
                 </footer>
 
-                {likeReady && <Comments key={post.id} postId={post.id} isAdmin={user?.role === 'ROLE_ADMIN'} />}
+                {likeReady && <Comments key={post.id} postId={post.id} isAdmin={user?.role === 'ROLE_ADMIN'} onVisibilityChange={setCommentsVisible} />}
                 <RecommendedPosts currentPostId={post.id} />
             </article>
 
@@ -439,7 +440,7 @@ const PostDetail = () => {
             />
 
             <RecruitmentSnackbar
-                isVisible={showRecruitment}
+                isVisible={showRecruitment && !commentsVisible}
                 onClose={() => {
                     setShowRecruitment(false);
                     setIsRecruitmentDismissed(true);
