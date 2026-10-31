@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const signup = async (userData, role = 'AUTHOR') => {
+    const signup = async (userData, role = 'USER') => {
         setLoading(true);
         try {
             if (role === 'ADMIN') {

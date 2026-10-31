@@ -12,7 +12,7 @@ const Signup = () => {
         bio: '',
         profileImageUrl: ''
     });
-    const [role, setRole] = useState('AUTHOR');
+    const [role, setRole] = useState('USER');
     const [error, setError] = useState('');
     const { signup, loading } = useAuth();
     const navigate = useNavigate();
