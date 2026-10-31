@@ -1,0 +1,50 @@
+.management-page { --manage-ink: #172536; --manage-muted: #596879; --manage-line: #dce5ee; --manage-blue: #0969b9; color: var(--manage-ink); padding: 48px 0 80px; }
+.management-shell { width: min(960px, calc(100% - 64px)); margin: 0 auto; }
+.management-back { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; margin-bottom: 20px; color: var(--manage-muted); font-size: 13px; }
+.management-back:hover { color: var(--manage-blue); }
+.management-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--manage-line); }
+.management-header h1 { margin: 0 0 10px; font-size: 28px; line-height: 1.35; font-weight: 700; letter-spacing: -.035em; }
+.management-header p { margin: 0; color: var(--manage-muted); font-size: 14px; line-height: 1.8; }
+.management-form { display: grid; gap: 28px; }
+.management-form-category { max-width: 560px; }
+.management-fields { display: grid; gap: 24px; min-width: 0; }
+.management-field { display: grid; gap: 8px; min-width: 0; }
+.management-field label { font-size: 14px; font-weight: 600; }
+.management-field :is(input,textarea) { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid var(--manage-line); border-radius: 6px; color: var(--manage-ink); background: #fff; font: inherit; font-size: 16px; line-height: 1.6; }
+.management-field textarea { resize: vertical; }
+.management-field :is(input,textarea)::placeholder { color: #8797a8; }
+.management-hint { margin: 0; color: var(--manage-muted); font-size: 12px; line-height: 1.7; }
+.management-actions { display: flex; align-items: center; justify-content: flex-start; padding-top: 24px; border-top: 1px solid var(--manage-line); }
+.management-submit { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 11px 20px; border: 1px solid var(--manage-blue); border-radius: 6px; background: var(--manage-blue); color: #fff; font-size: 14px; font-weight: 650; }
+.management-submit:hover { background: #085798; }
+.management-submit:disabled { opacity: .6; cursor: wait; }
+.management-page :is(a,button,input,textarea):focus-visible { outline: 3px solid #3294e6; outline-offset: 3px; }
+.management-notice { margin-bottom: 24px; padding: 12px 16px; border: 1px solid #efc7c5; border-radius: 6px; background: #fff7f6; color: #a52c28; font-size: 14px; line-height: 1.7; }
+.management-notice-success { border-color: #c4ddd2; background: #f4faf7; color: #24674b; }
+.profile-settings-grid { display: grid; grid-template-columns: minmax(0,1fr) 240px; gap: 48px; align-items: start; }
+.profile-confirmation { margin-top: 4px; padding-top: 24px; border-top: 1px solid var(--manage-line); }
+.profile-image-panel { min-width: 0; padding-left: 24px; border-left: 1px solid var(--manage-line); }
+.profile-image-panel h2 { margin: 0 0 8px; font-size: 14px; font-weight: 650; }
+.profile-image-panel .management-hint { margin-bottom: 16px; }
+.profile-image-upload .image-upload-label { display: none; }
+.profile-image-upload .image-upload-area { min-height: 180px; border: 1px dashed #b8c9d9; border-radius: 6px; background: #f7f9fb; }
+.profile-image-upload .image-upload-area:hover { border-color: var(--manage-blue); }
+.profile-image-upload .image-upload-area.has-image { border-style: solid; padding: 20px; background: #f7f9fb; }
+.profile-image-upload .image-preview-wrapper { min-height: 140px; }
+.profile-image-upload .image-preview { width: 140px; height: 140px; max-height: 140px; border-radius: 50%; object-fit: cover; }
+.profile-image-upload .remove-image-btn { top: -10px; right: -10px; border-radius: 6px; background: #fff; border: 1px solid var(--manage-line); color: var(--manage-muted); }
+.profile-image-upload .remove-image-btn:hover { background: #e8eff6; }
+.profile-image-upload .upload-placeholder { font-size: 13px; }
+@media (max-width: 700px) {
+    .profile-settings-grid { grid-template-columns: minmax(0,1fr); gap: 32px; }
+    .profile-image-panel { grid-row: 1; padding: 0 0 24px; border-left: 0; border-bottom: 1px solid var(--manage-line); }
+    .profile-image-upload { max-width: 240px; }
+}
+@media (max-width: 600px) {
+    .management-page { padding: 28px 0 48px; }
+    .management-shell { width: calc(100% - 40px); }
+    .management-back { margin-bottom: 16px; }
+    .management-header { margin-bottom: 24px; }
+    .management-header h1 { font-size: 24px; }
+    .management-actions .management-submit { width: 100%; }
+}

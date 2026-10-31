@@ -2,6 +2,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import ScrollToTopButton from './ScrollToTopButton';
 import { Outlet } from 'react-router-dom';
+import './Layout.css';
 
 const Layout = () => {
     return (

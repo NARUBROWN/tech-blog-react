@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { createCategory } from '../api/category';
-import './Auth.css'; // Reusing auth styles for form
+import './ManagementForm.css';
 
 const CreateCategory = () => {
     const [name, setName] = useState('');
@@ -8,56 +10,48 @@ const CreateCategory = () => {
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         setError('');
         setSuccess('');
+        const categoryName = name.trim();
+        if (!categoryName) {
+            setError('카테고리 이름을 입력해 주세요.');
+            return;
+        }
         setLoading(true);
-
         try {
-            // Note: Spec implies it returns 200 OK. 
-            // If it returns the object with ID, we could show it.
-            const result = await createCategory(name);
-            console.log('Category created:', result);
-            setSuccess('Category created successfully!');
+            await createCategory(categoryName);
+            setSuccess(`“${categoryName}” 카테고리를 추가했습니다.`);
             setName('');
-        } catch (err) {
-            setError('Failed to create category.');
-            console.error(err);
+        } catch {
+            setError('카테고리를 추가하지 못했습니다. 잠시 후 다시 시도해 주세요.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="auth-container">
-            <div className="auth-card">
-                <h2>Create Category</h2>
-                <p className="auth-subtitle">Add a new topic for posts</p>
-
-                {error && <div className="auth-error">{error}</div>}
-                {success && <div className="auth-error" style={{ color: 'var(--color-success)', backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>{success}</div>}
-
-                <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label htmlFor="name">Category Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="e.g. React, Spring Boot"
-                            required
-                        />
+        <div className="management-page">
+            <div className="management-shell">
+                <Link to="/" className="management-back"><ArrowLeft size={15} aria-hidden="true" /> 홈으로</Link>
+                <header className="management-header">
+                    <h1>카테고리 추가</h1>
+                    <p>글을 주제별로 분류할 카테고리를 추가합니다.</p>
+                </header>
+                {error && <div className="management-notice" role="alert">{error}</div>}
+                {success && <div className="management-notice management-notice-success" role="status">{success}</div>}
+                <form onSubmit={handleSubmit} className="management-form management-form-category" aria-busy={loading}>
+                    <div className="management-field">
+                        <label htmlFor="category-name">카테고리 이름</label>
+                        <input id="category-name" type="text" value={name} onChange={event => setName(event.target.value)} placeholder="예: 기술, 커리어, 에세이" required />
                     </div>
-
-                    <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                        {loading ? 'Creating...' : 'Create Category'}
-                    </button>
+                    <div className="management-actions">
+                        <button type="submit" className="management-submit" disabled={loading}><Plus size={16} aria-hidden="true" />{loading ? '추가 중...' : '카테고리 추가'}</button>
+                    </div>
                 </form>
             </div>
         </div>
     );
 };
-
 export default CreateCategory;
