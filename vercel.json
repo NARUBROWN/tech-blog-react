@@ -1,9 +1,18 @@
 {
     "functions": {
+        "api/home-share.js": {
+            "includeFiles": "dist/index.html"
+        },
         "api/post-share.js": {
             "includeFiles": "dist/index.html"
         }
     },
+    "routes": [
+        {
+            "src": "^/$",
+            "dest": "/api/home-share"
+        }
+    ],
     "rewrites": [
         {
             "source": "/post/share/:id",

@@ -131,6 +131,22 @@ const buildStructuredData = (meta) => {
   return JSON.stringify(payload).replace(/</g, '\\u003c');
 };
 
+export const renderHomeSharePage = (template, siteOrigin = DEFAULT_SITE_ORIGIN) => {
+    const homeUrl = toAbsoluteUrl('/', siteOrigin);
+    const meta = {
+      fullTitle: SITE_NAME,
+      description: '세상의 문제를 인공지능으로 해결하는 엔지니어입니다. 직접 만들고 개선하며 얻은 경험을 나눕니다.',
+      keywords: '김원정, NARUBROWN, 기술 블로그, AI, 백엔드, 포트폴리오',
+      author: '김원정 (NARUBROWN)',
+      shareUrl: homeUrl,
+      canonicalUrl: homeUrl,
+      ogImage: toAbsoluteUrl('/logo.png', siteOrigin),
+      ogType: 'website'
+    };
+
+    return injectMetaTags(template, SITE_NAME, buildMetaTags(meta), null);
+};
+
 export const renderPostSharePage = (template, post, siteOrigin = DEFAULT_SITE_ORIGIN) => {
     const fallbackOgImage = toAbsoluteUrl('/logo.png', siteOrigin);
     const title = post.seoTitle?.trim() || post.title?.trim() || SITE_NAME;

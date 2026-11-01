@@ -38,7 +38,7 @@
 | 독자 반응 | 비밀번호 기반 익명 댓글 작성과 수정, 삭제, 방문자 쿠키 기반 좋아요 |
 | 계정 | 회원가입, 로그인과 로그아웃, 프로필 설정 |
 | 포트폴리오 | 자기소개, 프로젝트와 활동 기록, 연말 Recap |
-| 공유와 검색 노출 | Open Graph, Twitter Card, canonical URL, 요청 시 게시글 공유용 HTML 생성 |
+| 공유와 검색 노출 | Open Graph, Twitter Card, canonical URL, 요청 시 홈·게시글 공유용 HTML 생성 |
 | 운영 | 관리자 전용 방문과 행동 통계, API 응답 시간과 화면 표시 성능 지표 |
 | 화면 구성 | 반응형 레이아웃, 로딩 스켈레톤, 스크롤 이동과 모션 효과 |
 
@@ -85,11 +85,13 @@ API 클라이언트는 [src/api/axios.js](src/api/axios.js)에서 `/api/v1`을 �
 | `npm run dev` | 개발 서버 실행 |
 | `npm run lint` | ESLint 검사 |
 | `npm run build` | 프로덕션 빌드 후 Recap 공유용 HTML 생성 |
-| `npm test` | 날짜 처리와 게시글 공유 워커 회귀 검사 |
+| `npm test` | 날짜 처리와 홈·게시글 공유 워커 회귀 검사 |
 | `npm run preview` | 빌드 결과 로컬 미리보기 |
 | `npm run generate:share-pages` | 기존 `dist/index.html`을 바탕으로 Recap 공유 페이지 다시 생성 |
 
 ## 공유 페이지와 배포
+
+홈 주소 `https://na2ru2.me`도 [홈 공유 워커](api/home-share.js)를 거쳐 사이트 제목·소개·로고가 포함된 HTML을 응답합니다. 홈 미리보기는 게시글 API 연결 없이 제공됩니다. 정적 `index.html`이 우선 응답하지 않도록 홈 경로는 `routes`에서 먼저 연결하고, 나머지 경로는 기존 `rewrites`로 처리합니다.
 
 게시글 공유 버튼은 `/post/share/{id}` 링크를 복사합니다. Vercel은 이 경로를 [공유 워커](api/post-share.js)로 연결하고, 워커는 공개 게시글 API(`/api/v1/post/id/{id}`)를 조회해 제목·설명·이미지와 구조화 데이터를 HTML에 넣어 응답합니다. 크롤러는 JavaScript 실행 없이 미리보기 정보를 읽을 수 있고, 방문자는 같은 HTML에서 React 앱으로 글을 읽습니다.
 
@@ -113,7 +115,7 @@ npm run preview
 
 `npm run dev`와 `npm run preview`는 React 화면만 실행하며 Vercel 워커는 실행하지 않습니다. 워커와 경로 재작성까지 확인하려면 Vercel 미리보기 배포를 사용하세요. `API_ORIGIN`은 워커의 서버 조회에만 사용하며 브라우저의 API 연결 주소를 바꾸지 않습니다. 기존 `STRICT_SHARE_PAGES`, `SHARE_PAGE_SIZE`, `SHARE_MAX_PAGES` 설정은 더 이상 사용하지 않습니다.
 
-Vercel에서는 빌드 명령을 `npm run build`, 출력 디렉터리를 `dist`로 설정합니다. [vercel.json](vercel.json)은 공유 워커, API 프록시, 클라이언트 라우팅 순으로 경로를 연결합니다.
+Vercel에서는 빌드 명령을 `npm run build`, 출력 디렉터리를 `dist`로 설정합니다. [vercel.json](vercel.json)은 홈·게시글 공유 워커, API 프록시, 클라이언트 라우팅을 연결합니다.
 
 ## 주요 화면
 
@@ -146,7 +148,7 @@ src/
 ├── App.jsx           # 라우팅과 로그인 보호
 └── main.jsx          # 앱 진입점
 public/               # 로고와 정적 자산
-api/                  # Vercel 게시글 공유 워커 진입점
+api/                  # Vercel 홈·게시글 공유 워커 진입점
 server/               # 공유 HTML 렌더링과 공개 게시글 조회
 scripts/              # Recap 공유 페이지 생성과 회귀 검사
 vite.config.js        # 개발 서버와 API 프록시
