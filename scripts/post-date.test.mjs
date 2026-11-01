@@ -26,7 +26,7 @@ for (const timeZone of ['Asia/Seoul', 'UTC', 'America/Los_Angeles']) {
             midnight: '2026.10.31',
             utcMidnight: '2026.10.31',
             dateTime: '2026. 10. 31. 오후 2:00',
-            relative: '약 1시간 전',
+            relative: '1시간 전',
         });
     });
 }
@@ -50,4 +50,29 @@ test('누락되거나 잘못된 시각 때문에 화면이 깨지지 않는다',
     }
     assert.equal(formatPostRelativeTime(null), '임시 저장');
     assert.equal(formatPostRelativeTime('invalid'), '날짜 정보 없음');
+});
+
+test('경과 시간은 반올림 없이 한국어 분, 시간, 일 단위로 표시한다', () => {
+    const now = new Date('2026-11-02T03:00:00Z');
+    for (const [secondsAgo, expected] of [
+        [0, '방금 전'],
+        [59, '방금 전'],
+        [60, '1분 전'],
+        [3599, '59분 전'],
+        [3600, '1시간 전'],
+        [86399, '23시간 전'],
+        [86400, '1일 전'],
+        [3 * 86400 + 3600, '3일 전'],
+        [44 * 86400, '44일 전'],
+        [365 * 86400, '365일 전'],
+    ]) {
+        const publishedAt = new Date(now.getTime() - secondsAgo * 1000);
+        assert.equal(formatPostRelativeTime(publishedAt, now), expected);
+    }
+});
+
+test('미래의 발행 시각도 한국어로 표시한다', () => {
+    const now = new Date('2026-11-02T03:00:00Z');
+    assert.equal(formatPostRelativeTime(new Date(now.getTime() + 30000), now), '잠시 후');
+    assert.equal(formatPostRelativeTime(new Date(now.getTime() + 3600000), now), '1시간 후');
 });

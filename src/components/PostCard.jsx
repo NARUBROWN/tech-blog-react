@@ -113,7 +113,7 @@ const PostCard = ({ post }) => {
 
                     <div className="post-card-meta">
                         <Clock size={14} />
-                        <time dateTime={toPostDateTime(post.publishedAt) || undefined} title={formatPostDateTime(post.publishedAt)}>
+                        <time lang="ko" translate="no" dateTime={toPostDateTime(post.publishedAt) || undefined} title={formatPostDateTime(post.publishedAt)}>
                             {formatPostRelativeTime(post.publishedAt)}
                         </time>
                     </div>

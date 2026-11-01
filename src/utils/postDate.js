@@ -1,6 +1,3 @@
-import { formatDistance } from 'date-fns';
-import { ko } from 'date-fns/locale';
-
 const BLOG_TIME_ZONE = 'Asia/Seoul';
 const LEGACY_TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?$/;
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -44,5 +41,13 @@ export const formatPostDateTime = value => {
 export const formatPostRelativeTime = (value, now = new Date()) => {
     const date = parsePostDate(value);
     if (!value) return '임시 저장';
-    return date ? formatDistance(date, now, { addSuffix: true, locale: ko }) : '날짜 정보 없음';
+    if (!date) return '날짜 정보 없음';
+
+    const elapsed = now - date;
+    const seconds = Math.floor(Math.abs(elapsed) / 1000);
+    const suffix = elapsed >= 0 ? '전' : '후';
+    if (seconds < 60) return elapsed >= 0 ? '방금 전' : '잠시 후';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}분 ${suffix}`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}시간 ${suffix}`;
+    return `${Math.floor(seconds / 86400)}일 ${suffix}`;
 };
