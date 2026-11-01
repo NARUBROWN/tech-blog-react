@@ -38,7 +38,7 @@
 | 독자 반응 | 비밀번호 기반 익명 댓글 작성과 수정, 삭제, 방문자 쿠키 기반 좋아요 |
 | 계정 | 회원가입, 로그인과 로그아웃, 프로필 설정 |
 | 포트폴리오 | 자기소개, 프로젝트와 활동 기록, 연말 Recap |
-| 공유와 검색 노출 | Open Graph, Twitter Card, canonical URL, 게시글 공유용 정적 HTML 생성 |
+| 공유와 검색 노출 | Open Graph, Twitter Card, canonical URL, 요청 시 게시글 공유용 HTML 생성 |
 | 운영 | 관리자 전용 방문과 행동 통계, API 응답 시간과 화면 표시 성능 지표 |
 | 화면 구성 | 반응형 레이아웃, 로딩 스켈레톤, 스크롤 이동과 모션 효과 |
 
@@ -84,37 +84,36 @@ API 클라이언트는 [src/api/axios.js](src/api/axios.js)에서 `/api/v1`을 �
 | --- | --- |
 | `npm run dev` | 개발 서버 실행 |
 | `npm run lint` | ESLint 검사 |
-| `npm run build` | 프로덕션 빌드 후 공유용 HTML 생성 |
+| `npm run build` | 프로덕션 빌드 후 Recap 공유용 HTML 생성 |
+| `npm test` | 날짜 처리와 게시글 공유 워커 회귀 검사 |
 | `npm run preview` | 빌드 결과 로컬 미리보기 |
-| `npm run generate:share-pages` | 기존 `dist/index.html`을 바탕으로 공유 페이지 다시 생성 |
+| `npm run generate:share-pages` | 기존 `dist/index.html`을 바탕으로 Recap 공유 페이지 다시 생성 |
 
 ## 공유 페이지와 배포
 
-`npm run build`는 Vite 빌드에 이어 게시글 API를 조회하고 `dist/post/share/{id}/index.html`에 공유용 메타데이터를 넣은 HTML을 생성합니다. Recap 공유 페이지도 함께 생성합니다. 게시글 본문은 React 앱에서 불러옵니다.
+게시글 공유 버튼은 `/post/share/{id}` 링크를 복사합니다. Vercel은 이 경로를 [공유 워커](api/post-share.js)로 연결하고, 워커는 공개 게시글 API(`/api/v1/post/id/{id}`)를 조회해 제목·설명·이미지와 구조화 데이터를 HTML에 넣어 응답합니다. 크롤러는 JavaScript 실행 없이 미리보기 정보를 읽을 수 있고, 방문자는 같은 HTML에서 React 앱으로 글을 읽습니다.
 
-[공유 페이지 생성 스크립트](scripts/generate-share-pages.js)는 아래 환경변수를 읽습니다. 빌드 명령 앞에 지정하거나 빌드 환경에 등록하세요.
+워커가 포함된 프론트를 한 번 배포하면 이후 새로 작성하거나 수정한 글도 재배포 없이 공유할 수 있습니다. 워커 응답과 게시글 조회는 캐시하지 않습니다. 없는 글은 404, API 장애는 재시도 가능한 503으로 응답해 실패한 미리보기를 정상 페이지로 저장하지 않도록 합니다. 공유 서비스가 별도로 보관하는 미리보기 캐시는 해당 서비스의 갱신 정책을 따릅니다.
+
+`npm run build`는 게시글 API에 접속하지 않습니다. Vite 빌드 후 [생성 스크립트](scripts/generate-share-pages.js)로 고정된 Recap 공유 페이지만 만듭니다. 게시글별 정적 HTML은 생성하지 않으며, `dist/index.html`은 워커에도 함께 포함합니다.
+
+Vercel 환경변수에 아래 값을 등록할 수 있습니다. `SITE_ORIGIN`은 빌드 시 Recap 생성에도 사용합니다.
 
 | 변수 | 기본값 | 용도 |
 | --- | --- | --- |
 | `SITE_ORIGIN` | `https://na2ru2.me` | 공유 URL과 canonical URL의 사이트 주소 |
-| `API_ORIGIN` | `SITE_ORIGIN`과 동일 | 빌드 시 게시글을 가져올 API 호스트 |
-| `SKIP_SHARE_PAGES` | 비활성 | `true`이면 공유 페이지 생성 생략 |
-| `STRICT_SHARE_PAGES` | 비활성 | `true`이면 게시글 조회 실패나 빈 목록을 빌드 실패로 처리 |
-| `SHARE_PAGE_SIZE` | `50` | API 조회 시 페이지 크기 |
-| `SHARE_MAX_PAGES` | `200` | 조회할 최대 페이지 수 |
+| `API_ORIGIN` | `https://api.na2ru2.me` | 워커가 게시글을 가져올 API 호스트 |
+| `SKIP_SHARE_PAGES` | 비활성 | `true`이면 빌드 시 Recap 공유 페이지 생성 생략. 게시글 공유 워커에는 영향 없음 |
 
 ```bash
-# 로컬 API로 공유 페이지까지 빌드
-SITE_ORIGIN=http://localhost:5173 API_ORIGIN=http://localhost:8080 npm run build
-
-# API 없이 화면 빌드만 확인
-SKIP_SHARE_PAGES=true npm run build
+# 게시글 API 연결 없이 빌드 가능
+npm run build
 npm run preview
 ```
 
-기본 설정에서는 게시글 API 조회가 실패해도 경고를 남기고 빌드를 계속합니다. 배포 시 공유 페이지 생성을 필수로 확인하려면 `STRICT_SHARE_PAGES=true`를 사용하세요. `API_ORIGIN`은 빌드 시에만 사용하며 브라우저의 API 연결 주소를 바꾸지 않습니다.
+`npm run dev`와 `npm run preview`는 React 화면만 실행하며 Vercel 워커는 실행하지 않습니다. 워커와 경로 재작성까지 확인하려면 Vercel 미리보기 배포를 사용하세요. `API_ORIGIN`은 워커의 서버 조회에만 사용하며 브라우저의 API 연결 주소를 바꾸지 않습니다. 기존 `STRICT_SHARE_PAGES`, `SHARE_PAGE_SIZE`, `SHARE_MAX_PAGES` 설정은 더 이상 사용하지 않습니다.
 
-Vercel에서는 빌드 명령을 `npm run build`, 출력 디렉터리를 `dist`로 설정합니다. [vercel.json](vercel.json)은 API 프록시와 클라이언트 라우팅을 위한 경로 재작성을 정의합니다.
+Vercel에서는 빌드 명령을 `npm run build`, 출력 디렉터리를 `dist`로 설정합니다. [vercel.json](vercel.json)은 공유 워커, API 프록시, 클라이언트 라우팅 순으로 경로를 연결합니다.
 
 ## 주요 화면
 
@@ -147,7 +146,9 @@ src/
 ├── App.jsx           # 라우팅과 로그인 보호
 └── main.jsx          # 앱 진입점
 public/               # 로고와 정적 자산
-scripts/              # 공유 페이지 생성
+api/                  # Vercel 게시글 공유 워커 진입점
+server/               # 공유 HTML 렌더링과 공개 게시글 조회
+scripts/              # Recap 공유 페이지 생성과 회귀 검사
 vite.config.js        # 개발 서버와 API 프록시
 vercel.json           # 배포 환경 경로 재작성
 ```

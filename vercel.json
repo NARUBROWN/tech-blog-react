@@ -1,5 +1,14 @@
 {
+    "functions": {
+        "api/post-share.js": {
+            "includeFiles": "dist/index.html"
+        }
+    },
     "rewrites": [
+        {
+            "source": "/post/share/:id",
+            "destination": "/api/post-share?id=:id"
+        },
         {
             "source": "/api/v1/:path*",
             "destination": "https://api.na2ru2.me/api/v1/:path*"
