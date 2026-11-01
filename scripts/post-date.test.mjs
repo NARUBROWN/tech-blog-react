@@ -63,8 +63,30 @@ test('경과 시간은 반올림 없이 한국어 분, 시간, 일 단위로 표
         [86399, '23시간 전'],
         [86400, '1일 전'],
         [3 * 86400 + 3600, '3일 전'],
-        [44 * 86400, '44일 전'],
-        [365 * 86400, '365일 전'],
+        [29 * 86400, '29일 전'],
+    ]) {
+        const publishedAt = new Date(now.getTime() - secondsAgo * 1000);
+        assert.equal(formatPostRelativeTime(publishedAt, now), expected);
+    }
+});
+
+test('30일부터 개월 단위로, 12개월부터 년과 남은 개월로 표시한다', () => {
+    const now = new Date('2026-11-02T03:00:00Z');
+    for (const [secondsAgo, expected] of [
+        [30 * 86400 - 1, '29일 전'],
+        [30 * 86400, '1개월 전'],
+        [31 * 86400, '1개월 전'],
+        [60 * 86400 - 1, '1개월 전'],
+        [60 * 86400, '2개월 전'],
+        [90 * 86400, '3개월 전'],
+        [360 * 86400 - 1, '11개월 전'],
+        [360 * 86400, '1년 전'],
+        [390 * 86400 - 1, '1년 전'],
+        [390 * 86400, '1년 1개월 전'],
+        [420 * 86400, '1년 2개월 전'],
+        [720 * 86400 - 1, '1년 11개월 전'],
+        [720 * 86400, '2년 전'],
+        [750 * 86400, '2년 1개월 전'],
     ]) {
         const publishedAt = new Date(now.getTime() - secondsAgo * 1000);
         assert.equal(formatPostRelativeTime(publishedAt, now), expected);
@@ -75,4 +97,6 @@ test('미래의 발행 시각도 한국어로 표시한다', () => {
     const now = new Date('2026-11-02T03:00:00Z');
     assert.equal(formatPostRelativeTime(new Date(now.getTime() + 30000), now), '잠시 후');
     assert.equal(formatPostRelativeTime(new Date(now.getTime() + 3600000), now), '1시간 후');
+    assert.equal(formatPostRelativeTime(new Date(now.getTime() + 30 * 86400000), now), '1개월 후');
+    assert.equal(formatPostRelativeTime(new Date(now.getTime() + 390 * 86400000), now), '1년 1개월 후');
 });

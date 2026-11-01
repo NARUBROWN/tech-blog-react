@@ -49,5 +49,15 @@ export const formatPostRelativeTime = (value, now = new Date()) => {
     if (seconds < 60) return elapsed >= 0 ? '방금 전' : '잠시 후';
     if (seconds < 3600) return `${Math.floor(seconds / 60)}분 ${suffix}`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}시간 ${suffix}`;
-    return `${Math.floor(seconds / 86400)}일 ${suffix}`;
+
+    const days = Math.floor(seconds / 86400);
+    if (days < 30) return `${days}일 ${suffix}`;
+
+    // 상대 시간은 30일을 1개월, 12개월을 1년으로 계산합니다.
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months}개월 ${suffix}`;
+
+    const years = Math.floor(months / 12);
+    const remainingMonths = months % 12;
+    return `${years}년${remainingMonths ? ` ${remainingMonths}개월` : ''} ${suffix}`;
 };
