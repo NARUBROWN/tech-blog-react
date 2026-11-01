@@ -62,6 +62,10 @@ export const buildMetaTags = (meta) => {
   pushMeta('property', 'og:site_name', SITE_NAME);
   pushMeta('property', 'og:url', meta.shareUrl);
   pushMeta('property', 'og:image', meta.ogImage);
+  pushMeta('property', 'og:image:type', meta.ogImageType);
+  pushMeta('property', 'og:image:width', meta.ogImageWidth);
+  pushMeta('property', 'og:image:height', meta.ogImageHeight);
+  pushMeta('property', 'og:image:alt', meta.ogImageAlt);
   pushMeta('property', 'og:locale', 'ko_KR');
   pushMeta('property', 'article:published_time', meta.publishedAt);
   pushMeta('property', 'article:section', meta.section);
@@ -69,6 +73,7 @@ export const buildMetaTags = (meta) => {
   pushMeta('name', 'twitter:title', meta.fullTitle);
   pushMeta('name', 'twitter:description', meta.description);
   pushMeta('name', 'twitter:image', meta.ogImage);
+  pushMeta('name', 'twitter:image:alt', meta.ogImageAlt);
 
   if (meta.canonicalUrl) {
     tags.push(`<link rel="canonical" href="${escapeHtml(meta.canonicalUrl)}" />`);
@@ -140,7 +145,11 @@ export const renderHomeSharePage = (template, siteOrigin = DEFAULT_SITE_ORIGIN) 
       author: '김원정 (NARUBROWN)',
       shareUrl: homeUrl,
       canonicalUrl: homeUrl,
-      ogImage: toAbsoluteUrl('/logo.png', siteOrigin),
+      ogImage: toAbsoluteUrl('/og/home-logo-v1.png', siteOrigin),
+      ogImageType: 'image/png',
+      ogImageWidth: 1730,
+      ogImageHeight: 909,
+      ogImageAlt: 'NARUBROWN 기술 블로그 · na2ru2.me',
       ogType: 'website'
     };
 

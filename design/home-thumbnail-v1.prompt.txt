@@ -1,0 +1,13 @@
+Use case: compositing.
+Asset type: final horizontal Open Graph share thumbnail for the Korean personal tech blog na2ru2.me.
+Primary request: Use the existing attached logo to make one clean, restrained landscape share thumbnail.
+Input image 1: the existing brand logo to insert, NOT a style reference. Preserve its exact circular silhouette, diagonal transparent cutouts, cyan-to-blue-to-indigo gradient, proportions, and orientation. Do not redesign or embellish it.
+Canvas: landscape 1200 x 630 pixels, opaque nearly white background (#FAFBFC). Flat digital brand artwork, not a photograph or a mockup.
+Composition: a spacious, optically balanced horizontal logo-and-type lockup centered as a single group. The supplied logo sits to the left at about 230 pixels square. To its right, align a two-line text stack to the left. Generous space between logo and text. Keep all important content well inside the central 80% so it is safe when cropped in mobile share previews.
+Text (verbatim, no additional words):
+First line: "NARUBROWN"
+Second line: "기술 블로그"
+Small third line below with ample separation: "na2ru2.me"
+Typography: exceptionally crisp modern sans-serif. NARUBROWN is large, medium-bold and near-black (#172033); Korean subtitle is medium weight and a little smaller; domain is small and muted blue-gray. Natural Korean glyphs, exact spelling.
+Style: quiet, tidy, precise, premium editorial branding. Plenty of open background. Use only the original logo colors and near-black/gray text.
+Constraints: one final complete thumbnail only; retain the logo exactly, with no new symbol. No gradients in background, no texture, no decorative illustrations, no icons, no frames, no shadows, no 3D, no glow, no watermark. Full-bleed artwork, no browser or device shell.

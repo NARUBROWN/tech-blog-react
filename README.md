@@ -91,7 +91,7 @@ API 클라이언트는 [src/api/axios.js](src/api/axios.js)에서 `/api/v1`을 �
 
 ## 공유 페이지와 배포
 
-홈 주소 `https://na2ru2.me`도 [홈 공유 워커](api/home-share.js)를 거쳐 사이트 제목·소개·로고가 포함된 HTML을 응답합니다. 홈 미리보기는 게시글 API 연결 없이 제공됩니다. 정적 `index.html`이 우선 응답하지 않도록 홈 경로는 `routes`에서 먼저 연결하고, 나머지 경로는 기존 `rewrites`로 처리합니다.
+홈 주소 `https://na2ru2.me`도 [홈 공유 워커](api/home-share.js)를 거쳐 사이트 제목·소개·[가로형 로고 썸네일](public/og/home-logo-v1.png)이 포함된 HTML을 응답합니다. 홈 미리보기는 게시글 API 연결 없이 제공됩니다. 정적 `index.html`이 우선 응답하지 않도록 홈 경로는 `routes`에서 먼저 연결하고, 나머지 경로는 기존 `rewrites`로 처리합니다.
 
 게시글 공유 버튼은 `/post/share/{id}` 링크를 복사합니다. Vercel은 이 경로를 [공유 워커](api/post-share.js)로 연결하고, 워커는 공개 게시글 API(`/api/v1/post/id/{id}`)를 조회해 제목·설명·이미지와 구조화 데이터를 HTML에 넣어 응답합니다. 크롤러는 JavaScript 실행 없이 미리보기 정보를 읽을 수 있고, 방문자는 같은 HTML에서 React 앱으로 글을 읽습니다.
 
