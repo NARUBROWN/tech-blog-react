@@ -1,22 +1,22 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import { login as loginApi, signup as signupApi, adminSignup as adminSignupApi, normalSignup as normalSignupApi, updateUser as updateUserApi, logout as logoutApi } from '../api/auth';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    // Check for existing session on mount (simplified for now)
-    useEffect(() => {
-        // In a real app, we'd check for a token or hit a /me endpoint
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+    const [user, setUser] = useState(() => {
+        // 보호 경로가 로그인 여부를 판단하기 전에 저장된 사용자 정보를 복원합니다.
+        try {
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            return storedUser && typeof storedUser === 'object'
+                && Number.isInteger(storedUser.id) && storedUser.id > 0
+                && typeof storedUser.username === 'string' && storedUser.username.trim()
+                ? storedUser : null;
+        } catch {
+            return null;
         }
-
-        console.log(user);
-    }, []);
+    });
+    const [loading, setLoading] = useState(false);
 
     const login = async (username, password) => {
         setLoading(true);
