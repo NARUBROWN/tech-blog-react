@@ -31,13 +31,14 @@ const PostDetail = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (isRecruitmentDismissed) return;
+            if (loading || isRecruitmentDismissed) return;
 
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight;
             const clientHeight = document.documentElement.clientHeight;
 
-            const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+            const scrollableHeight = scrollHeight - clientHeight;
+            const scrollPercentage = scrollableHeight > 0 ? scrollTop / scrollableHeight : 0;
 
             if (scrollPercentage >= 0.7) {
                 setShowRecruitment(true);
@@ -46,7 +47,7 @@ const PostDetail = () => {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isRecruitmentDismissed]);
+    }, [isRecruitmentDismissed, loading]);
 
     useEffect(() => {
         if (!slug && !id) return;
@@ -432,4 +433,7 @@ const PostDetail = () => {
     );
 };
 
-export default PostDetail;
+export default function PostDetailRoute() {
+    const { slug, id } = useParams();
+    return <PostDetail key={id || slug} />;
+}

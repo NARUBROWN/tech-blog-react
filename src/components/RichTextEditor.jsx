@@ -8,6 +8,36 @@ import './QuillContent.css';
 import './RichTextEditor.css';
 
 const BlockEmbed = Quill.import('blots/block/embed');
+const Parchment = Quill.import('parchment');
+Quill.register(new Parchment.Attributor('data-align', 'data-align', {
+    scope: Parchment.Scope.INLINE_ATTRIBUTE,
+    whitelist: ['left', 'center', 'right'],
+}), true);
+const Image = Quill.import('formats/image');
+class AlignedImage extends Image {
+    static formats(node) {
+        const formats = super.formats(node);
+        const alignment = node.getAttribute('data-align');
+        if (['left', 'center', 'right'].includes(alignment)) formats['data-align'] = alignment;
+        return formats;
+    }
+
+    format(name, value) {
+        if (name !== 'data-align') return super.format(name, value);
+        if (!['left', 'center', 'right'].includes(value)) {
+            this.domNode.removeAttribute('data-align');
+            this.domNode.style.removeProperty('display');
+            this.domNode.style.removeProperty('float');
+            this.domNode.style.removeProperty('margin');
+            return;
+        }
+        this.domNode.setAttribute('data-align', value);
+        this.domNode.style.display = value === 'center' ? 'block' : 'inline';
+        this.domNode.style.float = value === 'center' ? '' : value;
+        this.domNode.style.margin = value === 'center' ? 'auto' : value === 'left' ? '0 1em 1em 0' : '0 0 1em 1em';
+    }
+}
+Quill.register(AlignedImage, true);
 class MermaidBlock extends BlockEmbed {
     static blotName = 'mermaid';
     static tagName = 'div';
@@ -34,7 +64,7 @@ icons.mermaid = '<svg viewBox="0 0 18 18"><rect class="ql-stroke" fill="none" x=
 icons.undo = '<svg viewBox="0 0 18 18"><path class="ql-stroke" fill="none" d="M5 4L2 7l3 3M2 7h8a4 4 0 010 8H7"/></svg>';
 icons.redo = '<svg viewBox="0 0 18 18"><path class="ql-stroke" fill="none" d="M13 4l3 3-3 3M16 7H8a4 4 0 000 8h3"/></svg>';
 
-const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'script', 'color', 'background', 'blockquote', 'code-block', 'list', 'indent', 'align', 'direction', 'link', 'image', 'mermaid'];
+const formats = ['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'script', 'color', 'background', 'blockquote', 'code-block', 'list', 'indent', 'align', 'direction', 'link', 'image', 'data-align', 'mermaid'];
 const sample = 'flowchart TD\n    A[문제 정의] --> B[해결 방법 설계]\n    B --> C[구현과 검증]';
 const labels = { undo: '실행 취소', redo: '다시 실행', bold: '굵게', italic: '기울임', underline: '밑줄', strike: '취소선', blockquote: '인용', 'code-block': '코드 블록', link: '링크', image: '이미지 업로드', mermaid: 'Mermaid 다이어그램', clean: '서식 지우기', header: '제목 수준', font: '글꼴', size: '글자 크기', color: '글자색', background: '배경색', align: '정렬', list: '목록', indent: '들여쓰기', script: '위 첨자와 아래 첨자', direction: '텍스트 방향' };
 
@@ -113,6 +143,12 @@ export default function RichTextEditor({ value, onChange }) {
 
     const modules = useMemo(() => ({
         ...(ready && Quill.imports['modules/blotFormatter'] ? { blotFormatter: {} } : {}),
+        clipboard: {
+            matchers: [['.ql-code-block', (node) => {
+                const Delta = Quill.import('delta');
+                return new Delta().insert(node.textContent).insert('\n', { 'code-block': node.getAttribute('data-language') || 'plain' });
+            }]],
+        },
         history: { delay: 800, maxStack: 100, userOnly: true },
         toolbar: {
             container: [
