@@ -129,9 +129,9 @@ test('메타데이터의 HTML과 JSON-LD는 글 내용을 안전하게 보존한
     const html = renderPostSharePage(template, { ...post, seoTitle: unsafeTitle, thumbnailUrl: 'javascript:alert(1)' });
     assert.ok(!html.includes(unsafeTitle));
     assert.match(html, /&lt;\/script&gt;&lt;script&gt;alert\(&quot;x&quot;\)/);
-    assert.match(html, /property="og:image" content="https:\/\/na2ru2.me\/logo.png"/);
+    assert.match(html, /property="og:image" content="https:\/\/www.na2ru2.me\/logo.png"/);
     const json = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1];
     assert.equal(JSON.parse(json).headline, unsafeTitle);
-    assert.equal(JSON.parse(json).url, `https://na2ru2.me/post/${encodeURIComponent('새로-작성한-글')}`);
+    assert.equal(JSON.parse(json).url, `https://www.na2ru2.me/post/share/${post.id}`);
     assert.equal((html.match(/<title>/g) || []).length, 1);
 });

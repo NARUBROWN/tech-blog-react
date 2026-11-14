@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://www.na2ru2.me/sitemap.xml

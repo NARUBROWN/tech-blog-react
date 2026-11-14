@@ -1,7 +1,7 @@
 import { toPostDateTime } from '../src/utils/postDate.js';
 
 export const SITE_NAME = 'NARUBROWN의 기술 블로그';
-export const DEFAULT_SITE_ORIGIN = 'https://na2ru2.me';
+export const DEFAULT_SITE_ORIGIN = 'https://www.na2ru2.me';
 
 const escapeHtml = (value) => {
   return String(value)
@@ -24,13 +24,6 @@ const truncate = (value, maxLength) => {
   if (!value) return '';
   if (value.length <= maxLength) return value;
   return `${value.slice(0, Math.max(0, maxLength - 3))}...`;
-};
-
-const slugify = (text) => {
-  return String(text || '')
-    .toString()
-    .trim()
-    .replace(/\s+/g, '-');
 };
 
 export const toAbsoluteUrl = (url, siteOrigin) => {
@@ -165,8 +158,6 @@ export const renderPostSharePage = (template, post, siteOrigin = DEFAULT_SITE_OR
     const keywords = (post.seoKeywords || post.tags?.tagNames?.join(', ') || '').trim();
     const author = post.author?.username || '';
     const shareUrl = toAbsoluteUrl(`/post/share/${post.id}`, siteOrigin);
-    const slug = post.slug || slugify(post.title) || String(post.id);
-    const canonicalUrl = toAbsoluteUrl(`/post/${encodeURIComponent(slug)}`, siteOrigin);
     const ogImage = toAbsoluteUrl(post.thumbnailUrl, siteOrigin) || fallbackOgImage;
     const section = post.category?.name || '';
 
@@ -177,7 +168,7 @@ export const renderPostSharePage = (template, post, siteOrigin = DEFAULT_SITE_OR
       keywords,
       author,
       shareUrl,
-      canonicalUrl,
+      canonicalUrl: shareUrl,
       ogImage,
       fallbackOgImage,
       publishedAt: toPostDateTime(post.publishedAt),

@@ -32,7 +32,7 @@ const About = () => {
         const defaultTitle = document.title || siteName;
         const pageTitle = `김원정 | AI 엔지니어 포트폴리오 - ${siteName}`;
         const description = 'LLM, RAG, OCR, VLM 기반 AI 서비스와 백엔드 시스템을 설계하고 구현해 온 김원정의 AI 엔지니어 포트폴리오.';
-        const canonicalUrl = 'https://na2ru2.me/about';
+        const canonicalUrl = 'https://www.na2ru2.me/about';
         const ogImage = 'https://na2ru2.me/logo.png';
 
         const previousMetaContent = new Map();

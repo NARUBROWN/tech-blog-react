@@ -135,7 +135,7 @@ const PostDetail = () => {
             ? (descriptionSource.length > 160 ? `${descriptionSource.slice(0, 157)}...` : descriptionSource)
             : siteName;
         const keywords = (post.seoKeywords || post.tags?.tagNames?.join(', ') || '').trim();
-        const canonicalUrl = `https://na2ru2.me/post/${post.slug || slug || id}`;
+        const canonicalUrl = `https://www.na2ru2.me/post/share/${post.id}`;
         const fallbackOgImage = 'https://na2ru2.me/logo.png';
         const ogImage = getAbsoluteUrl(post.thumbnailUrl) || fallbackOgImage;
 
@@ -257,7 +257,7 @@ const PostDetail = () => {
                 ldScript.textContent = previousLdContent;
             }
         };
-    }, [post, slug, id]);
+    }, [post]);
 
     const handleLikeToggle = async () => {
         if (!post || likeBusy || !likeReady) return;
